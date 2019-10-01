@@ -1,0 +1,163 @@
+%==============================================================================
+\chapter{Introduction}
+\label{chapter:intro}
+%==============================================================================
+
+One of the key features of Big Data is its complexity. 
+We can define complexity in different ways.
+It could be that data is coming from different sources, it could be the same data source representing different aspects of a resource, it could be different data sources representing the same property; this difference in representation, structure, or association makes it difficult to introduce common methodologies or algorithms to learn and predict from different types of data. 
+The state of the art to handle this ambiguity and complexity of data is its representation or modelling in the form of Linked RDF Data.
+
+The Linked Data follows a set of standards for the integration of data and information in addition to searching and querying it. 
+To create linked data, the information represented in unstructured form or referring to other structured or semi-structured representation is mapped to the \gls{RDF} data model, this process is called extraction. 
+\gls{RDF} has a very flexible data model comprised of triples (subject, predicate, object), that can be interpreted as a labelled directed graph (s, p, o) with s and o being arbitrary resources (vertices) and p being the property (edge from s to o) among these two resources. 
+Thus, a set of \gls{RDF} triples forms an inter-linkable graph whose flexibility allows to represent a large variety of highly to loosely structured datasets. 
+RDF, which was standardized by \gls{W3C}, is increasingly being adapted to model data in a variety of scenarios, partly due to the popularity of projects like linked open data and schema.org. 
+This linked or semantically annotated data has grown steadily towards a massive scale \furl{http://lodstats.aksw.org/}.
+Nevertheless, most existing solutions are limited to centralized environments only.
+In order to deal with the massive data being produced at scale, the existing big data frameworks like Spark and Flink offer fault tolerant, high available and scalable approaches to process this data efficiently. 
+These frameworks have matured over the recent years and offer a proven and reliable method for processing of large scale unstructured data.
+
+In the past few years, MapReduce based, and related frameworks for Big Data processing have been explored for distributed processing of \gls{RDF} Data. 
+Some examples include the Spark-based S2RDF~\cite{Schatzle:2016:SRQ:2977797.2977806} which rewrites SPARQL queries to SQL by using prior research by the RDB2RDF community and augments this approach by using precomputed semi-join tables. Approaches like SparkRDF~\cite{xu2015sparkrdf}, H2RDF~\cite{papailiou2013h} and H2RDF+~\cite{papailiou2012h2rdf} use triple dataset statistics to find best merge-join orders for efficient querying.
+
+
+\subsection{Motivation}
+\label{sec:motivation}
+
+The main motivations behind using distributed computing are being able to handle data that does not fit on a single machine, and achieve a speed-up and scalability.
+Systems like \textit{Apache Spark} employ the Bulk Synchronous Parallel (BSP) synchronisation approach, i.e. each parallel iteration/task has to wait for a synchronisation step - all \textit{sub-tasks} must finish. 
+This ensures correctness and fault tolerance.
+However Machine learning applications are usually iteratively convergent in nature and this synchronisation barrier at the end of each iteration overshadows the speed-up gained by distributed computation. 
+Moreover, most of the machine learning algorithms contain interdependent parameters e.g. adaptive convergence rate of modelling parameters. 
+This requires structure aware parallelization techniques. 
+SANSA aims to exploit the existing communication, synchronisation and distribution techniques to optimise the performance of Distributed Structured Machine learning algorithms for large Scale Knowledge Bases.
+
+We have decided to explore the use of these two prominent frameworks for RDF data processing.
+
+\section{Problem Definition and Challenges}
+\label{sec:problem-definition-and-challenges}
+
+
+\begin{tcolorbox}
+\textbf{RQ}: Is it possible to process large-scale RDF Datasets efficiently and effectively?
+\end{tcolorbox}
+
+
+
+\subsection{Challenge 1: Scalable Computation of RDF Dataset Statistics}
+The first challenge to overcome when dealing with large-scale RDF dataset is to know an \textit{apriori} internals of a RDF dataset.
+
+\subsection{Challenge 2: Quality Assessment of RDF Dataset at Scale}
+Apart from knowing the internals of a given dataset, deciding how quality and what information is considered "\textit{fit for use}" is a challenge when size of a dataset goes beyond the capacity of a single machine.
+
+\subsection{Challenge 3: Efficient and Scalable SPARQL query evaluation}
+
+
+\section{Research Questions}
+\label{sec:research-questions}
+
+As stated in the motivation section above and identified challenges, we define three main research questions.
+Each challenge is mapped to a specific research questions and altogether contribute to the overall research problem definition tackled throughout this thesis.
+
+\begin{tcolorbox}
+\textbf{RQ1}: How can we efficiently explore the structure of the large-scale RDF datasets?
+\end{tcolorbox}
+
+Over the last years, the Semantic Web has been growing steadily. Today, we count more than 10,000 datasets made available online following Semantic Web standards.
+Nevertheless, many applications, such as data integration, search, and interlinking, may not take the full advantage of the data without having a priori statistical information about its internal structure and coverage.
+In fact, there are already a number of tools, which offer such statistics, providing basic information about \gls{RDF} datasets and vocabularies.
+However, those usually show severe deficiencies in terms of performance once the dataset size grows beyond the capabilities of a single machine.
+To address this research problem, we introduce a software component for statistical calculations of large RDF datasets, which scales out to clusters of machines.
+More specifically, we describe the first distributed in-memory approach for computing 32 different statistical criteria for \gls{RDF} datasets using Apache Spark.
+The preliminary results show that our distributed approach improves upon a previous centralized approach we compare against and provides approximately linear horizontal scale-up. 
+The criteria are extensible beyond the 32 default criteria, is integrated into the larger SANSA framework and employed in at least four major usage scenarios beyond the SANSA community.
+
+\begin{tcolorbox}
+\textbf{RQ2}: Can quality of large-scale RDF Datasets be assessed efficiently in a distributed manner?
+\end{tcolorbox}
+
+Over the last years, Linked Data has grown continuously. 
+Today, we count more than 10,000 datasets being available online following Linked Data standards. 
+These standards allow data to be machine readable and inter-operable.  
+Nevertheless, many applications, such as data integration, search, and interlinking, cannot take full advantage of Linked Data if it is of low quality.
+There exist a few approaches for the quality assessment of Linked Data, but their performance degrades with the increase in data size and quickly grows beyond the capabilities of a single machine.
+To address this question, we present DistQualityAssessment -- an open source implementation of quality assessment of large RDF datasets that can scale out to a cluster of machines.
+This is the first distributed, in-memory approach for computing different quality metrics for large \gls{RDF} datasets using Apache Spark. We also provide a quality assessment pattern that can be used to generate new scalable metrics that can be applied to big data.
+The work presented here is integrated with the SANSA framework and has been applied to at least three use cases beyond the SANSA community.   
+The results show that our approach is more generic, efficient, and scalable as compared to previously proposed approaches.
+
+\begin{tcolorbox}
+\textbf{RQ3}: Can distributed RDF datasets be queried efficiently and effectively?
+\end{tcolorbox}
+
+One of the key traits of Big Data is its complexity in terms of representation, structure, or formats.
+One existing way to deal with it is offered by Semantic Web standards.
+Among them, \gls{RDF} --which proposes to model data with triples representing edges in a graph-- has received a large success and the semantically annotated data has grown steadily towards a massive scale.
+Therefore, there is a need for scalable and efficient query engines capable of retrieving such information.
+In this paper, we propose \emph{Sparklify}: a scalable software component for efficient evaluation of SPARQL queries over distributed RDF datasets. It uses Sparqlify as a SPARQL-to-SQL rewriter for translating SPARQL queries into Spark executable code.
+Our preliminary results demonstrate that our approach is more extensible, efficient, and scalable as compared to state-of-the-art approaches.
+Sparklify is integrated into a larger SANSA framework and it serves as a default query engine and has been used by at least three external use scenarios.
+To address this question, we propose a scalable approach to evaluate SPARQL queries over distributed RDF datasets using a semantic-based partition and is implemented inside the state-of-the-art \gls{RDF} processing framework: SANSA.
+An evaluation of the performance of our approach in processing large-scale RDF datasets is also presented. 
+The preliminary results of the conducted experiments show that our approach can scale horizontally and perform well as compared with the previous Hadoop-based system.
+It is also comparable with the in-memory SPARQL query evaluators when there is less shuffling involved.
+
+
+\begin{tcolorbox}
+\textbf{RQ4}: How can we exploit large-scale RDF datasets for a particular use case and ensure scalability?
+\end{tcolorbox}
+In response to this question, we present a use-case ...
+
+
+\section{Thesis Overview}
+\label{sec:thesis-overview}
+
+\subsection{Contributions}
+\subsection{List of Publications}
+In this thesis, part of the work is based on the following publications:
+\begin{itemize}
+\item \emph{Conference Papers (peer reviewed)}
+\begin{enumerate}
+    
+    \item \textbf{Gezim Sejdiu}; Anisa Rula; Jens Lehmann; and Hajira Jabeen, “\href{http://jens-lehmann.org/files/2019/iswc_dist_quality_assessment.pdf}{A Scalable Framework for Quality Assessment of RDF Datasets},” in Proceedings of 18th International Semantic Web Conference (ISWC), 2019. \texttt{URL}:~\url{http://jens-lehmann.org/files/2019/iswc_dist_quality_assessment.pdf}
+
+    \item Claus Stadler; \textbf{Gezim Sejdiu}; Damien Graux; and Jens Lehmann, “\href{http://jens-lehmann.org/files/2019/iswc_sparklify.pdf}{Sparklify: A Scalable Software Component for Efficient evaluation of SPARQL queries over distributed RDF datasets},” in Proceedings of 18th International Semantic Web Conference (ISWC), 2019. \texttt{URL}:~\url{http://jens-lehmann.org/files/2019/iswc_sparklify.pdf}
+
+    \item \textbf{Gezim Sejdiu}; Damien Graux; Imran Khan; Ioanna Lytra; Hajira Jabeen; and Jens Lehmann, “\href{https://gezimsejdiu.github.io/publications/semantic_based_query_paper_SEMANTICS2019.pdf}{Towards A Scalable Semantic-based Distributed Approach for SPARQL query evaluation},” 15th International Conference on Semantic Systems (SEMANTiCS), Research \& Innovation , 2019. \texttt{URL}:~\url{https://gezimsejdiu.github.io/publications/semantic_based_query_paper_SEMANTICS2019.pdf}
+
+    \item \textbf{Gezim Sejdiu}; Ivan Ermilov; Jens Lehmann; and Mohamed Nadjib-Mami, “\href{http://jens-lehmann.org/files/2018/iswc_distlodstats.pdf}{DistLODStats: Distributed Computation of RDF Dataset Statistics},” in Proceedings of 17th International Semantic Web Conference (ISWC), 2018. \texttt{URL}:~\url{http://jens-lehmann.org/files/2018/iswc_distlodstats.pdf}
+
+    \item Jens Lehmann; \textbf{Gezim Sejdiu}; Lorenz Bühmann; Patrick Westphal; Claus Stadler; Ivan Ermilov; Simon Bin; Nilesh Chakraborty; Muhammad Saleem; Axel-Cyrille Ngomo Ngonga; and Hajira Jabeen, “\href{http://svn.aksw.org/papers/2017/ISWC_SANSA_SoftwareFramework/public.pdf}{Distributed Semantic Analytics using the SANSA Stack},”; in Proceedings of 16th International Semantic Web Conference - Resources Track (ISWC’2017), 2017. \texttt{URL}:~\url{http://svn.aksw.org/papers/2017/ISWC_SANSA_SoftwareFramework/public.pdf}
+
+    \item Sören Auer; Simon Scerri; Aad Versteden; Erika Pauwels; Angelos Charalambidis; Stasinos Konstantopoulos; Jens Lehmann; Hajira Jabeen; Ivan Ermilov; \textbf{Gezim Sejdiu}; Andreas Ikonomopoulos; Spyros Andronopoulos; Mandy Vlachogiannis; Charalambos Pappas; Athanasios Davettas; Iraklis A. Klampanos; Efstathios Grigoropoulos; Vangelis Karkaletsis; Victor Boer; Ronald Siebes; Mohamed Nadjib Mami; Sergio Albani; Michele Lazzarini; Paulo Nunes; Emanuele Angiuli; Nikiforos Pittaras; George Giannakopoulos; Giorgos Argyriou; George Stamoulis; George Papadakis; Manolis Koubarakis; Pythagoras Karampiperis; Axel-Cyrille Ngonga Ngomo; and Maria-Esther Vidal, “\href{http://jens-lehmann.org/files/2017/icwe_bde.pdf}{The BigDataEurope Platform – Supporting the Variety Dimension of Big Data},” in 17th International Conference on Web Engineering (ICWE2017), 2017. \texttt{URL}:~\url{http://jens-lehmann.org/files/2017/icwe_bde.pdf}
+     
+\end{enumerate}
+    \item \emph{Demo \& Poster Papers (peer reviewed)}
+    \begin{enumerate}
+    \setcounter{enumi}{9}
+
+    \item Claus Stadler; \textbf{Gezim Sejdiu}; Damien Graux; and Jens Lehmann. "\href{https://gezimsejdiu.github.io/publications/sansa-sparklify-ISWC-demo.pdf}{Querying large-scale RDF datasets using the SANSA framework}".  In Proceedings of 18th International Semantic Web Conference (ISWC), Poster \& Demos, 2019. \texttt{URL}:~\url{https://gezimsejdiu.github.io/publications/sansa-sparklify-ISWC-demo.pdf}
+
+    \item Danning Sui; \textbf{Gezim Sejdiu}; Damien Graux; and Jens Lehmann. "\href{https://gezimsejdiu.github.io/publications/sansa-hubs-and-authorities-transaction-semantics19-poster.pdf}{The Hubs and Authorities Transaction NetworkAnalysis using the SANSA framework}".  In 15th International Conference on Semantic Systems (SEMANTiCS), Poster \& Demos, 2019. \texttt{URL}:~\url{http://tiny.cc/4ukxcz}
+    
+    \item \textbf{Gezim Sejdiu}; Ivan Ermilov; Jens Lehmann; and Mohamed-Nadjib Mami, “\href{http://jens-lehmann.org/files/2018/iswc_statisfy_pd.pdf}{STATisfy Me: What are my Stats?},” in Proceedings of 17th International Semantic Web Conference (ISWC), Poster \& Demos, 2018. \texttt{URL}:~\url{http://jens-lehmann.org/files/2018/iswc_statisfy_pd.pdf}
+    
+    \item Damien Graux; \textbf{Gezim Sejdiu}; Hajira Jabeen; Jens Lehmann; Danning Sui; Dominik Muhs; and Johannes Pfeffer, “\href{http://jens-lehmann.org/files/2018/semantics_ethereum_pd.pdf}{Profiting from Kitties on Ethereum: Leveraging Blockchain RDF with SANSA},” in 14th International Conference on Semantic Systems, Poster \& Demos, 2018. \texttt{URL}:~\url{http://jens-lehmann.org/files/2018/semantics_ethereum_pd.pdf}
+    
+    \item Ivan Ermilov; Jens Lehmann; \textbf{Gezim Sejdiu}; Lorenz Bühmann; Patrick Westphal; Claus Stadler; Simon Bin; Nilesh Chakraborty; Henning Petzka; Muhammad Saleem; Axel-Cyrille Ngomo Ngonga; and Hajira Jabeen, “\href{http://jens-lehmann.org/files/2017/iswc_pd_sansa.pdf}{The Tale of Sansa Spark},” in Proceedings of 16th International Semantic Web Conference, Poster \& Demos, 2017 ({\color{darkred}\textbf{Best Demo Award}}). \texttt{URL}:~\url{http://jens-lehmann.org/files/2017/iswc_pd_sansa.pdf}
+        
+    \end{enumerate}
+\end{itemize}
+
+Appendix~\ref{sec:appendix-publications} contains the complete list of publications finished during the PhD studies.
+
+\section{Thesis Outline}
+\label{sec:thesis-structure}
+The thesis consists of eight chapters. 
+Chapter \ref{chapter:intro} introduces the thesis starting with the main research problem and challenges, motivation, research questions, scientific contributions addressing research questions, and a list of published scientific papers describing these contributions.
+Chapter~\ref{chapter:preliminaries} presents basic concepts and background about Semantic Web technologies and Distributed Computing frameworks for a comprehensive overview of the research problem. 
+Chapter~\ref{chapter:related} describes state-of-the-art efforts in the field of processing \gls{RDF} datasets w.r.t research problem.
+We provide an overview of existing RDF dataset statistics sytems, Quality Assessment systems, and SPARQL query evaluators in order to provide a thorough knowledge of their limitations, and the identified gaps we cover in this thesis.
+
+In Chapter~\ref{chapter:dist_lod_stats} we introduce 

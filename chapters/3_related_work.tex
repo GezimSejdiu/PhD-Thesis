@@ -1,0 +1,104 @@
+%==============================================================================
+\chapter{Related Work}
+\label{chapter:related}
+%==============================================================================
+
+This chapter reviews the related work to our research, according to the research problem and research questions defined in Chapter~\ref{chapter:intro}.
+
+\section{RDF Dataset Statistics Systems}
+In this section, we provide an overview of related work regarding RDF dataset statistics calculation.
+
+To the best of our knowledge, all but one existing approaches use small to medium scale datasets and do not horizontally scale.
+
+A dataset is large-scale w.r.t. a particular task in the scope of this article if the main memory on commodity hardware is insufficient to perform the task (without swapping to disk). 
+We mention here, for example RDF$_{Pro}$~\cite{SAC-2015-CorcoglionitiRM}, which offers a suite of stream-oriented, highly optimized processors for common tasks, such as data filtering, RDFS inference, smushing, as well as statistics extraction. 
+The second related approach we are aware of is Aether~\cite{makela2014aether}, which is an application for generating, viewing and comparing extended VoID statistical descriptions of RDF datasets.
+The tool is useful, for example, in getting to know a newly encountered dataset, in comparing the different versions of a dataset, and in detecting outliers and errors.
+Luzzu~\cite{debattista2016luzzu} is a quality assessment framework for linked data.
+Its Quality Metric Language (LQML), is a domain specific language (DSL) that enables knowledge engineers to declaratively define quality metrics whose definitions can be understood more easily. LQML offers notations, abstractions and expressive power, focusing on the representation of quality metrics.
+
+However, only one work we came across that provided a distributed framework for RDF statistics computation: LODOP~\cite{Forchhammer:PROFILES:14}. 
+LODOP adopts a MapReduce approach for computing, optimizing, and benchmarking data profiling techniques.
+It uses Apache Pig as the underlying computation engine (Hadoop-based). 
+LODOP implements 15 data profiling tasks comparing to 32 in our work. 
+Because of the usage of MapReduce, the framework has a significant drawback: materialization of intermediate results between Map and Reduce and between two subsequent jobs is done on disk.
+DistLODStats does not use the disk-based MapReduce framework (Hadoop), but rather bases its computation mainly in-memory, so runtime performance is presumably better~\cite{Shi:2015:CTM:2831360.2831365}.
+Unfortunately, we were unable to run LODOP for comparison. This is due to technical problems encountered, despite the very significant effort we devoted to deploy and run it.
+
+To the best of our knowledge, DistLODStats is the first software component for in-memory distributed computation of RDF dataset statistics. 
+
+\section{RDF Quality Assessment Frameworks}
+Even though quality assessment of big datasets is an important research area, it is still largely under-explored. 
+There have been a few works discussing the challenges and issues of big data quality~\cite{becker2015big,RaoG015,cai2015challenges}. 
+Only recently, a few of them have started to address the problem from a practical point of view~\cite{debattista2016luzzu}, which is the focus of our work w.r.t the quality assessment of RDF datasets. %as stated in \autoref{sec:introduction}. 
+In the following, we divide the section between conceptual and practical approaches proposed in the state of the art for big data quality assessment.
+
+In~\cite{CatarciSCD17} the authors propose a big data processing pipeline and a big data quality pipeline. 
+For each of the phases of the processing pipeline they discuss the corresponding phase of the big data quality pipeline.
+Relevant quality dimensions such as accuracy, consistency and completeness are discussed for the quality assessment of RDF datasets as part of an integration scenario.
+Given that the quality dimensions and metrics have somehow evolved from relational to Linked Data,
+it is relevant to understand the evolution of quality dimensions according to the differences between the structural characteristics of the two data models~\cite{BatiniRSV15}. 
+This allows to manage the huge variability of methods and techniques needed to manage data quality and understand which are the quality dimensions that prevail when assessing large-scale RDF datasets.
+
+Most of the existing approaches can be applied to small/medium scale datasets and do not horizontally scale~\cite{debattista2016luzzu,KontokostasWAHLCZ14}. 
+The work in~\cite{KontokostasWAHLCZ14} presents a methodology for assessing the quality of Linked Data based on a test case generation analogy used for software testing. 
+The idea of this approach is to generate templates of the SPARQL queries (i.e., quality test case patterns) and then instantiate them by using the vocabulary or schema information, thus producing quality test case queries. 
+Luzzu~\cite{debattista2016luzzu} is similar in spirit with our approach in that its objective is to provide a framework for quality assessment. 
+In contrast to our approach, where data is distributed and also the evaluation of metrics is distributed, Luzzu does not provide any large-scale processing of the data. 
+It only uses Spark streaming for loading the data which is not part of the core framework. 
+Another approach proposed for assessing the quality of large-scale medical data implements Hadoop Map/Reduce~\cite{BonnerMKBTMCA15}. 
+It takes advantage of query optimization and join strategies which are tailored to the structure of the data and the SPARQL queries for that particular dataset. In addition, this work, differently from our approach, does not assess any data quality metric defined in~\cite{zaveri2015quality}.
+The work in~\cite{BenbernouO17} propose a reasoning approach to derive inconsistency rules and implements a Spark-based implementation of the inference algorithm for capturing and cleaning inconsistencies in RDF datasets. 
+The inference generally incurs higher complexity. Our approach is designed for scalability, and we also use Spark-based implementation for capturing inconsistencies in the data. While the approach in~\cite{BenbernouO17} needs manual definitions of the inconsistency rules, our approach runs automatically, not only for consistency metrics but also for other quality metrics. 
+In addition, we test the performance of our approach on large-scale RDF datasets while their approach is not experimentally evaluated. 
+LD-Sniffer~\cite{Mihindukulasooriya2016LDSA}, is a tool for assessing the accessibility of Linked Data resources according to the metrics defined in the Linked Data Quality Model. 
+The limitation of this tool, besides that it is a centralized version, is that it does not provide most of the quality assessment metrics defined in~\cite{zaveri2015quality}. 
+In addition to above, there is a lack of unified structure to propose and develop new quality metrics that are scalable and less computationally expensive.
+
+Based on the identified limitations of these aforementioned approaches, we have introduced DistQualityAssessment which bases its computation and evaluations mainly in-memory.
+As a result the computation of the quality metrics show a high performance for large-scale datasets.
+
+\section{SPARQL query evaluators}
+\defn{Partitioning of RDF Data}
+Centralized RDF stores use relational (e.g., Sesame \cite{BroekstraKH02}), property (e.g., Jena~\cite{Wilkinson06}), or binary tables (e.g., SW-Store~\cite{AbadiMMH09}) for storing RDF triples or maintain the graph structure of the RDF data (e.g., gStore~\cite{ZouMCOZ11}). 
+For dealing with big RDF datasets, vertical partitioning and exhaustive indexing are commonly employed techniques. 
+For instance, Abadi et al.~\cite{AbadiMMH07} introduce a vertical partitioning approach in which each predicate is mapped to a two-column table containing the subject and object. 
+This approach has been extended in Hexastore~\cite{WeissKB08} to include all six permutations of subject, predicate, and object (s, p, o). 
+To improve the efficiency of SPARQL queries RDF-3X~\cite{NeumannW10} has adopted exhaustive indices not only for all (s, p, o) permutations but also for their binary and unary projections. 
+While some of these techniques can be used in distributed configurations as well, storing and querying RDF datasets in distributed environments pose new challenges such as the scalability. 
+In our approach, we tackle partitioning and querying of big RDF datasets in a distributed manner.
+
+Partitioning-based approaches for distributed RDF systems propose to partition an RDF graph in fragments which are hosted in centralized RDF stores at different sites. 
+Such approaches use either standard partitioning algorithms like METIS~\cite{GurajadaSMT14} or introduce their own partitioning strategies. 
+For instance, Lee et al.~\cite{LeeL2013} define a partition unit as a vertex with its closest neighbors based on heuristic rules while DiploCloud~\cite{WylotC16} and AdPart~\cite{harbi2016accelerating} use physiological RDF partitioning based on RDF molecules. 
+In our proposal, we use a semantic-based partitioning approach.
+~\\
+\defn{Hadoop-based systems}
+Cloud-based approaches for managing large-scale RDF mainly use NoSQL distributed data stores or employ various partitioning approaches on top of Hadoop infrastructure, i.e., the Hadoop Distributed File System (HDFS) and its MapReduce implementation, in order to leverage computational resources of multiple nodes. 
+For instance, Sempala~\cite{Schatzle2014Sempala} is a Hadoop-based approach which serves as SPARQL-to-SQL approach on top of Hadoop.
+It uses Impala\furl{https://impala.apache.org/} as a distributed SQL processing engine. 
+Sempala uses unified vertical partitioning based on a single property table to improve the runtime of the star-shaped queries by excluding the joins. 
+The limitation of Sempala is that it was designed only for that particular shape of the queries.
+PigSPARQL~\cite{Schatzle2011PMS} uses Hadoop based implementation of vertical partitioning for data representation. 
+It translates SPARQL queries into Pig\furl{https://pig.apache.org/} LATIN queries and runs them using the Pig engine.
+A most recent approach based on MapReduce is RYA~\cite{Punnoose2012Rya}.
+It is a Hadoop based scalable RDF store which uses Accumulo\furl{accumulo.apache.org} as a distributed key-value store for indexing the RDF triples.
+One of RYA's advantages is the power of performing join reorder. 
+The main drawback of RYA is that it relies on disk-based processing increasing query execution times.
+Other RDF systems like JenaHBase~\cite{KhadilkarKTC2012} and H2RDF+~\cite{PapailiouKTKK13} use the Hadoop database HBase for storing triple and property tables.
+
+SHARD~\cite{Rohloff2010SHARD} is one approach which groups RDF data into a dedicated partition so-called semantic-based partition.  
+It groups these RDF data by subject and implements a query engine which iterates through each of the clauses used on the query and performs a query processing. 
+A MapReduce job is created while scanning each of the triple patterns and generates a single plan for each of the triple pattern which leads to a larger query plan, therefore, it contains too many Map and Reduces jobs. 
+Our partitioning algorithm is based on SHARD, but instead of creating MapReduce jobs we employ the Spark framework in order to increase scalability.
+~\\
+\defn{In-Memory systems}
+S2RDF~\cite{Schatzle:2016:SRQ:2977797.2977806} is a distributed query engine which translates SPARQL queries into SQL ones while running them on Spark-SQL. 
+It introduces a data partitioning strategy that extends vertical partitioning with additional statistics, containing pre-computed semi-joins for query optimization.
+SPARQLGX~\cite{sparqlgx-iswc-2016} is similar to S2RDF, but instead of translating SPARQL to SQL, it maps SPARQL into direct Spark RDD operations. 
+It is a scalable query engine which is capable of evaluating efficiently the SPARQL queries over distributed RDF datasets~\cite{graux2018multi}.
+It uses a simplified VP approach, where each predicate is assigned to a specific parquet file. 
+As an addition, it is able to assign RDF statistics for further query optimization while also providing the possibility of directly query files on the HDFS using SDE.
+Recently, Sparklify~\cite{2019-sansa-sparklify-iswc} -- a scalable software component for efficient evaluation of SPARQL queries over distributed RDF datasets has been proposed. 
+The approach uses Sparqify\furl{https://github.com/SmartDataAnalytics/Sparqlify} as a SPARQL to SQL rewriter for translating SPARQL queries into Spark executable code.
+In our approach, intermediate results are kept in-memory in order to accelerate query execution over big RDF data.

@@ -1,0 +1,254 @@
+\documentclass[PhD, ngerman, UKenglish, USenglish, Submit]{scrbook}
+%------------------------------------------------------------------------------
+\usepackage[texlive=2018]{uni-bonn-style/ubonn-thesis}
+
+%\usepackage[texlive=2018]{uni-bonn-style/ubonn-biblatex}
+
+\usepackage{uni-bonn-style/thesis_defs}
+% \usepackage{listings}
+
+% ------
+\usepackage{hyperref}
+\usepackage[acronym, toc, nosuper]{glossaries}
+\usepackage[ruled, vlined, linesnumbered]{algorithm2e}
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage[textsize=tiny]{todonotes}
+\usepackage{listings}
+\usepackage{colortbl}
+\usepackage{tcolorbox}
+
+\newtheorem{hyp}{Hypothesis}
+\newtheorem{definition}{Definition}[section]
+
+\newcommand{\furl}[1]{\footnote{\scriptsize \url{#1}}}
+\newcommand{\f}[1]{\footnote{\scriptsize #1}}
+\newcommand{\fixme}[2][Fixme]{\textcolor{red}{\textbf{[#1:}} {\color{blue} {#2}}\textcolor{red}{\textbf{]}}}
+\newcommand{\emphb}[1]{\textbf{\textit{#1}}}
+\newcommand{\defn}[1]{\emphb{#1}\quad}
+\newcommand{\refline}[1]{line~\ref{#1}}
+\renewcommand{\algorithmautorefname}{Algorithm}
+\newcounter{hdItemCounter}
+\setcounter{hdItemCounter}{0}
+
+
+\definecolor{cycle3}{RGB}{77, 175, 74}
+\newcommand{\win}{\cellcolor{cycle3!30}}
+
+\newcounter{count}
+\makeatletter
+\newcommand\newMetricNr[1][]{#1\refstepcounter{count}\def\@currentlabel{#1}}
+\newcommand\newitem[1][]{\item[#1)]\refstepcounter{count}\def\@currentlabel{#1}}
+\makeatother
+
+\makeatletter
+\g@addto@macro{\UrlBreaks}{\UrlOrds}
+\makeatother
+
+\lstset{
+    string=[s]{"}{"},
+    stringstyle=\color{blue},
+    comment=[l]{:},
+    commentstyle=\color{black},
+   basicstyle=\scriptsize\ttfamily,
+}
+
+
+
+\makeglossaries
+%----
+
+\addbibresource{references.bib}
+%------------------------------------------------------------------------------
+% The following definitions are used to produce the title pages
+% needed at various stages
+\newcommand{\thesistitle}{Efficient Distributed In-Memory Processing of RDF Datasets}
+\newcommand*{\thesisauthor}{Gezim Sejdiu}
+\newcommand*{\thesistown}{Kosovo}
+\renewcommand*{\InstituteName}{\PI}
+\renewcommand*{\inInstitute}{\inPI}
+\renewcommand*{\InstituteAddress}{\PIaddress}
+% Adjust \thesisreferee...text depending on male/female referee
+\newcommand*{\thesisrefereeonetext}{1.\ Gutachter}
+\newcommand*{\thesisrefereeone}{Prof. Dr.\ Jens Lehmann}
+\newcommand*{\thesisrefereetwotext}{2.\ Gutachter}
+\newcommand*{\thesisrefereetwo}{Prof.\ Dr.\ S{\"o}ren Auer}
+% Date when thesis was submitted (Master/Diplom)
+% Year or Month, Year when thesis was submitted (PhD)
+\newcommand*{\thesissubmit}{30.11.2019}
+% \newcommand*{\thesissubmit}{Month 2015}
+% Date of thesis examination (PhD)
+\newcommand*{\thesispromotion}{ 17.12.2019}
+% Month and year of the final printed version of the thesis
+\newcommand*{\thesismonth}{MMM}
+\newcommand*{\thesisyear}{2019}
+\newcommand*{\thesisnumber}{BONN-IR-2019-XXX}
+
+%------------------------------------------------------------------------------
+
+% The abstract is only needed for the printed version and should be in
+% English regardless of the language of the thesis
+\newcommand{\thesisabstract}{%
+  \begin{otherlanguage}{UKenglish}
+    abstract
+  \end{otherlanguage}
+}
+
+%------------------------------------------------------------------------------
+% \includeonly can be used to select which chapters you want to process
+% A simple \include command just inserts a \clearpage before and after the file
+% Note that \includeonly can be quite picky! Do not forget to put a
+% comma after the filename, otherwise it will simply be ignored!
+% \includeonly{%
+%   thesis_intro,
+%   thesis_appendix,
+%   thesis_acknowledge
+% }
+
+%------------------------------------------------------------------------------
+% Give a list of directories where figures can be found. Do not leave
+% any spaces in the list and end the directory name with a /
+\graphicspath{%
+  {../images/}%
+  {../images/cover/}%
+  {../images/graphics/}%
+}
+
+%------------------------------------------------------------------------------
+% Make a glossary and a list of acronyms
+% \makeglossaries
+
+% Glossary entries
+% \input{thesis_glossary}
+
+% Draft version - add the word DRAFT on the cover pages
+\ifthenelse{\equal{\ThesisVersion}{Draft}}{%
+  \usepackage{background}
+  \ifthenelse{\texlive < 2013}{%
+    \SetBgContents{DRAFT}
+    \SetBgColor{blue!30}
+  }{%
+    \backgroundsetup{contents=DRAFT, color=blue!30}
+  }
+}
+
+%------------------------------------------------------------------------------
+\begin{document}
+
+% Cover page of thesis - this is only needed for the printed final
+% version to be submitted to the department library
+% Do not use this page for thesis submission to the Prüfungsamt or Promotionsbüro!
+\ifthenelse{\equal{\ThesisVersion}{PILibrary}}{%
+  \typeout{Document \jobname, Info: PI library version of thesis}
+  \input{cover/\ThesisType_Cover}
+}{}
+
+% Start counting pages from the title page
+\frontmatter
+% Dedication has to come before \maketitle
+% \dedication{For ...}
+
+% Select the correct title page(s)
+\ifthenelse{\equal{\ThesisType}{Phd}}{%
+  \typeout{Document \jobname, Error: Unknown thesis type - no title page printed}
+}{%
+  % Bachelor thesis only has one title page
+  \ifthenelse{\equal{\ThesisType}{Bachelor}}{%
+    \typeout{Document \jobname, Info: Bachelor thesis}
+    \input{cover/\ThesisType_Title}
+  }{%
+    \ifthenelse{\equal{\ThesisVersion}{Final} \OR \equal{\ThesisVersion}{PILibrary}}{%
+      % Final and PI library versions
+      \typeout{Document \jobname, Info: Final version of a \ThesisType  thesis}
+      \input{cover/\ThesisType_Final_Title}
+    }{% Submission and draft versions
+      \input{cover/\ThesisType_Submit_Title}
+      \typeout{Document \jobname, Info: Draft/submission version of a \ThesisType  thesis}
+    }
+  }
+}
+
+\pagestyle{scrplain}
+
+%------------------------------------------------------------------------------
+% You can add your acknowledgements here - don't forget to also add
+% them to \includeonly above
+% \include{dedication}
+\include{chapters/abstract}
+\include{acknowledgement}
+\tableofcontents
+
+\mainmatter
+\pagestyle{scrheadings}
+
+% Turn off DRAFT for the following pages
+\ifthenelse{\equal{\ThesisVersion}{Draft}}{%
+  \ifthenelse{\texlive < 2013}{%
+    \SetBgContents{}
+  }{%
+    \backgroundsetup{contents={}}
+  }
+}{}
+
+%------------------------------------------------------------------------------
+% Add your chapters here - don't forget to also add them to \includeonly above
+
+\include{chapters/1_introduction}
+\include{chapters/2_preliminaries}
+\include{chapters/3_related_work}
+\include{chapters/4_distlodstats}
+\include{chapters/5_distqualityassessment}
+\include{chapters/6_scalable_rdf_querying}
+\include{chapters/7_implemenation_and_usecases}
+\include{chapters/8_conclusion}
+% Uncomment the following command to get references per chapter.
+% Put it inside the file or change \include to \input if you do not want the references
+% on a separate page
+%------------------------------------------------------------------------------
+% Use biblatex for the bibliography
+% Add bibliography to Table of Contents
+% Comment out this command if your references are printed for each chapter.
+\printbibliography[heading=bibintoc]
+%------------------------------------------------------------------------------
+% Include the following lines and comment out \printbibliography if
+% you use BiBTeX for the bibliography.
+% If you use biblatex package the files should be specified in the preamble.
+ %\KOMAoptions{toc=bibliography}
+ %{\raggedright
+  % \bibliographystyle{../refs/atlasBibStyleWithTitle.bst}
+ % \bibliographystyle{unsrt}
+  % \bibliography{./thesis_refs,../refs/standard_refs-bibtex}
+%}
+
+%------------------------------------------------------------------------------
+\appendix
+% \part*{Appendix}
+% Add your appendices here - don't forget to also add them to \includeonly above
+\include{appendices/appendix_sansa_releases}
+\include{appendices/appendix_sansa_manual}
+\include{appendices/appendix_publications}
+
+\input{acronyms}
+\printglossaries
+
+% \printbibliography[heading=subbibliography]
+
+%------------------------------------------------------------------------------
+% Declare lists of figures and tables and acknowledgements as backmatter
+% Chapter/section numbers are turned off
+\backmatter
+
+\listoffigures
+\listoftables
+%---------------------------------------------------------
+% Print the glossary and list of acronyms
+% \printglossaries
+
+%------------------------------------------------------------------------------
+% You could instead add your acknowledgements here - don't forget to
+% also add them to \includeonly above
+%------------------------------------------------------------------------------
+% CV needed when you submit your PhD thesis
+%\input{cv}
+
+\end{document}

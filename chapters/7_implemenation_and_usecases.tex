@@ -1,0 +1,346 @@
+%==============================================================================
+\chapter{Implementation and Use Cases}
+\label{chapter:implementation_and_use_cases}
+%==============================================================================
+In this chapter we give a more detailed overview of the SANSA framework and the components developed during this thesis.
+It also shows how they can be applied to various problems.
+
+In this chapter we address the following research question:
+
+\begin{tcolorbox}
+\textbf{RQ4}: How can we exploit large-scale RDF datasets for a particular use case and ensure scalability?
+\end{tcolorbox}
+
+The chapter is organized as follows: First, in Section \ref{sec:the-sansa-framework}, we give an overview of the SANSA framework, which contains the implementation of the methods presented in this thesis.
+Later, we demonstrate the use of our components in a real use case in Section~\ref{sec:alethio-use-case}.
+
+This chapter is based on the following publications:
+\begin{itemize}
+
+
+   \item Danning Sui; \textbf{Gezim Sejdiu}; Damien Graux; and Jens Lehmann. "\href{https://gezimsejdiu.github.io/publications/sansa-hubs-and-authorities-transaction-semantics19-poster.pdf}{The Hubs and Authorities Transaction NetworkAnalysis using the SANSA framework}".  In 15th International Conference on Semantic Systems (SEMANTiCS), Poster \& Demos, 2019.
+   
+    \item Rajjat Dadwal; Damien Graux; \textbf{Gezim Sejdiu}; Hajira Jabeen; and Jens Lehmann. "\href{https://gezimsejdiu.github.io/publications/piping-clustering-eswc19-poster.pdf}{Clustering Pipelines of large RDF POI Data}" in Proceedings of 16th Extended Semantic Web Conference (ESWC), Poster \& Demos, 2019.
+   
+   \item Damien Graux; \textbf{Gezim Sejdiu}; Hajira Jabeen; Jens Lehmann; Danning Sui; Dominik Muhs; and Johannes Pfeffer, “\href{http://jens-lehmann.org/files/2018/semantics_ethereum_pd.pdf}{Profiting from Kitties on Ethereum: Leveraging Blockchain RDF with SANSA},” in 14th International Conference on Semantic Systems, Poster \& Demos, 2018.
+    
+    \item Ivan Ermilov; Jens Lehmann; \textbf{Gezim Sejdiu}; Lorenz Bühmann; Patrick Westphal; Claus Stadler; Simon Bin; Nilesh Chakraborty; Henning Petzka; Muhammad Saleem; Axel-Cyrille Ngomo Ngonga; and Hajira Jabeen, “\href{http://jens-lehmann.org/files/2017/iswc_pd_sansa.pdf}{The Tale of Sansa Spark},” in Proceedings of 16th International Semantic Web Conference, Poster \& Demos, 2017 ({\color{darkred}\textbf{Best Demo Award}}).
+  
+    \item Jens Lehmann; \textbf{Gezim Sejdiu}; Lorenz Bühmann; Patrick Westphal; Claus Stadler; Ivan Ermilov; Simon Bin; Nilesh Chakraborty; Muhammad Saleem; Axel-Cyrille Ngomo Ngonga; and Hajira Jabeen, “\href{http://svn.aksw.org/papers/2017/ISWC_SANSA_SoftwareFramework/public.pdf}{Distributed Semantic Analytics using the SANSA Stack},”; in Proceedings of 16th International Semantic Web Conference - Resources Track (ISWC’2017), 2017.
+
+    \item Sören Auer; Simon Scerri; Aad Versteden; Erika Pauwels; Angelos Charalambidis; Stasinos Konstantopoulos; Jens Lehmann; Hajira Jabeen; Ivan Ermilov; \textbf{Gezim Sejdiu}; Andreas Ikonomopoulos; Spyros Andronopoulos; Mandy Vlachogiannis; Charalambos Pappas; Athanasios Davettas; Iraklis A. Klampanos; Efstathios Grigoropoulos; Vangelis Karkaletsis; Victor Boer; Ronald Siebes; Mohamed Nadjib Mami; Sergio Albani; Michele Lazzarini; Paulo Nunes; Emanuele Angiuli; Nikiforos Pittaras; George Giannakopoulos; Giorgos Argyriou; George Stamoulis; George Papadakis; Manolis Koubarakis; Pythagoras Karampiperis; Axel-Cyrille Ngonga Ngomo; and Maria-Esther Vidal, “\href{http://jens-lehmann.org/files/2017/icwe_bde.pdf}{The BigDataEurope Platform – Supporting the Variety Dimension of Big Data},” in 17th International Conference on Web Engineering (ICWE2017), 2017.
+    
+\end{itemize}
+
+
+\section{The SANSA framework}
+\label{sec:the-sansa-framework}
+In this section, we introduce SANSA\furl{http://sansa-stack.net/}, an open-source\furl{https://github.com/SANSA-Stack} \emph{structured data processing engine} for performing distributed computation over large-scale RDF datasets.
+It provides data distribution, scalability, and fault tolerance for manipulating large RDF datasets, and facilitates analytics on the data at scale by making use of cluster-based big data processing engines.
+It comes with: (i) specialised serialisation mechanisms and partitioning schemata for RDF, using vertical partitioning strategies,
+(ii) a scalable query engine for large RDF datasets and different distributed representation formats for RDF, namely graphs, tables and tensors,
+(iii) an adaptive reasoning engine which derives an efficient execution and evaluation plan from a given set of inference rules,
+(iv) several distributed structured machine learning algorithms that can be applied on large-scale RDF data,
+and (v) a framework with a unified API that aims to combine distributed in-memory computation technology with semantic technologies.
+
+To achieve the goal of storing and manipulating large RDF datasets, we leverage existing big data frameworks like Apache Spark\furl{http://spark.apache.org/} and Apache Flink\furl{http://flink.apache.org/}, which have matured over the years and offer a proven and reliable method for general-purpose processing of large-scale data.
+
+\subsection{Architecture Overview}
+\label{sec:sansa-architecture}
+
+We now give an overview of SANSA framework.
+Figure~\ref{fig:imp-use-cases-sansa-architecture} shows the overall architecture of SANSA that consists of four layers: \emphb{Knowledge Distribution \& Representation Layer}, \emphb{Query Layer}, \emphb{Inference Layer} and \emphb{Machine Learning Layer}.
+
+\begin{figure*}
+\centering 
+	\includegraphics[width=0.95\columnwidth]{images/7_implemenation_and_usecases/sansa-architecture.pdf}
+	\caption{Overview of the SANSA stack.}
+	\label{fig:imp-use-cases-sansa-architecture}
+\end{figure*}
+
+In the following, we explain the role of each layer.
+
+\defn{Knowledge Distribution \& Representation Layer}
+It is the lowest layer on top of the existing distributed frameworks (Spark or Flink).
+This layer mainly provides the facility to read and write native RDF or OWL data from HDFS or a local drive and represent it in the native distributed data structures of the frameworks.
+
+In addition, we also require a dedicated serialization mechanism for faster I/O. 
+SANSA aim to support Jena and OWL API interfaces for processing RDF and OWL data, respectively.
+This particularly targets usability, as many users are already familiar with the corresponding libraries and thus would require less time to get productive with the SANSA stack.
+
+Moreover, it allows users to compute RDF statistics~\cite{sejdiu-2018-dist-lod-stats-iswc} and quality assessment~\cite{sejdiu-2019-sansa-dist-quality-assessment-iswc} in a distributed manner.
+
+
+\defn{Query Layer}
+Querying an RDF graph is the primary method for searching, exploring, and extracting information from the underlying RDF data.
+\gls{SPARQL} is the \gls{W3C} standard for querying RDF graphs.
+Our aim is to have cross-representational transformations and partitioning strategies for efficient query answering. We are investigating the performance of different data structures (e.g., graphs, tables, tensors) in the context of different types of queries and workflows.
+SANSA provides APIs for performing \gls{SPARQL} queries directly in Spark and Flink programs.
+It also features a W3C standard compliant HTTP SPARQL endpoint server component for enabling externally querying the data that has been loaded using its APIs. These queries are eventually transformed into lower-level Spark/Flink programs executed on the Distribution \& Representation Layer.
+At present, SANSA implements flexible triple-based partitioning strategies on top of RDF (such as predicate tables with sub-partitioning by datatypes), which will be complemented with sub-graph based partitioning strategies.
+In addition, it also support a so-called semantic-based query engine~\cite{sejdiu-2019-sansa-semantic-based-semantics} -- a scalable approach to evaluate SPARQL queries over distributed RDF datasets
+Based on the partitioning and the SQL dialects supported by Spark and Flink, SANSA provides an infrastructure for the integration of existing SPARQL-to-SQL rewriting tools. 
+This bears the potential advantage of leveraging the optimizers of both the rewriters as well as those of the underlying frameworks for SQL.
+Currently, the Sparklify~\cite{2019-sansa-sparklify-iswc} implementation serves as the baseline.
+It uses Sparqlify\furl{https://github.com/AKSW/Sparqlify} as a SPARQL-to-SQL rewriter for translating SPARQL queries into Spark executable code.
+Query results can then be further processed by other modules in the SANSA Framework.
+
+\defn{Inference Layer} 
+Both RDFS and OWL contain schema information in addition to links between different resources. 
+This additional information and rules allows to perform reasoning on the knowledge bases in order to infer new knowledge and expanding the existing one. 
+The core of the inference process is to continuously apply schema related rules on the input data to infer new facts. 
+This process is helpful for deriving new knowledge and for detecting inconsistencies in the knowledge base.
+It is well known that there is always a trade-off between expressiveness of a formal language and the efficiency of reasoning in that language. 
+SANSA contains an adaptive rule engine that can use a given set of rules and derive an efficient execution plan from a given set of inference rules.
+
+By using SANSA, applications will be able to fine tune the rules they require and -- in case of scalability problems -- adjust them accordingly.
+
+\defn{Machine Learning Layer}
+While most machine learning algorithms are based on processing simple features, the machine learning algorithms in SANSA exploit the graph structure and semantics of the background knowledge specified using the RDF and OWL standards. 
+In many cases, this allows to obtain either more accurate or more human-understandable results.
+There exist a wide range of machine learning algorithms for the structured data. 
+However, the challenging task would be to distribute the data and to devise distributed versions of these algorithms to fully exploit the underlying frameworks. 
+We are exploring different algorithms namely, tensor factorization, association rule mining, decision trees and clustering on structured data. 
+The aim is to provide out-of-the-box algorithms to work with the structured data in a distributed, fault tolerant and resilient fashion.
+Based on those advances, we will also be able to efficiently perform analytics to gain insights of the data for relevant trends, predictions or detection of anomalies.
+
+
+\subsubsection{Use Cases}
+The main goal of the SANSA framework is to build a generic stack which can work with large amounts of linked data, offering algorithms for scalable, i.e.~horizontally distributed, semantic data analysis.
+To validate this, we have developed use case implementations in several domains and projects.
+   
+A more detailed list of use cases with technical details and implementation is given on the following sections.
+
+\section{Leveraging Blockchain RDF Data using the SANSA framework}
+\label{sec:alethio-use-case}
+With the hype on blockchain technologies and in particular in the Ethereum blockchain~\cite{wood2014ethereum}, many participants wanted to know more about the most impactful players across the blockchains transaction network.
+In parallel, as the number of statements, actions and transactions in the network are increasing quickly, many ``Big Data'' challenges arise.
+First, transactions are raw data and one cannot take advantage of them for further analysis.
+To do so, Alethio designed EthOn (The Ethereum Ontology)~\cite{pfeffer2016ethon} which models such raw data as triples using the \gls{RDF}\furl{https://www.w3.org/TR/rdf-primer/} standard.
+This ontology describes all Ethereum terms including blocks, transactions, contract messages, event logs etc., as well as their relationships.
+Afterword, performing querying and analysis on such large-scale RDF datasets is computing intensive.
+To overcome these challenges, we have explored the potential of the SANSA~\cite{lehmann-2017-sansa-iswc} framework.
+SANSA is an open-source\furl{https://github.com/SANSA-Stack} framework for distributed processing and analysis of large-scale RDF data.
+With SANSA on Spark, \gls{RDF} triples are loaded into Spark distributed and resilient data structured, namely the data frames, for further analysis.
+
+\subsection{The Hubs and Authorities Transaction Network Analysis}
+\label{sec:the-hub-and-authorities-use-case}
+In this work, we perform an analysis (using well-known graph processing algorithms) of the value transaction network graph with the main focus on the Hubs and Authorities behaviors.
+``Authorities'' are accounts who pay out to a large crowd of addresses, with high volume; while ``Hubs'' are entities who receive extensive Ether (ETH) flow into their accounts.
+In this study, we do not differentiate these two roles but rank them all together as the biggest players/entities.
+
+\subsubsection{Finding big Ethereum players with SANSA}
+The Ethereum network graph contains nodes of external accounts which have had a transaction on the Ethereum blockchain.
+The connection (edges) between such nodes on the network indicate the transaction relationship between them; when a node (an external account) sends ETH to another, a transaction record is written, and an edge between them is added in the network with the direction of the ETH flow. When we encounter multiple edges between same pairs of nodes, we summarize the edges as a single one\footnote{This optimization is also convenient practically as it is easier not to have duplicated edges in a graph.}. The edge weight is the total transaction value in Ether.
+As an example, if address \emph{A} sends \emph{x} ETH to address \emph{B} in total, there will be an edge of weight \emph{x} from node \emph{A} to node \emph{B}. 
+In this study, self-loops i.e. transactions from an address to itself are omitted.
+
+\begin{figure*}
+\centering
+\includegraphics[width=1.0\columnwidth]{images/7_implemenation_and_usecases/hub-and-authorities-system-architecture.pdf}
+\caption{Hubs and Authorities analysis workflow.}
+% source: https://docs.google.com/presentation/d/1AoIvsI12ayLPFOqQlWkTk4rDG4GolY3YLs3yTql8lPg
+\label{fig:hub-and-authorities-system-architecture}
+\end{figure*}
+
+SANSA framework has been used for efficient reading and querying of RDF datasets using SPARQL as depicted on Figure~\ref{fig:hub-and-authorities-system-architecture}. 
+First, the data need to be loaded on an efficient storage that SANSA can read from. 
+For that purpose, we use Amazon S3 buckets containing the whole RDF Ethereum network transactions.
+Afterword, SANSA data representation layer loads the data in a form of Resilient Distributed Datasets (RDD)~\cite{zaharia2012resilient} of triples. 
+During this process, SANSA performs a data partition for fast processing and then aggregate and filter the data using the its query layer~\cite{iermilov-2017-sansa-iswc-demo}. Further, we applied two classic graph analysis algorithms via Apache GraphX: Connected Components and Page Rank.
+Connected Components algorithm enables us to find the largest cluster of connected nodes, regardless of transaction direction. Within this largest cluster, we can derive the page rank score of all nodes. Top-ranked entities and their relation are visualized.
+
+\subsubsection{Results}
+
+\defn{Datasets}
+The Ethereum dataset in the format of RDF contains more than 17B triples.
+For the sake of the experiment, we limited the dataset to 10,000 blocks which contain around 38M triples, including both value transactions and contract messages.
+
+\defn{Top Accounts Analysis}
+The PageRank algorithm was run over the largest connected component of 185,741 nodes (accounts) and 250,637 edges (aggregated transaction relations).
+
+Figure \ref{fig:pagerank-score-distribution-of-top-50-accounts} plots the top 50 account's distribution. 
+Based on the findings, we can see that these accounts are grouped on two different types: mining pool wallets, and (mostly centralized) exchange wallets. 
+
+Figure \ref{fig:category-distribution-of-top-50-accounts} shows that 58\% of the addresses are controlled by exchanges, while another 12\% with convincing tags related to the mining pools.
+The exchange and mining pool wallets can be found in the top position of our ranking, underlining the effectiveness of PageRank: Addresses related to mining pools allocate extensive amounts of payouts to their subscribed miners, resulting in large out-degrees, as well as high accumulated transaction value.
+We can see that the main wallets are centralized exchanges which distribute (and receive) large volumes of the transaction to (and from) their deposit wallets, token contracts, etc.
+
+
+\begin{figure*}[t]
+ \begin{minipage}[b]{.5\textwidth}
+\includegraphics[width=1\columnwidth]{images/7_implemenation_and_usecases/pagerank-score-distribution-of-top-50-accounts.jpeg}
+\caption{PageRank Score Distribution of Top-50 Accounts.}
+\label{fig:pagerank-score-distribution-of-top-50-accounts}
+ \end{minipage}
+ \begin{minipage}[b]{.5\textwidth}
+\includegraphics[width=1.0\columnwidth]{images/7_implemenation_and_usecases/category-distribution-of-top-50-accounts.jpeg}
+\caption{Category Distribution of Top-50 Accounts.}
+\label{fig:category-distribution-of-top-50-accounts}
+ \end{minipage}
+\end{figure*}
+
+Our PageRank implementation successfully detects the most influential accounts across the network, corresponding to the Hubs and Authorities, connecting various transactors and carrying heavy flow weights.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=1.0\textwidth]{images/7_implemenation_and_usecases/pagerank.jpeg}
+\caption{Transaction Network of Top Hubs and Authorities.}
+\label{fig:page-rank}
+\end{figure*}
+
+Focusing on those known accounts (with labels from Etherscan\furl{https://etherscan.io/}), we present (see Figure \ref{fig:page-rank}) the network overview of top hubs and authorities with transactions as edges surrounding them.
+
+\defn{Typical Behavior Patterns of Exchanges' Deposit Wallets}
+We investigated the associated transaction behavior of the exchange wallets.
+Based on our finding, these behaviors can be grouped into three categories:
+\begin{enumerate}
+    \item \textit{Frequently paying out to certain exchanges' main wallets with a fixed, large value} -- From the scatter plot, the payout amount is always around a same value.
+    \item \textit{Frequently receiving funds from the same exchange main wallets, and paying out to various token contracts} -- This is due to the activity which is associated with exchanges as they use external accounts as deposit addresses for collecting tokens based on trading needs.
+
+    \item \textit{Frequently receiving funds from a group of ``miner'' accounts, with ``proxy'' accounts in between, which clean out their received ETH within a short time frame} -- Usually, these addresses receive funds from miner accounts, which again get paid reasonable amounts by known mining pools, which we assume are mining rewards (usually around 0.11-0.12 ETH).
+\end{enumerate}
+
+Despite pointing out the three typical behaviors above, they are not necessarily mutually exclusive.
+There are addresses which share more than one of the deducted patterns.
+These behavior patterns explored here are based on the labels we have gathered, and this may be different for other use cases.
+
+
+\subsection{Profiting from Kitties on Ethereum}
+\label{sec:kitties-use-case}
+
+The Ethereum ecosystem generates a large amount of data, including but not limited to protocol-level data (e.g. average block time, gas prices), as well as application-level data (e.g. account interactions, smart contract deployments). 
+To efficiently handle this volume of data, Alethio has investigated different tools and frameworks with one focus: the infrastructure should be resilient, load-bearing, and most importantly, scalable.
+And so, for that reason to overcome the variety of the different data sources, Alethio introduces semantification of Ethereum network and uses SANSA as an underlying engine for large scale distributed RDF based querying, reasoning, and machine learning on top of these RDF datasets.
+To show the joint effort between SANSA and Alethio, we describe a use case on how SANSA can be used to analyze Ethereum at new scales, as depicted in Figure \ref{fig:crypto-sansa}. 
+
+\begin{figure*}[t]
+\caption{Leveraging Blockchain RDF Data with SANSA: CryptoKitties as a Use Case.}
+\label{fig:crypto-sansa}
+\begin{subfigure}[b]{0.95\textwidth}
+\centering
+\includegraphics[height=3cm,width=0.9\textwidth]{images/7_implemenation_and_usecases/kittie_attributes.png}
+\caption{The unique attributes of a Kitty.}
+\label{fig:attributes}
+\end{subfigure}
+\begin{subfigure}[b]{0.5\textwidth}
+\centering
+\includegraphics[height=2.8cm]{images/7_implemenation_and_usecases/kittie.png}
+\caption{An instance of a Kitty.}
+\label{fig:kitty}
+\end{subfigure}
+\begin{subfigure}[b]{0.5\textwidth}
+\centering
+\includegraphics[height=2.8cm,width=\textwidth]{images/7_implemenation_and_usecases/auction_event.png}
+\caption{History of three types of auction events.}
+\label{fig:auction}
+\end{subfigure}
+\begin{subfigure}[b]{0.5\textwidth}
+\centering
+\includegraphics[width=1\textwidth]{images/7_implemenation_and_usecases/CryptoSANSA-pipeline.png}
+\caption{The process pipeline.}
+\label{fig:pipeline}
+\end{subfigure}
+\begin{subfigure}[b]{0.5\textwidth}
+\centering
+\includegraphics[height=4cm,width=\textwidth]{images/7_implemenation_and_usecases/incest-crop.jpeg}
+\caption{An illustration of a small family tree.}
+\label{fig:incest}
+\end{subfigure}
+\end{figure*}
+
+\paragraph*{CryptoKitties\footnote{\url{https://www.cryptokitties.co/} (last accessed June 11\textsuperscript{th} 2018 )}} is one of the first games to be built on blockchain technology. In particular, CryptoKitties initiated and released the first generation virtual kitties, with delicately designed icons and genes sequences. All the kitties are virtual with some biological feature settings. 
+Shown in Figure~\ref{fig:kitty} is a kitty with its specific biological attributes displayed in Figure~\ref{fig:attributes}. The attributes are stored in a sequence, succeeded from its parents' gene sequences, with possibility of \textit{mewtations}.
+An owner can sell, breed or gift it to other user. When users sell or breed it, they will send transactions to the CryptoKitties smart contracts, which will complete the execution of either transferring ownership between users, or generating a new kitty.
+Based on that, game users can trade or breed kitties like traditional collectibles, while having the guarantee that the blockchain will track ownership securely. Moreover, one can breed two kitties to create a brand-new, genetically unique offspring.
+
+\paragraph*{Data Challenges.}
+Alethio has been exploring efficient means of processing large RDF data sets. SANSA empowers Alethio to read and query the data at scale as described in Figure~\ref{fig:pipeline}. Indeed, once the complete RDF data set is loaded, SANSA filters it to retain only the CryptoKitties triples --transactions, contract messages and log information-- before performing more specific analyses.
+
+Practically, the challenges tackled with SANSA can be divided into two groups: game performance and customer behaviors. The first one focuses on time series metrics: throughput time, the event volume, number of active users and amount of spent Ether, which can jointly estimate the trend of popularity for the game. In Figure \ref{fig:auction}, the history of CryptoKitties auctions events shows clearly that there was a peak of traffic in December after the game was launched for around one month. By this time series, we can estimate the popularity of the game throughout history.
+The second one requires machine learning algorithms to detect correlations between indicators (e.g. to determine whether richer owners have the tendency to collect special/rare kitties which are more expensive). and topology from a network view. In Figure \ref{fig:incest}, we present a small subset of the kitty family tree, where incest happened during the reproduction: kitty 1057 is the secondary-degree relative (grandparent) of kitty 3200, while later it bred with kitty 3200 and gave birth to kitty 3225.
+
+
+\section{Mining Big Data applications logs using the SANSA framework}
+\label{sec:bde-use-case}
+Big Data Europe(BDE)\furl{https://github.com/big-data-europe}~\cite{Auer+ICWE-2017} is a large Horizon2020 funded EU project which offers an open source big data processing platform allowing users to install numerous big data processing tools and frameworks. 
+The platform is being tested and used by the 17 different partners of the project scattered across Europe and its 7 different use cases cover a variety of societal challenges like climate, health, weather etc.
+As a specific example, SANSA can be used for log analysis in the context of the BDE platform.
+The mu.semte.ch micro service in BDE transforms docker events to RDF and stores them in a triple store.
+Work is also being done in order to translate HTTP network traffic to RDF. 
+The data from these logs (events and HTTP traffic) can be then combined with the data for a particular micro service and its relevant load (CPU/memory usage) on the server. SANSA can then build a predictive cost model for the micro service calls. This can further be extended for efficient resource allocation, monitoring and creation of common user profiles.
+
+\section{Scalable POIs using the SANSA framework}
+\label{sec:slipo-use-case}
+
+Various organizations like DBpedia~\cite{dbpedia-swj}, Wikidata~\cite{Vrandecic:2014:WFC:2661061.2629489} etc. are constantly working for gathering information from different sources and storing it in structured form, e.g.~\gls{RDF}\furl{https://www.w3.org/TR/rdf11-primer/}.
+RDF data allow to model various domains and this characteristic helps to solve problems in different areas i.e., from the medical domain to the geographical domain. 
+
+In this study, we are focusing on Points Of Interests (POIs).
+POIs are generally characterized by their geospatial coordinates along with their thematic/contextual attributes.
+A common POI use-case is to find hot zones according to specific topics: i.e. discovering Areas of Interest (AOIs) as a result of aggregation of POIs.
+With the assistance of AOIs, one can identify other similar areas in the same or a different city, recognize the distinguishing characteristics of this area, and determine potential types of users (or customers) that would be interested in that area.
+
+In this use case, we propose a flexible architecture to design clustering pipelines for POI semantic datasets at once.
+Indeed, using large and detailed RDF vocabularies allow richer POI descriptions.
+For example, one POI related to a restaurant might be described by its latitude, longitude, food specialty, reviews, address, phone number etc. which could represent up to 50 distinct triples\footnote{\scriptsize See e.g. the SLIPO ontology: \url{https://github.com/SLIPO-EU/poi-data-model/}} leading then to billions of RDF records overall.
+As a consequence, we require scalability and build our solution on top of the distributed semantic stack SANSA~\cite{lehmann-2017-sansa-iswc} which benefits from Apache Spark~\cite{zaharia2012resilient}.
+The proposed architecture then enables any kind of clustering algorithm combinations on POI RDF data.
+
+\subsection{Proposed Solution: Architecture Overview}
+In order to process RDF (containing POIs) datasets in an efficient and scalable way, we first have to adopt a convenient processing framework.
+SANSA~\cite{lehmann-2017-sansa-iswc} is a data-flow engine for distributed computing of large-scale RDF datasets. 
+It provides APIs for faster reading, querying, inferencing and apply analytics at scale.
+It uses Apache Spark~\cite{zaharia2012resilient} as an underlying engine.
+SANSA contains features which are utilized for processing RDF data with thematic and spatial information.
+
+\begin{figure*}
+    \centering
+	\includegraphics[width=\textwidth]{images/7_implemenation_and_usecases/KmeansPaper8.pdf}
+	\caption{A Semantic-Geo Clustering flow.}
+	\label{fig:imp-use-case-clustering}
+\end{figure*}
+
+Our proposed approach contains up to five main components (which could be enabled/disabled if necessary) namely: data pre-processing, SPARQL filtering, word embedding, semantic clustering and geo-clustering.
+In particular, in \autoref{fig:imp-use-case-clustering}, we present an example of Semantic-Geospatial clustering pipeline.
+Indeed, we consider two types of clustering algorithms: the semantic-based ones and the geo-based ones.
+
+In semantic based clustering algorithms (which do not consider POI locations but rather aim at grouping POIs according to shared labels), there is a need to transform the POIs categorical values to numerical vectors to find the distance between them. 
+So far, we can select any word embedding technique among the three available ones namely one-hot encoding, Word2Vec and Multi-Dimensional Scaling.
+All the above mentioned methods converts categorical variables into a form that could be provided to semantic clustering algorithms to form groups of non-location-based similarities.
+
+For example, all restaurants are in one cluster whereas all the ATMs in another one.
+On the other hand, the geo-clustering methods help to group the spatially closed coordinates with in each semantic cluster.
+
+More generically, our architecture and implementation allow users to design any kind of clustering combinations they would like. Actually, the solution is flexible enough to pipe together more than two clustering ``blocks'' and even to add additional RDF datasets into the process after several clustering rounds. In addition, we directly embedded the state-of-the-art clustering algorithms into the SANSA Machine Learning layer\furl{https://github.com/SANSA-Stack/SANSA-ML} so that these pipelines are prone to be built out of the box.
+
+
+\subsubsection{Application example: a Semantic-Geo clustering pipeline}
+
+To illustrate the feasibility of our approach and demonstrate the potential of the RDF POI clustering library we developed in SANSA, we present --as an example-- in this section the implementation results of the specific architecture presented in \autoref{fig:imp-use-case-clustering} i.e. a Semantic-Geo clustering pipeline.
+
+In order to test the process and validate the approach, we used an RDF POI dataset which follows the ontology described in~\cite{Athanasiou2019BigPD} containing around 18\,000 triples which represent information on 623 POIs (i.e. around 28 triples per POI). We then chose Word2Vec~\cite{mikolov2013distributed} as embedding for the K-means~\cite{kmeans-algo} semantic-clustering algorithm, before running DBSCAN~\cite{ester1996density} as geo-clustering method. In details, we gave the following parameters to the algorithms: 8 clusters within 5 iterations for K-means and $\epsilon=0.002$ with at least 2 points per cluster for DBSCAN.
+The complete process took around 20 seconds using a 8GB-memory laptop running a single-node SANSA \& Spark stack.
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=.49\textwidth]{images/7_implemenation_and_usecases/kmean.png}
+	\includegraphics[width=.49\textwidth]{images/7_implemenation_and_usecases/kmeandbscan.png}
+    \caption{Visualizations (on a map) of the Semantic-Geo clustering pipeline steps.}
+    \label{fig:imp-use-cases-map}
+\end{figure*}
+
+We present the results obtained at the various steps in \autoref{fig:imp-use-cases-map} on a map, the figure presents a zoom over a particular Austrian region. The figure is twofold, we first display (left side) the only result of the K-means where POIs are pinned on a map and where each color corresponds to a specific cluster. As expected, the semantic clusters are distributed over the entire country since POIs of a color are sharing common ``sense'' with regards to the categories in the ontology. As a consequence, the geographical step of aggregation allows then to break those country-spread clusters into pieces and obtain (right side of \autoref{fig:imp-use-cases-map}) relevant AOIs. In particular, four AOIs are visible: an orange one in the corner, a large red one which also embeds a green one and a little magenta.
+
+
+\section{Summary}
+SANSA provides a scalable solution for reading and querying large scale RDF data, providing compatibility with machine learning libraries on Spark including GraphX as a graph processing library.
+With conventional graph analysis tools, we successfully identified Hubs and Authorities in the Ethereum transaction network and discovered that they are mainly related to exchange wallet and mining pool activities.
+
+This pipeline also provides a possibility to filter out top accounts, which are likely to be exchanges' deposit wallets. 
+Furthermore, with the filtered top rank accounts, the ``mixing'' patterns of exchanges' deposit wallets become recognizable. 
+This can be a promising tool for detecting previously unknown exchange wallets and lead to a deeper understanding of their behavior patterns for future analyses.
+
+Furthermore, we presented a solution to extract AOIs from big POI data while considering several dimensions at the same time. The architecture is embedded inside a state-of-the-art Semantic Web stack (i.e.~SANSA) and then benefits from the advantages of it. For instance, it allows source aggregation or datasets filtering via SPARQL to only focus on some interesting regions, e.g., a specific country can be selected. 
+Moreover, even if we restricted our description in this study to a Semantic-Geo clustering pipeline, our architecture allows any kind of clustering combinations.
+Finally, the above-presented pipeline is also openly available from a demonstrating notebook\furl{https://github.com/SANSA-Stack/SANSA-Notebooks} on the SANSA repository.
