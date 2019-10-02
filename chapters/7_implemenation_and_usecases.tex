@@ -104,12 +104,66 @@ We are exploring different algorithms namely, tensor factorization, association 
 The aim is to provide out-of-the-box algorithms to work with the structured data in a distributed, fault tolerant and resilient fashion.
 Based on those advances, we will also be able to efficiently perform analytics to gain insights of the data for relevant trends, predictions or detection of anomalies.
 
+\subsection{SANSA-Notebooks: Developer friendly access to SANSA}
+
+SANSA provides Notebooks for an easy local deployment for development and demonstration purposes.
+SANSA-Notebooks is an interactive toolkit on top of Hadoop-Spark-Workbench\furl{https://github.com/big-data-europe/docker-hadoop-spark-workbench} with Apache Zeppelin\furl{https://zeppelin.apache.org/}, which allows the copying of files from/to HDFS and an interactive Spark code execution via a web GUI.
+The architecture of SANSA-Notebooks is depicted in Figure~\ref{fig:notebooks_arch}.
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=\textwidth]{images/7_implemenation_and_usecases/SANSA-Notebook-architecture.pdf}
+    \caption{SANSA-Notebooks architecture.}
+    \label{fig:notebooks_arch}
+\end{figure*}
+
+We utilize SANSA-Notebooks (see~Figure~\ref{fig:notebooks}) in Big Data labs and courses as they alleviate the complicated Hadoop/Spark setup and allow the students to focus on developing distributed algorithms on top of SANSA. 
+Cluster deployment of the examples is also possible through Docker images (see SANSA-Examples Github repository\furl{https://github.com/SANSA-Stack/SANSA-Examples}). 
+Additionally, SANSA is readily available from the Maven Central Repository. 
+Thus it is straightforward to include it in other projects using Maven or SBT -- the most popular build managers for Scala -- for both Spark- and Flink-based setups. 
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=.9\textwidth]{images/7_implemenation_and_usecases/RDF-Statistics_withoutlangTAG-cropped.png}
+    \caption{RDF-Stats Spark application running in SANSA-Notebooks with statistics visualization.}
+    \label{fig:notebooks}
+\end{figure*}
+
+The notebooks present a compiled list of the SANSA examples\footnote{\scriptsize{The source code for all of them is provided at \url{https://github.com/SANSA-Stack/SANSA-Examples}}}.
+These examples give a quick overview of the SANSA APIs.
+SANSA is build on the concepts of distributed datasets (i.e RDD, DataFrame, DataSet). 
+A dataset is inferred from the external data, then parallel operations e.g. \textit{transformations} and \textit{actions} are applied which trigger a job execution on a cluster.
+Depending on the network connection, the demonstration will be performed on a local single node cluster or a remote multi node cluster.
+In the following, we provide a concise description for the examples grouped by the SANSA layers.
+\fixme{Add more examples as they have been added to the SANSA-Notebooks, including the POI example}.
+
+\begin{enumerate}
+    \item \emphb{RDF}.
+    \begin{enumerate}
+      \item Reading and writing triple files from HDFS or file system and some basic triple operations.
+      \item A distributed evaluation of numerous RDF Dataset Statistics dubbed RDF-Stats (see~Figure~\ref{fig:notebooks}), for example, property distribution, class distribution, distinct subjects/objects/entities as well as statistics summary.
+      \item Assigning weights to a given entity based on the Spark GraphX PageRank algorithm after triples have been transformed to a graph representation (i.e.~PageRank for resources).
+    \end{enumerate}
+    \item \emphb{Query}. 
+    The example applies Sparqlify\furl{http://aksw.org/Projects/Sparqlify.html}, which is a SPARQL-to-SQL rewriter, for data partitioning and schema extraction. The queries are executed using the SparkSQL engine.
+    \item \emphb{RDF inference}. The examples apply a reasoning profile (RDFS Full, RDFS Simple, OWL Horst, Transitive) on a given input file with an optimised execution plan.
+    \item \emphb{OWL}. The examples provided for the OWL layer demonstrate the process of loading an OWL file into Spark RDD, a Spark Dataset, or a Flink DataSet.
+    \item \emphb{Machine Learning}.
+    \begin{enumerate}
+        \item Clustering algorithms. Three examples for different clustering algorithms are provided, namely power iteration clustering, BorderFlow and modularity clustering. 
+        They all take an RDF graph as input and return the list of triples for each of the different clusters.
+        \item Rule mining. This example applies association rule mining on a given RDF knowledge base. The output is the set of closed Horn rules that satisfy a support-confidence threshold.
+    \end{enumerate}
+\end{enumerate}
+
+One of the powerful features of the SANSA Notebooks is that you can view the result set of the previous session within the Spark framework and, in case you have found some insight for your data and would like to share, you can easily create a report and either print or send it.
+
 
 \subsubsection{Use Cases}
 The main goal of the SANSA framework is to build a generic stack which can work with large amounts of linked data, offering algorithms for scalable, i.e.~horizontally distributed, semantic data analysis.
 To validate this, we have developed use case implementations in several domains and projects.
    
-A more detailed list of use cases with technical details and implementation is given on the following sections.
+A more detailed list of use cases with technical details and implementation is given on the following sections (cf. Section~\ref{sec:alethio-use-case}, \ref{sec:bde-use-case}, and \ref{sec:slipo-use-case}).
 
 \section{Leveraging Blockchain RDF Data using the SANSA framework}
 \label{sec:alethio-use-case}
@@ -265,8 +319,9 @@ The second one requires machine learning algorithms to detect correlations betwe
 \label{sec:bde-use-case}
 Big Data Europe(BDE)\furl{https://github.com/big-data-europe}~\cite{Auer+ICWE-2017} is a large Horizon2020 funded EU project which offers an open source big data processing platform allowing users to install numerous big data processing tools and frameworks. 
 The platform is being tested and used by the 17 different partners of the project scattered across Europe and its 7 different use cases cover a variety of societal challenges like climate, health, weather etc.
-As a specific example, SANSA can be used for log analysis in the context of the BDE platform.
-The mu.semte.ch micro service in BDE transforms docker events to RDF and stores them in a triple store.
+
+SANSA has been used used for log analysis in the context of the BDE platform.
+The \url{mu.semte.ch} micro service in BDE transforms docker events to RDF and stores them in a triple store.
 Work is also being done in order to translate HTTP network traffic to RDF. 
 The data from these logs (events and HTTP traffic) can be then combined with the data for a particular micro service and its relevant load (CPU/memory usage) on the server. SANSA can then build a predictive cost model for the micro service calls. This can further be extended for efficient resource allocation, monitoring and creation of common user profiles.
 
