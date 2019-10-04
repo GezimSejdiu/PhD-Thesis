@@ -142,6 +142,7 @@ In the following, we provide a concise description for the examples grouped by t
     \begin{enumerate}
       \item Reading and writing triple files from HDFS or file system and some basic triple operations.
       \item A distributed evaluation of numerous RDF Dataset Statistics dubbed RDF-Stats (see~Figure~\ref{fig:notebooks}), for example, property distribution, class distribution, distinct subjects/objects/entities as well as statistics summary.
+      \item A distributed evaluation of numerous RDF Dataset quality assessment metrics i.e schema completeness, conciseness, interlinking, etc.
       \item Assigning weights to a given entity based on the Spark GraphX PageRank algorithm after triples have been transformed to a graph representation (i.e.~PageRank for resources).
     \end{enumerate}
     \item \emphb{Query}. 
@@ -325,29 +326,29 @@ The \url{mu.semte.ch} micro service in BDE transforms docker events to RDF and s
 Work is also being done in order to translate HTTP network traffic to RDF. 
 The data from these logs (events and HTTP traffic) can be then combined with the data for a particular micro service and its relevant load (CPU/memory usage) on the server. SANSA can then build a predictive cost model for the micro service calls. This can further be extended for efficient resource allocation, monitoring and creation of common user profiles.
 
-\section{Scalable POIs using the SANSA framework}
+\section{Scalable Integration of Big POI data using the SANSA framework}
 \label{sec:slipo-use-case}
 
-Various organizations like DBpedia~\cite{dbpedia-swj}, Wikidata~\cite{Vrandecic:2014:WFC:2661061.2629489} etc. are constantly working for gathering information from different sources and storing it in structured form, e.g.~\gls{RDF}\furl{https://www.w3.org/TR/rdf11-primer/}.
-RDF data allow to model various domains and this characteristic helps to solve problems in different areas i.e., from the medical domain to the geographical domain. 
+Various organizations like DBpedia~\cite{dbpedia-swj}, Wikidata~\cite{Vrandecic:2014:WFC:2661061.2629489} etc. are constantly working for gathering information from different sources and storing it in structured form, e.g.~\gls{RDF}.
+\gls{RDF} data allow to model various domains and this characteristic helps to solve problems in different areas i.e., from the medical domain to the geographical domain. 
 
-In this study, we are focusing on Points Of Interests (POIs).
-POIs are generally characterized by their geospatial coordinates along with their thematic/contextual attributes.
-A common POI use-case is to find hot zones according to specific topics: i.e. discovering Areas of Interest (AOIs) as a result of aggregation of POIs.
-With the assistance of AOIs, one can identify other similar areas in the same or a different city, recognize the distinguishing characteristics of this area, and determine potential types of users (or customers) that would be interested in that area.
+In this study, we are focusing on \gls{POI}s.
+\gls{POI}s are generally characterized by their geospatial coordinates along with their thematic/contextual attributes.
+A common \gls{POI} use-case is to find hot zones according to specific topics: i.e. discovering \gls{AOI}s as a result of aggregation of \gls{POI}s.
+With the assistance of \gls{AOI}s, one can identify other similar areas in the same or a different city, recognize the distinguishing characteristics of this area, and determine potential types of users (or customers) that would be interested in that area.
 
 In this use case, we propose a flexible architecture to design clustering pipelines for POI semantic datasets at once.
-Indeed, using large and detailed RDF vocabularies allow richer POI descriptions.
-For example, one POI related to a restaurant might be described by its latitude, longitude, food specialty, reviews, address, phone number etc. which could represent up to 50 distinct triples\footnote{\scriptsize See e.g. the SLIPO ontology: \url{https://github.com/SLIPO-EU/poi-data-model/}} leading then to billions of RDF records overall.
+Indeed, using large and detailed \gls{RDF} vocabularies allow richer \gls{POI} descriptions.
+For example, one \gls{POI} related to a restaurant might be described by its latitude, longitude, food specialty, reviews, address, phone number etc. which could represent up to 50 distinct triples\footnote{\scriptsize See e.g. the SLIPO ontology: \url{https://github.com/SLIPO-EU/poi-data-model/}} leading then to billions of RDF records overall.
 As a consequence, we require scalability and build our solution on top of the distributed semantic stack SANSA~\cite{lehmann-2017-sansa-iswc} which benefits from Apache Spark~\cite{zaharia2012resilient}.
-The proposed architecture then enables any kind of clustering algorithm combinations on POI RDF data.
+The proposed architecture then enables any kind of clustering algorithm combinations on \gls{POI} \gls{RDF} data.
 
 \subsection{Proposed Solution: Architecture Overview}
 In order to process RDF (containing POIs) datasets in an efficient and scalable way, we first have to adopt a convenient processing framework.
-SANSA~\cite{lehmann-2017-sansa-iswc} is a data-flow engine for distributed computing of large-scale RDF datasets. 
+SANSA~\cite{lehmann-2017-sansa-iswc} is a data-flow engine for distributed computing of large-scale \gls{RDF} datasets. 
 It provides APIs for faster reading, querying, inferencing and apply analytics at scale.
 It uses Apache Spark~\cite{zaharia2012resilient} as an underlying engine.
-SANSA contains features which are utilized for processing RDF data with thematic and spatial information.
+SANSA contains features which are utilized for processing \gls{RDF} data with thematic and spatial information.
 
 \begin{figure*}
     \centering
@@ -356,25 +357,25 @@ SANSA contains features which are utilized for processing RDF data with thematic
 	\label{fig:imp-use-case-clustering}
 \end{figure*}
 
-Our proposed approach contains up to five main components (which could be enabled/disabled if necessary) namely: data pre-processing, SPARQL filtering, word embedding, semantic clustering and geo-clustering.
-In particular, in \autoref{fig:imp-use-case-clustering}, we present an example of Semantic-Geospatial clustering pipeline.
+Our proposed approach contains up to five main components (which could be enabled/disabled if necessary) namely: data pre-processing, \gls{SPARQL} filtering, word embedding, semantic clustering and geo-clustering.
+In particular, in Figure~\ref{fig:imp-use-case-clustering}, we present an example of Semantic-Geospatial clustering pipeline.
 Indeed, we consider two types of clustering algorithms: the semantic-based ones and the geo-based ones.
 
-In semantic based clustering algorithms (which do not consider POI locations but rather aim at grouping POIs according to shared labels), there is a need to transform the POIs categorical values to numerical vectors to find the distance between them. 
+In semantic based clustering algorithms (which do not consider POI locations but rather aim at grouping \gls{POI}s according to shared labels), there is a need to transform the \gls{POI}s categorical values to numerical vectors to find the distance between them. 
 So far, we can select any word embedding technique among the three available ones namely one-hot encoding, Word2Vec and Multi-Dimensional Scaling.
 All the above mentioned methods converts categorical variables into a form that could be provided to semantic clustering algorithms to form groups of non-location-based similarities.
 
 For example, all restaurants are in one cluster whereas all the ATMs in another one.
 On the other hand, the geo-clustering methods help to group the spatially closed coordinates with in each semantic cluster.
 
-More generically, our architecture and implementation allow users to design any kind of clustering combinations they would like. Actually, the solution is flexible enough to pipe together more than two clustering ``blocks'' and even to add additional RDF datasets into the process after several clustering rounds. In addition, we directly embedded the state-of-the-art clustering algorithms into the SANSA Machine Learning layer\furl{https://github.com/SANSA-Stack/SANSA-ML} so that these pipelines are prone to be built out of the box.
+More generically, our architecture and implementation allow users to design any kind of clustering combinations they would like. Actually, the solution is flexible enough to pipe together more than two clustering ``blocks'' and even to add additional \gls{RDF} datasets into the process after several clustering rounds. In addition, we directly embedded the state-of-the-art clustering algorithms into the SANSA Machine Learning layer\furl{https://github.com/SANSA-Stack/SANSA-ML} so that these pipelines are prone to be built out of the box.
 
 
 \subsubsection{Application example: a Semantic-Geo clustering pipeline}
 
-To illustrate the feasibility of our approach and demonstrate the potential of the RDF POI clustering library we developed in SANSA, we present --as an example-- in this section the implementation results of the specific architecture presented in \autoref{fig:imp-use-case-clustering} i.e. a Semantic-Geo clustering pipeline.
+To illustrate the feasibility of our approach and demonstrate the potential of the \gls{RDF} \gls{POI} clustering library we developed in SANSA, we present --as an example-- in this section the implementation results of the specific architecture presented in Figure~\ref{fig:imp-use-case-clustering} i.e. a Semantic-Geo clustering pipeline.
 
-In order to test the process and validate the approach, we used an RDF POI dataset which follows the ontology described in~\cite{Athanasiou2019BigPD} containing around 18\,000 triples which represent information on 623 POIs (i.e. around 28 triples per POI). We then chose Word2Vec~\cite{mikolov2013distributed} as embedding for the K-means~\cite{kmeans-algo} semantic-clustering algorithm, before running DBSCAN~\cite{ester1996density} as geo-clustering method. In details, we gave the following parameters to the algorithms: 8 clusters within 5 iterations for K-means and $\epsilon=0.002$ with at least 2 points per cluster for DBSCAN.
+In order to test the process and validate the approach, we used an \gls{RDF} \gls{POI} dataset which follows the ontology described in~\cite{Athanasiou2019BigPD} containing around 18\,000 triples which represent information on 623 \gls{POI}s (i.e. around 28 triples per \gls{POI}). We then chose Word2Vec~\cite{mikolov2013distributed} as embedding for the K-means~\cite{kmeans-algo} semantic-clustering algorithm, before running DBSCAN~\cite{ester1996density} as geo-clustering method. In details, we gave the following parameters to the algorithms: 8 clusters within 5 iterations for K-means and $\epsilon=0.002$ with at least 2 points per cluster for DBSCAN.
 The complete process took around 20 seconds using a 8GB-memory laptop running a single-node SANSA \& Spark stack.
 
 \begin{figure*}
@@ -385,17 +386,17 @@ The complete process took around 20 seconds using a 8GB-memory laptop running a 
     \label{fig:imp-use-cases-map}
 \end{figure*}
 
-We present the results obtained at the various steps in \autoref{fig:imp-use-cases-map} on a map, the figure presents a zoom over a particular Austrian region. The figure is twofold, we first display (left side) the only result of the K-means where POIs are pinned on a map and where each color corresponds to a specific cluster. As expected, the semantic clusters are distributed over the entire country since POIs of a color are sharing common ``sense'' with regards to the categories in the ontology. As a consequence, the geographical step of aggregation allows then to break those country-spread clusters into pieces and obtain (right side of \autoref{fig:imp-use-cases-map}) relevant AOIs. In particular, four AOIs are visible: an orange one in the corner, a large red one which also embeds a green one and a little magenta.
+We present the results obtained at the various steps in Figure~\ref{fig:imp-use-cases-map} on a map, the figure presents a zoom over a particular Austrian region. The figure is twofold, we first display (left side) the only result of the K-means where \gls{POI}s are pinned on a map and where each color corresponds to a specific cluster. As expected, the semantic clusters are distributed over the entire country since \gls{POI}s of a color are sharing common ``sense'' with regards to the categories in the ontology. As a consequence, the geographical step of aggregation allows then to break those country-spread clusters into pieces and obtain (right side of Figure~\ref{fig:imp-use-cases-map}) relevant \gls{AOI}s. In particular, four \gls{AOI}s are visible: an orange one in the corner, a large red one which also embeds a green one and a little magenta.
 
 
 \section{Summary}
-SANSA provides a scalable solution for reading and querying large scale RDF data, providing compatibility with machine learning libraries on Spark including GraphX as a graph processing library.
+SANSA provides a scalable solution for reading and querying large scale \gls{RDF} data, providing compatibility with machine learning libraries on Spark including GraphX as a graph processing library.
 With conventional graph analysis tools, we successfully identified Hubs and Authorities in the Ethereum transaction network and discovered that they are mainly related to exchange wallet and mining pool activities.
 
 This pipeline also provides a possibility to filter out top accounts, which are likely to be exchanges' deposit wallets. 
 Furthermore, with the filtered top rank accounts, the ``mixing'' patterns of exchanges' deposit wallets become recognizable. 
 This can be a promising tool for detecting previously unknown exchange wallets and lead to a deeper understanding of their behavior patterns for future analyses.
 
-Furthermore, we presented a solution to extract AOIs from big POI data while considering several dimensions at the same time. The architecture is embedded inside a state-of-the-art Semantic Web stack (i.e.~SANSA) and then benefits from the advantages of it. For instance, it allows source aggregation or datasets filtering via SPARQL to only focus on some interesting regions, e.g., a specific country can be selected. 
+Furthermore, we presented a solution to extract \gls{AOI}s from big POI data while considering several dimensions at the same time. The architecture is embedded inside a state-of-the-art Semantic Web stack (i.e.~SANSA) and then benefits from the advantages of it. For instance, it allows source aggregation or datasets filtering via \gls{SPARQL} to only focus on some interesting regions, e.g., a specific country can be selected. 
 Moreover, even if we restricted our description in this study to a Semantic-Geo clustering pipeline, our architecture allows any kind of clustering combinations.
 Finally, the above-presented pipeline is also openly available from a demonstrating notebook\furl{https://github.com/SANSA-Stack/SANSA-Notebooks} on the SANSA repository.

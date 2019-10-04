@@ -50,7 +50,9 @@ An RDF graph is a set of RDF triples $(S,P,O)$ where $S$ is called the \emph{Sub
 \label{fig:preliminaries-rdf-graph-sample}
 \end{figure*}
 
-Figure~\ref{fig:preliminaries-rdf-graph-sample} represent an \gls{RDF} graph sample about $\verb|"Gezim Sejdiu"|$ as a resource.
+It can be seen as a node and directed-arc diagram, in which each triple is represented as a node-arc-node relation.
+Figure~\ref{fig:preliminaries-rdf-graph-sample} represent an \gls{RDF} graph sample about $\verb|"Gezim Sejdiu"|$ as a resource. 
+
 An RDF triple is used to describe properties of resources and it has the following format:
 $$\verb|<Subject::(resource)> <Predicate::(property)> <Object::(property value)>.|$$
 
@@ -76,6 +78,12 @@ $G_0$ is considered as a default graph which deos not have a name and can be $\e
 \subsubsection{RDF Serialization Formats}
 
 \subsection{SPARQL}
+An \gls{RDF} graph is considered being a directed, labeled graph data format which represent information in the Web.
+\gls{SPARQL} is a \gls{W3C} standard query language for retrieving and manipulating RDF data.
+
+This section cover the foundation of SPARQL and its syntax. 
+
+The results of SPARQL queries can be results sets or RDF graphs.
 
 \subsection{RDF Statistics}
 In this section we define a statistical criteria
@@ -111,10 +119,11 @@ It is a popular file system capable of of handling the distribution of the data 
 HDFS serve as a common, distributed and fault-tolerant data lake for all applications on top of the Hadoop in order to minimize the data movement and duplication.
 Furthermore, it also leverage the distributed processing of large-scale datasets by adapting advanced and automatically partitioning techniques across all the nodes in the cluster.
 \gls{HDFS} was originally built as infrastructure for the Apache Nutch\furl{https://nutch.apache.org/} web search engine project and was inspired by the \gls{GFS}~\cite{Ghemawat:2003:GFS:945445.945450}. 
-\gls{HDFS} is part of the Apache Hadoop ecosystem.
+\gls{HDFS} is an integral component of the Apache Hadoop ecosystem.
 
 \gls{HDFS} is designed in a way that it doesn't require highly reliable and costly hardware but instead, it can be run on a cluster of computers with commodity hardware.
-
+It splits files into blocks that can be replicated across the \textit{DataNodes} machines.
+A \textit{NameNode} is responsible for 
 
 
 \subsubsection{MapReduce}

@@ -1,0 +1,365 @@
+%------------------------------------------------------------------------------
+\chapter{SPARQL Benchmark Queries}
+\label{sec:appendix-sparql-benchmark-queries}
+%------------------------------------------------------------------------------
+We make use of two well-known SPARQL benchmarks for our query engine evaluations (cf. Chapter~\ref{chapter:scalable_rdf_querying}): 
+the \textit{Waterloo SPARQL Diversity Test Suite (WatDiv)} v0.6~\cite{Alu2014DiversifiedST} and \textit{Lehigh University Benchmark (LUBM)} v3.1~\cite{Guo2005LUBMAB}.
+
+In this section, we list the queries used during our benchmarks.
+
+\section{LUBM SPARQL Queries}
+
+\begin{lstlisting}[language=SQL, basicstyle=\ttfamily\scriptsize,morekeywords={PREFIX,OPTIONAL,FILTER,java,rdf,rdfs,url},label=lubm-sparql-queries,basewidth=0.5em]
+==Q1==
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX ub: <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#>
+SELECT ?X  
+WHERE {
+    ?X rdf:type ub:GraduateStudent .
+    ?X ub:takesCourse <http://www.Department0.University0.edu/GraduateCourse0> .
+}
+
+==Q2==
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX ub: <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#>
+SELECT ?X ?Y ?Z
+WHERE {
+    ?X rdf:type ub:GraduateStudent .
+    ?Y rdf:type ub:University .
+    ?Z rdf:type ub:Department .
+    ?X ub:memberOf ?Z .
+    ?Z ub:subOrganizationOf ?Y .
+    ?X ub:undergraduateDegreeFrom ?Y
+}
+
+==Q3==
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX ub: <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#>
+SELECT ?X
+WHERE {
+    ?X rdf:type ub:Publication .
+    ?X ub:publicationAuthor <http://www.Department0.University0.edu/AssistantProfessor0>
+}
+
+==Q4==
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX ub: <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#>
+SELECT ?X ?Y1 ?Y2 ?Y3
+WHERE {
+    ?X rdf:type ub:Professor .
+    ?X ub:worksFor <http://www.Department0.University0.edu> .
+    ?X ub:name ?Y1 .
+    ?X ub:emailAddress ?Y2 .
+    ?X ub:telephone ?Y3
+}
+
+==Q5==
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX ub: <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#>
+SELECT ?X
+WHERE {
+    ?X rdf:type ub:Person .
+    ?X ub:memberOf <http://www.Department0.University0.edu>
+}
+
+==Q6==
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX ub: <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#>
+SELECT ?X
+WHERE {
+    ?X rdf:type ub:Student
+}
+
+==Q7==
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX ub: <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#>
+SELECT ?X ?Y
+WHERE {
+    ?X rdf:type ub:Student .
+    ?Y rdf:type ub:Course .
+    ?X ub:takesCourse ?Y .
+    <http://www.Department0.University0.edu/AssociateProfessor0> ub:teacherOf ?Y
+}
+
+==Q8==
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX ub: <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#>
+SELECT ?X ?Y ?Z
+WHERE {
+    ?X rdf:type ub:Student .
+    ?Y rdf:type ub:Department .
+    ?X ub:memberOf ?Y .
+    ?Y ub:subOrganizationOf <http://www.University0.edu> .
+    ?X ub:emailAddress ?Z
+}
+
+==Q9==
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX ub: <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#>
+SELECT ?X ?Y ?Z
+WHERE {
+    ?X rdf:type ub:Student .
+    ?Y rdf:type ub:Faculty .
+    ?Z rdf:type ub:Course .
+    ?X ub:advisor ?Y .
+    ?Y ub:teacherOf ?Z .
+    ?X ub:takesCourse ?Z
+}
+
+==Q10==
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX ub: <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#>
+SELECT ?X
+WHERE {
+    ?X rdf:type ub:Student .
+    ?X ub:takesCourse <http://www.Department0.University0.edu/GraduateCourse0>
+}
+
+==Q11==
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX ub: <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#>
+SELECT ?X
+WHERE {
+    ?X rdf:type ub:ResearchGroup .
+    ?X ub:subOrganizationOf <http://www.University0.edu>
+}
+
+==Q12==
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX ub: <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#>
+SELECT ?X ?Y
+WHERE {
+    ?X rdf:type ub:Chair .
+    ?Y rdf:type ub:Department .
+    ?X ub:worksFor ?Y .
+    ?Y ub:subOrganizationOf <http://www.University0.edu>
+}
+
+==Q13==
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX ub: <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#>
+SELECT ?X
+WHERE {
+    ?X rdf:type ub:Person .
+    <http://www.University0.edu> ub:hasAlumnus ?X
+}
+
+==Q14==
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX ub: <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#>
+SELECT ?X
+WHERE {
+    ?X rdf:type ub:UndergraduateStudent
+}
+\end{lstlisting}
+
+
+
+\section{WatDiv SPARQL Queries}
+
+\begin{lstlisting}[language=SQL, basicstyle=\ttfamily\scriptsize,morekeywords={PREFIX,OPTIONAL,FILTER,java,rdf,rdfs,url},label=watdiv-sparql-queries,basewidth=0.5em]
+==C1==
+SELECT ?v0 ?v4 ?v6 ?v7 
+WHERE {
+    ?v0 <http://schema.org/caption> ?v1 .
+    ?v0 <http://schema.org/text> ?v2 .
+    ?v0 <http://schema.org/contentRating> ?v3 .
+    ?v0 <http://purl.org/stuff/rev#hasReview> ?v4 .
+    ?v4 <http://purl.org/stuff/rev#title> ?v5 .
+    ?v4 <http://purl.org/stuff/rev#reviewer> ?v6 .
+    ?v7 <http://schema.org/actor> ?v6 .
+    ?v7 <http://schema.org/language> ?v8 .
+}
+
+==C2==
+SELECT ?v0 ?v3 ?v4 ?v8 
+WHERE {
+    ?v0 <http://schema.org/legalName> ?v1 .
+    ?v0 <http://purl.org/goodrelations/offers> ?v2 .
+    ?v2 <http://schema.org/eligibleRegion> <http://db.uwaterloo.ca/~galuc/wsdbm/Country5> .
+    ?v2 <http://purl.org/goodrelations/includes> ?v3 .
+    ?v4 <http://schema.org/jobTitle> ?v5 .
+    ?v4 <http://xmlns.com/foaf/homepage> ?v6 .
+    ?v4 <http://db.uwaterloo.ca/~galuc/wsdbm/makesPurchase> ?v7 .
+    ?v7 <http://db.uwaterloo.ca/~galuc/wsdbm/purchaseFor> ?v3 .
+    ?v3 <http://purl.org/stuff/rev#hasReview> ?v8 .
+    ?v8 <http://purl.org/stuff/rev#totalVotes> ?v9 .
+}
+
+==C3==
+SELECT ?v0 
+WHERE {
+    ?v0 <http://db.uwaterloo.ca/~galuc/wsdbm/likes> ?v1 .
+    ?v0 <http://db.uwaterloo.ca/~galuc/wsdbm/friendOf> ?v2 .
+    ?v0 <http://purl.org/dc/terms/Location> ?v3 .
+    ?v0 <http://xmlns.com/foaf/age> ?v4 .
+    ?v0 <http://db.uwaterloo.ca/~galuc/wsdbm/gender> ?v5 .
+    ?v0 <http://xmlns.com/foaf/givenName> ?v6 .
+}
+
+==F1==
+SELECT ?v0 ?v2 ?v3 ?v4 ?v5 
+WHERE {
+    ?v0 <http://ogp.me/ns#tag> <http://db.uwaterloo.ca/~galuc/wsdbm/Topic13> .
+    ?v0 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ?v2 .
+    ?v3 <http://schema.org/trailer> ?v4 .
+    ?v3 <http://schema.org/keywords> ?v5 .
+    ?v3 <http://db.uwaterloo.ca/~galuc/wsdbm/hasGenre> ?v0 .
+    ?v3 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://db.uwaterloo.ca/~galuc/wsdbm/ProductCategory2> .
+}
+
+==F2==
+SELECT ?v0 ?v1 ?v2 ?v4 ?v5 ?v6 ?v7 
+WHERE {
+    ?v0 <http://xmlns.com/foaf/homepage> ?v1 .
+    ?v0 <http://ogp.me/ns#title> ?v2 .
+    ?v0 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ?v3 .
+    ?v0 <http://schema.org/caption> ?v4 .
+    ?v0 <http://schema.org/description> ?v5 .
+    ?v1 <http://schema.org/url> ?v6 .
+    ?v1 <http://db.uwaterloo.ca/~galuc/wsdbm/hits> ?v7 .
+    ?v0 <http://db.uwaterloo.ca/~galuc/wsdbm/hasGenre> <http://db.uwaterloo.ca/~galuc/wsdbm/SubGenre22> .
+}
+
+==F3==
+SELECT ?v0 ?v1 ?v2 ?v4 ?v5 ?v6 
+WHERE {
+    ?v0 <http://schema.org/contentRating> ?v1 .
+    ?v0 <http://schema.org/contentSize> ?v2 .
+    ?v0 <http://db.uwaterloo.ca/~galuc/wsdbm/hasGenre> <http://db.uwaterloo.ca/~galuc/wsdbm/SubGenre60> .
+    ?v4 <http://db.uwaterloo.ca/~galuc/wsdbm/makesPurchase> ?v5 .
+    ?v5 <http://db.uwaterloo.ca/~galuc/wsdbm/purchaseDate> ?v6 .
+    ?v5 <http://db.uwaterloo.ca/~galuc/wsdbm/purchaseFor> ?v0 .
+}
+
+==F4==
+SELECT ?v0 ?v1 ?v2 ?v4 ?v5 ?v6 ?v7 ?v8
+WHERE {
+    ?v0 <http://xmlns.com/foaf/homepage> ?v1 .
+    ?v2 <http://purl.org/goodrelations/includes> ?v0 .
+    ?v0 <http://ogp.me/ns#tag> <http://db.uwaterloo.ca/~galuc/wsdbm/Topic13> .
+    ?v0 <http://schema.org/description> ?v4 .
+    ?v0 <http://schema.org/contentSize> ?v8 .
+    ?v1 <http://schema.org/url> ?v5 .
+    ?v1 <http://db.uwaterloo.ca/~galuc/wsdbm/hits> ?v6 .
+    ?v1 <http://schema.org/language> <http://db.uwaterloo.ca/~galuc/wsdbm/Language0> .
+    ?v7 <http://db.uwaterloo.ca/~galuc/wsdbm/likes> ?v0 .
+}
+
+==F5==
+SELECT ?v0 ?v1 ?v3 ?v4 ?v5 ?v6 
+WHERE {
+    ?v0 <http://purl.org/goodrelations/includes> ?v1 .
+    <http://db.uwaterloo.ca/~galuc/wsdbm/Retailer842> <http://purl.org/goodrelations/offers> ?v0 .
+    ?v0 <http://purl.org/goodrelations/price> ?v3 .
+    ?v0 <http://purl.org/goodrelations/validThrough> ?v4 .
+    ?v1 <http://ogp.me/ns#title> ?v5 .
+    ?v1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ?v6 .
+}
+
+==L1==
+SELECT ?v0 ?v2 ?v3 
+WHERE {
+    ?v0 <http://db.uwaterloo.ca/~galuc/wsdbm/subscribes> <http://db.uwaterloo.ca/~galuc/wsdbm/Website16661> .
+    ?v2 <http://schema.org/caption> ?v3 .
+    ?v0 <http://db.uwaterloo.ca/~galuc/wsdbm/likes> ?v2 .
+}
+
+==L2==
+SELECT ?v1 ?v2 
+WHERE {
+    <http://db.uwaterloo.ca/~galuc/wsdbm/City13> <http://www.geonames.org/ontology#parentCountry> ?v1 .
+    ?v2 <http://db.uwaterloo.ca/~galuc/wsdbm/likes> <http://db.uwaterloo.ca/~galuc/wsdbm/Product0> .
+    ?v2 <http://schema.org/nationality> ?v1 .
+}
+
+==L3==
+SELECT ?v0 ?v1 
+WHERE {
+    ?v0 <http://db.uwaterloo.ca/~galuc/wsdbm/likes> ?v1 .
+    ?v0 <http://db.uwaterloo.ca/~galuc/wsdbm/subscribes> <http://db.uwaterloo.ca/~galuc/wsdbm/Website2633> .
+}
+
+==L4==
+SELECT ?v0 ?v2 
+WHERE {
+    ?v0 <http://ogp.me/ns#tag> <http://db.uwaterloo.ca/~galuc/wsdbm/Topic96> .
+    ?v0 <http://schema.org/caption> ?v2 .
+}
+
+==L5==
+SELECT ?v0 ?v1 ?v3 
+WHERE {
+    ?v0 <http://schema.org/jobTitle> ?v1 .
+    <http://db.uwaterloo.ca/~galuc/wsdbm/City13> <http://www.geonames.org/ontology#parentCountry> ?v3 .
+    ?v0 <http://schema.org/nationality> ?v3 .
+}
+
+==S1==
+SELECT ?v0 ?v1 ?v3 ?v4 ?v5 ?v6 ?v7 ?v8 ?v9 
+WHERE {
+    ?v0 <http://purl.org/goodrelations/includes> ?v1 .
+    <http://db.uwaterloo.ca/~galuc/wsdbm/Retailer633> <http://purl.org/goodrelations/offers> ?v0 .
+    ?v0 <http://purl.org/goodrelations/price> ?v3 .
+    ?v0 <http://purl.org/goodrelations/serialNumber> ?v4 .
+    ?v0 <http://purl.org/goodrelations/validFrom> ?v5 .
+    ?v0 <http://purl.org/goodrelations/validThrough> ?v6 .
+    ?v0 <http://schema.org/eligibleQuantity> ?v7 .
+    ?v0 <http://schema.org/eligibleRegion> ?v8 .
+    ?v0 <http://schema.org/priceValidUntil> ?v9 .
+}
+
+==S2==
+SELECT ?v0 ?v1 ?v3 
+WHERE {
+    ?v0 <http://purl.org/dc/terms/Location> ?v1 .
+    ?v0 <http://schema.org/nationality> <http://db.uwaterloo.ca/~galuc/wsdbm/Country8> .
+    ?v0 <http://db.uwaterloo.ca/~galuc/wsdbm/gender> ?v3 .
+    ?v0 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://db.uwaterloo.ca/~galuc/wsdbm/Role2> .
+}
+
+==S3==
+SELECT ?v0 ?v2 ?v3 ?v4 
+WHERE {
+    ?v0 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://db.uwaterloo.ca/~galuc/wsdbm/ProductCategory9> .
+    ?v0 <http://schema.org/caption> ?v2 .
+    ?v0 <http://db.uwaterloo.ca/~galuc/wsdbm/hasGenre> ?v3 .
+    ?v0 <http://schema.org/publisher> ?v4 .
+}
+
+==S4==
+SELECT ?v0 ?v2 ?v3 
+WHERE {
+    ?v0 <http://xmlns.com/foaf/age> <http://db.uwaterloo.ca/~galuc/wsdbm/AgeGroup0> .
+    ?v0 <http://xmlns.com/foaf/familyName> ?v2 .
+    ?v3 <http://purl.org/ontology/mo/artist> ?v0 .
+    ?v0 <http://schema.org/nationality> <http://db.uwaterloo.ca/~galuc/wsdbm/Country1> .
+}
+
+==S5==
+SELECT ?v0 ?v2 ?v3 
+WHERE {
+    ?v0 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://db.uwaterloo.ca/~galuc/wsdbm/ProductCategory3> .
+    ?v0 <http://schema.org/description> ?v2 .
+    ?v0 <http://schema.org/keywords> ?v3 .
+    ?v0 <http://schema.org/language> <http://db.uwaterloo.ca/~galuc/wsdbm/Language0> .
+}
+
+==S6==
+SELECT ?v0 ?v1 ?v2 
+WHERE {
+    ?v0 <http://purl.org/ontology/mo/conductor> ?v1 .
+    ?v0 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ?v2 .
+    ?v0 <http://db.uwaterloo.ca/~galuc/wsdbm/hasGenre> <http://db.uwaterloo.ca/~galuc/wsdbm/SubGenre90> .
+}
+
+==S7==
+SELECT ?v0 ?v1 ?v2 
+WHERE {
+    ?v0 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ?v1 .
+    ?v0 <http://schema.org/text> ?v2 .
+    <http://db.uwaterloo.ca/~galuc/wsdbm/User52828> <http://db.uwaterloo.ca/~galuc/wsdbm/likes> ?v0 .
+}
+\end{lstlisting}
+
+
