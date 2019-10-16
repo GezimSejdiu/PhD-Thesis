@@ -4,6 +4,22 @@
 %==============================================================================
 
 This chapter reviews the related work to our research, according to the research problem and research questions defined in Chapter~\ref{chapter:intro}.
+We first discuss and compare the state-of-the-art RDF dataset statistics systems.
+Then, we give an overview and discuss previous work related to RDF quality assessment frameworks. 
+Finally, we cover existing SPARQL query evaluators and position our proposed solutions. 
+
+This chapter is based on the related work sections from following publications~\cite{sejdiu-2018-dist-lod-stats-iswc,sejdiu-2019-sansa-dist-quality-assessment-iswc,sejdiu-2019-sansa-semantic-based-semantics, 2019-sansa-sparklify-iswc}:
+
+\begin{itemize}
+    \item \textbf{Gezim Sejdiu}, Ivan Ermilov, Jens Lehmann, and Mohamed Nadjib-Mami. “\href{http://jens-lehmann.org/files/2018/iswc_distlodstats.pdf}{DistLODStats: Distributed Computation of RDF Dataset Statistics},” in Proceedings of 17th International Semantic Web Conference (ISWC), 2018.
+    
+    \item \textbf{Gezim Sejdiu}, Anisa Rula, Jens Lehmann, and Hajira Jabeen. “\href{http://jens-lehmann.org/files/2019/iswc_dist_quality_assessment.pdf}{A Scalable Framework for Quality Assessment of RDF Datasets},” in Proceedings of 18th International Semantic Web Conference (ISWC), 2019.
+    
+    \item \textbf{Gezim Sejdiu}, Damien Graux, Imran Khan, Ioanna Lytra; Hajira Jabeen; and Jens Lehmann. “\href{https://gezimsejdiu.github.io/publications/semantic_based_query_paper_SEMANTICS2019.pdf}{Towards A Scalable Semantic-based Distributed Approach for SPARQL query evaluation},” 15th International Conference on Semantic Systems (SEMANTiCS), Research \& Innovation , 2019.
+     
+    \item Claus Stadler, \textbf{Gezim Sejdiu}, Damien Graux, and Jens Lehmann. “\href{http://jens-lehmann.org/files/2019/iswc_sparklify.pdf}{Sparklify: A Scalable Software Component for Efficient evaluation of SPARQL queries over distributed RDF datasets},” in Proceedings of 18th International Semantic Web Conference (ISWC), 2019. 
+    
+\end{itemize}
 
 \section{RDF Dataset Statistics Systems}
 In this section, we provide an overview of related work regarding RDF dataset statistics calculation.
@@ -30,7 +46,7 @@ To the best of our knowledge, DistLODStats is the first software component for i
 \section{RDF Quality Assessment Frameworks}
 Even though quality assessment of big datasets is an important research area, it is still largely under-explored. 
 There have been a few works discussing the challenges and issues of big data quality~\cite{becker2015big,RaoG015,cai2015challenges}. 
-Only recently, a few of them have started to address the problem from a practical point of view~\cite{debattista2016luzzu}, which is the focus of our work w.r.t the quality assessment of RDF datasets. %as stated in \autoref{sec:introduction}. 
+Only recently, a few of them have started to address the problem from a practical point of view~\cite{debattista2016luzzu}, which is the focus of our work w.r.t the quality assessment of RDF datasets.
 In the following, we divide the section between conceptual and practical approaches proposed in the state of the art for big data quality assessment.
 
 In~\cite{CatarciSCD17} the authors propose a big data processing pipeline and a big data quality pipeline. 
@@ -59,6 +75,7 @@ Based on the identified limitations of these aforementioned approaches, we have 
 As a result the computation of the quality metrics show a high performance for large-scale datasets.
 
 \section{SPARQL query evaluators}
+
 \defn{Partitioning of RDF Data}
 Centralized RDF stores use relational (e.g., Sesame \cite{BroekstraKH02}), property (e.g., Jena~\cite{Wilkinson06}), or binary tables (e.g., SW-Store~\cite{AbadiMMH09}) for storing RDF triples or maintain the graph structure of the RDF data (e.g., gStore~\cite{ZouMCOZ11}). 
 For dealing with big RDF datasets, vertical partitioning and exhaustive indexing are commonly employed techniques. 
@@ -72,7 +89,7 @@ Partitioning-based approaches for distributed RDF systems propose to partition a
 Such approaches use either standard partitioning algorithms like METIS~\cite{GurajadaSMT14} or introduce their own partitioning strategies. 
 For instance, Lee et al.~\cite{LeeL2013} define a partition unit as a vertex with its closest neighbors based on heuristic rules while DiploCloud~\cite{WylotC16} and AdPart~\cite{harbi2016accelerating} use physiological RDF partitioning based on RDF molecules. 
 In our proposal, we use a semantic-based partitioning approach.
-~\\
+
 \defn{Hadoop-based systems}
 Cloud-based approaches for managing large-scale RDF mainly use NoSQL distributed data stores or employ various partitioning approaches on top of Hadoop infrastructure, i.e., the Hadoop Distributed File System (HDFS) and its MapReduce implementation, in order to leverage computational resources of multiple nodes. 
 For instance, Sempala~\cite{Schatzle2014Sempala} is a Hadoop-based approach which serves as SPARQL-to-SQL approach on top of Hadoop.
@@ -91,7 +108,7 @@ SHARD~\cite{Rohloff2010SHARD} is one approach which groups RDF data into a dedic
 It groups these RDF data by subject and implements a query engine which iterates through each of the clauses used on the query and performs a query processing. 
 A MapReduce job is created while scanning each of the triple patterns and generates a single plan for each of the triple pattern which leads to a larger query plan, therefore, it contains too many Map and Reduces jobs. 
 Our partitioning algorithm is based on SHARD, but instead of creating MapReduce jobs we employ the Spark framework in order to increase scalability.
-~\\
+
 \defn{In-Memory systems}
 S2RDF~\cite{Schatzle:2016:SRQ:2977797.2977806} is a distributed query engine which translates SPARQL queries into SQL ones while running them on Spark-SQL. 
 It introduces a data partitioning strategy that extends vertical partitioning with additional statistics, containing pre-computed semi-joins for query optimization.

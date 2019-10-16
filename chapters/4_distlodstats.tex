@@ -579,14 +579,13 @@ We run the experiments on four datasets
 \multicolumn{1}{l}{}& \multicolumn{5}{c}{\scriptsize{Runtime (h)} (\scriptsize{mean/std})} \\
 \cline{2-6}
 \rule{0pt}{8pt}
-\multirow{2}{*}{$\longrightarrow$} & \multicolumn{2}{c|}{\scriptsize{LODStats}} & \multicolumn{3}{c}{\scriptsize{DistLODStats}} \\
+\multirow{2}{*}{$\longrightarrow$} & \multicolumn{2}{c|}{\scriptsize{\textbf{LODStats}}} & \multicolumn{3}{c}{\scriptsize{\textbf{DistLODStats}}} \\
 \cline{2-6}  \rule{0pt}{10pt}
 & \scriptsize{a) files} & \scriptsize{b) bigfile}  & \scriptsize{c) local} & \scriptsize{d) cluster} & \scriptsize{e) speedup ratio} \\
 \midrule
-\scriptsize{\textbf{LinkedGeoData}}& \scriptsize{n/a} & \scriptsize{n/a} & \scriptsize{36.65/0.13} & \scriptsize{\textbf{4.37}/0.15} & \scriptsize{7.4x}\\
-\scriptsize{\textbf{M$_{DBpedia}^{en}$}} & \scriptsize{\textbf{24.63}/0.57} & \scriptsize{fail} & \scriptsize{25.34/0.11} & \scriptsize{\textbf{2.97}/0.08} & \scriptsize{7.6x} \\
-\scriptsize{\textbf{M$_{DBpedia}^{de}$}} & \scriptsize{n/a} & \scriptsize{n/a} & \scriptsize{10.34/0.06} & \scriptsize{\textbf{1.2}/0.0} & \scriptsize{7.3x}\\
-\scriptsize{\textbf{M$_{DBpedia}^{fr}$}} & \scriptsize{n/a} & \scriptsize{n/a} & \scriptsize{10.49/0.09} & \scriptsize{\textbf{1.27}/0.04} & \scriptsize{7.3x}\\
+\scriptsize{LinkedGeoData}& \scriptsize{n/a} & \scriptsize{n/a} & \scriptsize{36.65/0.13} & \win \scriptsize{4.37/0.15} & \scriptsize{7.4x}\\ \scriptsize{M$_{DBpedia}^{en}$} & \win \scriptsize{24.63/0.57} & \scriptsize{fail} & \scriptsize{25.34/0.11} & \win \scriptsize{2.97/0.08} & \scriptsize{7.6x} \\
+\scriptsize{M$_{DBpedia}^{de}$} & \scriptsize{n/a} & \scriptsize{n/a} & \scriptsize{10.34/0.06} & \win \scriptsize{1.2/0.0} & \scriptsize{7.3x}\\
+\scriptsize{M$_{DBpedia}^{fr}$} & \scriptsize{n/a} & \scriptsize{n/a} & \scriptsize{10.49/0.09} & \win \scriptsize{1.27/0.04} & \scriptsize{7.3x}\\
 \bottomrule
 \end{tabularx}
 \end{table*}

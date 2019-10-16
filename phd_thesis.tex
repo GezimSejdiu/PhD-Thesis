@@ -7,6 +7,10 @@
 \usepackage{uni-bonn-style/thesis_defs}
 % \usepackage{listings}
 
+% generate Texlive offlien version: 
+%1. latex thesis.tex, then biber thesis // will generate thesis.bbl -- needed to render references.
+%2. makeglossaries thesis // will generate acronym
+
 % ------
 \usepackage{hyperref}
 \usepackage[acronym, toc, nosuper]{glossaries}
@@ -39,19 +43,8 @@
 \makeatletter
 \newcommand\newMetricNr[1][]{#1\refstepcounter{count}\def\@currentlabel{#1}}
 \newcommand\newitem[1][]{\item[#1)]\refstepcounter{count}\def\@currentlabel{#1}}
+\newcommand\rqNr[1][]{#1\refstepcounter{count}\def\@currentlabel{#1}}
 \makeatother
-
-\makeatletter
-\g@addto@macro{\UrlBreaks}{\UrlOrds}
-\makeatother
-
-\lstset{
-    string=[s]{"}{"},
-    stringstyle=\color{blue},
-    comment=[l]{:},
-    commentstyle=\color{black},
-   basicstyle=\scriptsize\ttfamily,
-}
 
 
 
@@ -63,7 +56,7 @@
 % The following definitions are used to produce the title pages
 % needed at various stages
 \newcommand{\thesistitle}{Efficient Distributed In-Memory Processing of RDF Datasets}
-\newcommand*{\thesisauthor}{Gezim Sejdiu}
+\newcommand*{\thesisauthor}{\textbf{Gezim Sejdiu}}
 \newcommand*{\thesistown}{Kosovo}
 \renewcommand*{\InstituteName}{\PI}
 \renewcommand*{\inInstitute}{\inPI}
@@ -195,11 +188,11 @@
 
 \include{chapters/1_introduction}
 \include{chapters/2_preliminaries}
-\include{chapters/3_related_work}
-\include{chapters/4_distlodstats}
-\include{chapters/5_distqualityassessment}
-\include{chapters/6_scalable_rdf_querying}
-\include{chapters/7_implemenation_and_usecases}
+%\include{chapters/3_related_work}
+%\include{chapters/4_distlodstats}
+%\include{chapters/5_distqualityassessment}
+%\include{chapters/6_scalable_rdf_querying}
+%\include{chapters/7_implemenation_and_usecases}
 \include{chapters/8_conclusion}
 % Uncomment the following command to get references per chapter.
 % Put it inside the file or change \include to \input if you do not want the references
@@ -229,6 +222,7 @@
 \include{appendices/appendix_sparql_benchmark_queries}
 \include{appendices/appendix_publications}
 
+\include{acronyms}
 \input{acronyms}
 \printglossaries
 

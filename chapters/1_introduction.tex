@@ -38,13 +38,6 @@ We have decided to explore the use of these two prominent frameworks for RDF dat
 \section{Problem Definition and Challenges}
 \label{sec:problem-definition-and-challenges}
 
-
-\begin{tcolorbox}
-\textbf{RQ}: Is it possible to process large-scale RDF Datasets efficiently and effectively?
-\end{tcolorbox}
-
-
-
 \subsection{Challenge 1: Scalable Computation of RDF Dataset Statistics}
 The first challenge to overcome when dealing with large-scale RDF dataset is to know an \textit{apriori} internals of a RDF dataset.
 
@@ -60,11 +53,19 @@ Apart from knowing the internals of a given dataset, deciding how quality and wh
 \section{Research Questions}
 \label{sec:research-questions}
 
-As stated in the motivation section above and identified challenges, we define three main research questions.
+As stated in the motivation section above and identified challenges, we define a main research question:
+
+\begin{tcolorbox}
+\centering
+\textit{Is it possible to process large-scale RDF datasets efficiently and effectively?}
+\end{tcolorbox}
+
+This research question then breaks down into four specific research questions.
+
 Each challenge is mapped to a specific research questions and altogether contribute to the overall research problem definition tackled throughout this thesis.
 
 \begin{tcolorbox}
-\textbf{RQ1}: How can we efficiently explore the structure of the large-scale RDF datasets?
+\textbf{\rqNr[RQ1]\label{rq:1}}: How can we efficiently explore the structure of the large-scale RDF datasets?
 \end{tcolorbox}
 
 Over the last years, the Semantic Web has been growing steadily. Today, we count more than 10,000 datasets made available online following Semantic Web standards.
@@ -77,7 +78,7 @@ The preliminary results show that our distributed approach improves upon a previ
 The criteria are extensible beyond the 32 default criteria, is integrated into the larger SANSA framework and employed in at least four major usage scenarios beyond the SANSA community.
 
 \begin{tcolorbox}
-\textbf{RQ2}: Can quality of large-scale RDF Datasets be assessed efficiently in a distributed manner?
+\textbf{\rqNr[RQ2]\label{rq:2}}: Can quality of large-scale RDF Datasets be assessed efficiently in a distributed manner?
 \end{tcolorbox}
 
 Over the last years, Linked Data has grown continuously. 
@@ -91,7 +92,7 @@ The work presented here is integrated with the SANSA framework and has been appl
 The results show that our approach is more generic, efficient, and scalable as compared to previously proposed approaches.
 
 \begin{tcolorbox}
-\textbf{RQ3}: Can distributed RDF datasets be queried efficiently and effectively?
+\textbf{\rqNr[RQ3]\label{rq:3}}: Can distributed RDF datasets be queried efficiently and effectively?
 \end{tcolorbox}
 
 One of the key traits of Big Data is its complexity in terms of representation, structure, or formats.
@@ -108,15 +109,45 @@ It is also comparable with the in-memory SPARQL query evaluators when there is l
 
 
 \begin{tcolorbox}
-\textbf{RQ4}: How can we exploit large-scale RDF datasets for a particular use case and ensure scalability?
+\textbf{\rqNr[RQ4]\label{rq:4}}: How can we exploit large-scale RDF datasets for a particular use case and ensure scalability?
 \end{tcolorbox}
 In response to this question, we present a use-case ...
 
 
 \section{Thesis Overview}
 \label{sec:thesis-overview}
+This section gives an overview of our main contributions conducted during this thesis and the research areas investigated.
+References to scientific publications covering this study and an overview of the thesis outline are also covered.
 
 \subsection{Contributions}
+Our contributions cover a spectrum of research areas from the Scalable RDF Datasets, RDF Quality Assessment at Scale, and Scalable and Efficient SPARQL evaluators, as depicted in Figure~\fixme{add the figure for the main research areas and methodologies}
+
+\begin{enumerate}
+    \item \textit{A Scalable Distributed Approach for Computation of RDF Dataset Statistics}.
+    
+    More details on this contribution are provided in Chapter~\ref{chapter:dist_lod_stats}, and publications~\cite{sejdiu-2018-dist-lod-stats-iswc, sejdiu-2018-statisfy-iswc-poster}.
+    Which answer~\ref{rq:1}.
+    
+    \item \textit{A Scalable Framework for Quality Assessment of RDF Datasets}.
+    
+    See Chapter~\ref{chapter:dist_quality_assessment} for more information about this contribution, and publication~\cite{sejdiu-2019-sansa-dist-quality-assessment-iswc}.
+    answer~\ref{rq:2}
+    
+    \item \textit{A Scalable Framework for SPARQL evaluation of large RDF data}.
+    
+    A more detailed information of this contribution is given in the Chapter~\ref{chapter:scalable_rdf_querying}, and publications~\cite{2019-sansa-sparklify-iswc, sejdiu-2019-sansa-semantic-based-semantics, sansa-sparklify-ISWC-demo}.
+    
+    answer~\ref{rq:3}
+    
+    \item \textit{A real use cases exploiting large-scale RDF datasets}.
+    
+    Some of the use cases are described in Chapter~\ref{chapter:implementation_and_use_cases}, and publications~\cite{lehmann-2017-sansa-iswc, iermilov-2017-sansa-iswc-demo, sansa-hubs-and-authorities-transaction-semantics19-poster, piping-clustering-eswc19-poster, graux-2018-sansa-ethereum-semantics-poster, Auer+ICWE-2017}.
+    
+    answer~\ref{rq:4}
+    
+\end{enumerate}
+
+
 \subsection{List of Publications}
 In this thesis, part of the work is based on the following publications:
 \begin{itemize}
@@ -138,7 +169,7 @@ In this thesis, part of the work is based on the following publications:
 \end{enumerate}
     \item \emph{Demo \& Poster Papers (peer reviewed)}
     \begin{enumerate}
-    \setcounter{enumi}{9}
+    \setcounter{enumi}{6}
 
     \item Claus Stadler; \textbf{Gezim Sejdiu}; Damien Graux; and Jens Lehmann. "\href{https://gezimsejdiu.github.io/publications/sansa-sparklify-ISWC-demo.pdf}{Querying large-scale RDF datasets using the SANSA framework}".  In Proceedings of 18th International Semantic Web Conference (ISWC), Poster \& Demos, 2019. \texttt{URL}:~\url{https://gezimsejdiu.github.io/publications/sansa-sparklify-ISWC-demo.pdf}
 
@@ -158,9 +189,11 @@ Appendix~\ref{sec:appendix-publications} contains the complete list of publicati
 \section{Thesis Outline}
 \label{sec:thesis-structure}
 The thesis consists of eight chapters. 
-Chapter \ref{chapter:intro} introduces the thesis starting with the main research problem and challenges, motivation, research questions, scientific contributions addressing research questions, and a list of published scientific papers describing these contributions.
-Chapter~\ref{chapter:preliminaries} presents basic concepts and background about Semantic Web technologies and Distributed Computing frameworks for a comprehensive overview of the research problem. 
-Chapter~\ref{chapter:related} describes state-of-the-art efforts in the field of processing \gls{RDF} datasets w.r.t research problem.
+\textbf{Chapter~\ref{chapter:intro}} introduces the thesis starting with the main research problem and challenges, motivation, research questions, scientific contributions addressing research questions, and a list of published scientific papers describing these contributions.
+\textbf{Chapter~\ref{chapter:preliminaries}} presents basic concepts and background about Semantic Web technologies and Hadoop Ecosystem for a comprehensive overview of the research problem. 
+\textbf{Chapter~\ref{chapter:related}} describes state-of-the-art efforts in the field of processing \gls{RDF} datasets w.r.t research problem.
 We provide an overview of existing RDF dataset statistics sytems, Quality Assessment systems, and SPARQL query evaluators in order to provide a thorough knowledge of their limitations, and the identified gaps we cover in this thesis.
-
-In Chapter~\ref{chapter:dist_lod_stats} we introduce 
+In \textbf{Chapter~\ref{chapter:dist_lod_stats}} we introduce a scalable approach for statistical calculation of large \gls{RDF} datasets, which scales out to cluster of machines.
+More specifically, we describe the first distributed in-memory approach for computing 32 different statistical criteria for \gls{RDF} dataset using the Apache Spark framework.
+The component is integrated into the larger SANSA framework.
+\textbf{Chapter~\ref{chapter:dist_quality_assessment}} 
