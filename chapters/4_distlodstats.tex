@@ -1,5 +1,5 @@
 %==============================================================================
-\chapter{ Large-scale RDF Dataset Statistics}
+\chapter{Large-scale RDF Dataset Statistics}
 \label{chapter:dist_lod_stats}
 %==============================================================================
 
@@ -27,7 +27,7 @@ In this chapter we address the following research question:
 \textbf{RQ1}: How can we efficiently explore the structure of the large-scale RDF datasets?
 \end{tcolorbox}
 
-Contributions of this chapters are summarize as follows:
+Contributions of this chapter are summarize as follows:
 \begin{itemize}
     \item We propose an algorithm for computing RDF dataset statistics and implement it using an efficient framework for large-scale, distributed and in-memory computations: Apache Spark.
     \item We perform an analysis of the complexity of the computational steps and the data exchange between nodes in the cluster. 
@@ -522,15 +522,16 @@ In the following, we present our experimental setup including the datasets used.
 \subsubsection{Experimental Setup}
 
 We used one synthetic and two real world datasets for our experiments:
- \begin{enumerate}
+\begin{enumerate}
  
  \item We chose the geospatial dataset LinkedGeoData~\cite{SLHA11} which offers a spatial RDF knowledge base derived from OpenStreetMap.
  
  \item As a cross domain dataset, we selected \emph{DBpedia}~\cite{dbpedia-swj} (v 3.9). DBpedia is a knowledge base with a large ontology.
  
  \item As a synthetic dataset, we chose to use the Berlin SPARQL Benchmark (BSBM)~\cite{Bizer2009TheBS}.
-It is based on an e-commerce use case which is built around a set of products that are offered by different vendors.
-The benchmark provides a data generator, which can be used to create sets of connected triples of any particular size.
+ It is based on an e-commerce use case which is built around a set of products that are offered by different vendors.
+ The benchmark provides a data generator, which can be used to create sets of connected triples of any particular size.
+ 
 \end{enumerate}
 
 Properties of these datasets are given in Table~\ref{tab:dataset_info}.
@@ -772,5 +773,3 @@ DistLODStats is a prominent solution, however, it requires setup and managing of
 To make the process easier, we have introduced STATisfy, a tool for interacting with DistLODStats via a REST Interface.
 This way DistLODStats can be provided as-a-service, where users only send (HTTP) requests to the remote cluster and obtain the wished results, without having any knowledge about system access or cluster management.
 STATisfy is used for the LODStats project and an inclusion in the new DBpedia\furl{https://wiki.dbpedia.org/} community release processes is ongoing.
-
-Although we achieved reasonable results in terms of scalability, we plan to further improve time efficiency by persisting the data to an even higher extend more in memory and perform load balancing. 

@@ -51,6 +51,9 @@ To achieve the goal of storing and manipulating large RDF datasets, we leverage 
 We now give an overview of SANSA framework.
 Figure~\ref{fig:imp-use-cases-sansa-architecture} shows the overall architecture of SANSA that consists of four layers: \emphb{Knowledge Distribution \& Representation Layer}, \emphb{Query Layer}, \emphb{Inference Layer} and \emphb{Machine Learning Layer}.
 
+SANSA's core concept is derived from the useful lessons we learned through the use of big data tools and technologies and a lot of background knowledge through semantic web technologies.
+\fixme{Rephrase it.}
+
 \begin{figure*}
 \centering 
 	\includegraphics[width=0.95\columnwidth]{images/7_implemenation_and_usecases/sansa-architecture.pdf}
@@ -326,6 +329,23 @@ The \url{mu.semte.ch} micro service in BDE transforms docker events to RDF and s
 Work is also being done in order to translate HTTP network traffic to RDF. 
 The data from these logs (events and HTTP traffic) can be then combined with the data for a particular micro service and its relevant load (CPU/memory usage) on the server. SANSA can then build a predictive cost model for the micro service calls. This can further be extended for efficient resource allocation, monitoring and creation of common user profiles.
 
+Big Data Europe(BDE)\furl{https://github.com/big-data-europe}~\cite{Auer+ICWE-2017} is a large Horizon2020 funded EU project which offers an open source big data processing platform allowing users to install numerous big data processing tools and frameworks. The platform is being tested and used by the 17 different partners of the project scattered across Europe and its 7 different use cases cover a variety of societal challenges like climate, health, weather etc. %\todo{Hajra: Can we say that SANSA is then deployed in x scenarios etc.? Are there any usage statistics from this?} 
+%
+As a specific example, SANSA can be used for log analysis in the context of the BDE platform. 
+The mu.semte.ch micro service in BDE transforms docker events to RDF and stores them in a triple store.
+Work is also being done in order to translate HTTP network traffic to RDF. 
+The data from these logs (events and HTTP traffic) can be then combined with the data for a particular micro service and its relevant load (CPU/memory usage) on the server. 
+SANSA can then build a predictive cost model for the micro service calls. This can further be extended for efficient resource allocation, monitoring and creation of common user profiles.
+
+More specifically, BDE also allows creation of a workflow for a stack containing many applications, each serving a particular data value chain. 
+An important feature of the integrator interface is the mu.semte.ch micro service transforms docker events to RDF and stores them in a triple store. The work is also being done towards storing the network logs in the triple store, by translating the http network traffic as triples as they occur in the network.
+This network log data combined with the docker event data grows over time and provides a useful source that can help in analysing the event-call-time proximity. 
+SANSA can be used to perform useful analytics over this data and provide a possibility to create user profiles for the BDI platform. 
+
+The data from these logs(events and http traffic) combined with the data for a particular micro service and its relevant load (CPU/memory usage) on the server. 
+SANSA can be used to build a predictive cost model for the micro service calls. This can further be extended for efficient resource allocation and monitoring.
+
+
 \section{Scalable Integration of Big POI data using the SANSA framework}
 \label{sec:slipo-use-case}
 
@@ -391,12 +411,15 @@ We present the results obtained at the various steps in Figure~\ref{fig:imp-use-
 
 \section{Summary}
 SANSA provides a scalable solution for reading and querying large scale \gls{RDF} data, providing compatibility with machine learning libraries on Spark including GraphX as a graph processing library.
+
 With conventional graph analysis tools, we successfully identified Hubs and Authorities in the Ethereum transaction network and discovered that they are mainly related to exchange wallet and mining pool activities.
 
 This pipeline also provides a possibility to filter out top accounts, which are likely to be exchanges' deposit wallets. 
 Furthermore, with the filtered top rank accounts, the ``mixing'' patterns of exchanges' deposit wallets become recognizable. 
 This can be a promising tool for detecting previously unknown exchange wallets and lead to a deeper understanding of their behavior patterns for future analyses.
+Alethio is investigating DistQualityAssesment as well, for performing large-scale batch quality checks, e.g.~analysing the quality while merging new data, computing attack pattern frequencies and fraud detection. 
+Alethio uses our approaches on a cluster of 100 worker nodes to assess the quality of their $\approx$20B\furl{https://linkeddata.aleth.io/} of RDF data.
 
-Furthermore, we presented a solution to extract \gls{AOI}s from big POI data while considering several dimensions at the same time. The architecture is embedded inside a state-of-the-art Semantic Web stack (i.e.~SANSA) and then benefits from the advantages of it. For instance, it allows source aggregation or datasets filtering via \gls{SPARQL} to only focus on some interesting regions, e.g., a specific country can be selected. 
+In addition, we presented a solution to extract \gls{AOI}s from big POI data while considering several dimensions at the same time. The architecture is embedded inside a state-of-the-art Semantic Web stack (i.e.~SANSA) and then benefits from the advantages of it. For instance, it allows source aggregation or datasets filtering via \gls{SPARQL} to only focus on some interesting regions, e.g., a specific country can be selected. 
 Moreover, even if we restricted our description in this study to a Semantic-Geo clustering pipeline, our architecture allows any kind of clustering combinations.
 Finally, the above-presented pipeline is also openly available from a demonstrating notebook\furl{https://github.com/SANSA-Stack/SANSA-Notebooks} on the SANSA repository.

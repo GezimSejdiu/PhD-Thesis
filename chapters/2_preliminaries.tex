@@ -3,8 +3,9 @@
 \label{chapter:preliminaries}
 %==============================================================================
 This chapter covers the foundation technologies used throughout the thesis.
-First, Section~\ref{sec:preliminaries-semantic-technologies} gives an overview about Semantic Technologies, i.e \gls{RDF} model as a standard model for representing the data, its data partitioning mechanism and accompanying query language \gls{SPARQL}.
-It also covers basic concepts of the \gls{RDF} statistical criteria definition and quality assessment introduction. 
+First, Section~\ref{sec:preliminaries-semantic-technologies} gives an overview about Semantic Technologies, i.e \gls{RDF} model as a standard model for representing the data and its accompanying query language \gls{SPARQL}.
+It also covers different \gls{RDF} serialization formats. 
+%basic concepts of the \gls{RDF} statistical criteria definition and quality assessment introduction. 
 Later, Section~\ref{sec:preliminaries-distributed-frameworks} gives an introduction to \textit{Hadoop}, its core technologies \textit{\gls{HDFS}}, \textit{MapReduce} and \textit{Apache Spark} with its libraries that have been used in the course of this thesis.
 
 \section{Semantic Technologies}
@@ -24,7 +25,8 @@ As a consequence, the \gls{W3C} consortium was built and is mainly in charge of 
 \begin{figure*}
 \centering
 \includegraphics[width=0.7\columnwidth]{images/2_preliminaries/sw-layer-cake-2007.png}
- \caption[Semantic Web Stack]{Semantic Web Stack\footnotemark.}
+ \caption[\textbf{Semantic Web Stack}. The Semantic Web Stack, also known as Semantic Web Cake or Semantic Web Layer Cake, illustrates the architecture of the Semantic Web, according to W3C.] %
+ {\textbf{Semantic Web Stack}\footnotemark \addtocounter{footnote}{1}. The Semantic Web Stack, also known as Semantic Web Cake or Semantic Web Layer Cake, illustrates the architecture of the Semantic Web, according to W3C.}
 \label{fig:preliminaries-sw-layer-cake}
 \end{figure*}
 
@@ -34,17 +36,14 @@ Here we focus only on \textit{Data interchange: \gls{RDF}} and \textit{Query: \g
 Semantic Web's core technology is the so-called Resource Description Framework (\gls{RDF}) which serve as a main data representation.
 It represent information about resources.
 A resource is identified with a globally unique identifier (\gls{URI}s).
-The \gls{RDF} data model can be interpreted as a directed labeled graph where resources identified by \gls{URI} are nodes in the graph and edges represent the relationships between resources labeled with the type of relationship known as predicates also identified by \gls{URI}s.
+The \gls{RDF} data model can be interpreted as a directed labeled graph where resources identified by \gls{URI} are nodes in the graph and edges represent the relationships between resources labeled with the type of relationship known as predicates, also identified by \gls{URI}s.
 
 \gls{SPARQL} is the \gls{W3C} standard for querying \gls{RDF} data.
 It uses graph pattern mechanism to be matched against an \gls{RDF} graph and its syntax is similar to SQL.
 
 More details about \gls{RDF} (cf. Section~\ref{sec:rdf-data}) and \gls{SPARQL} (cf. Section~\ref{sec:sparql}) is given in the following sections.
-
-
-\footnotetext{\url{https://www.w3.org/2007/03/layerCake.png} (retrieved in September 2019)}
-
-
+\addtocounter{footnote}{-1}
+\footnotetext{\url{https://www.w3.org/2007/03/layerCake.png} (Retrieved in September 2019)}
 
 
 \subsection{RDF Data}
@@ -53,7 +52,7 @@ More details about \gls{RDF} (cf. Section~\ref{sec:rdf-data}) and \gls{SPARQL} (
 The Resource Description Framework (\gls{RDF})~\cite{Wood:14:RCA} is a \gls{W3C} standard for describing resources.
 A resource is a fact or a thing which can be described and identified. 
 A person, a home page, this thesis is a resource. 
-An RDF resource is identified by a \emph{\gls{URI}} reference, while Literals are used to represent a respective data values.
+An RDF resource is identified by a \emph{\gls{URI}} reference, while literals are used to represent a respective data values.
 Literals consist either a string and its language tag or a value and its datatype.
 
 An \gls{RDF} graph is a set of \gls{RDF} triples $(s,p,o)$ where $s$ is called the \emph{subject}, $p$ is the \emph{predicate} and $o$ is the \emph{object}, each of which can be an \gls{URI}, subjects and objects can alternatively be blank nodes and objects can also represent literal data values.
@@ -136,11 +135,11 @@ Often, triples are grouped (1) if several \textit{predicates} share the common \
 The following example depict an RDF graph represented in a Turtle syntax.
 
 \begin{lstlisting}[basicstyle=\ttfamily,breaklines=true,showstringspaces=false,label=lst:turtlesyntax,basewidth=0.5em,caption=\textbf{Turtle syntax example}. Representation of the example in Figure~\ref{fig:preliminaries-rdf-graph-sample} using the Turtle syntax.,captionpos=b]
-@base   <http://sda.tech/> .
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix foaf: <http://xmlns.com/foaf/0.1/> .
-@prefix sdaperson: <http://sda.tech/Person/> .
+@base               <http://sda.tech/> .
+@prefix rdf:        <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:       <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix foaf:       <http://xmlns.com/foaf/0.1/> .
+@prefix sdaperson:  <http://sda.tech/Person/> .
 @prefix sdaproject: <http://sda.tech/Project/> .
 
 sdaperson:GezimSejdiu a foaf:Person ;
@@ -199,11 +198,14 @@ The property elements (predicates) can either be encoded using the XML attribute
 \subsection{SPARQL}
 \label{sec:sparql}
 An \gls{RDF} graph is considered being a directed, labeled graph data format which represent information in the Web.
-\gls{SPARQL}\cite{Seaborne:08:SQL} is a \gls{W3C} standard query language for retrieving and manipulating RDF data.
-Its core component is the graph pattern mechanism which allows users to write queries in the form of triple patterns, conjunctions, disjunctions and/or a set of optional patterns (e.g. $\verb|FILTER|$).
+\gls{SPARQL}~\cite{Seaborne:08:SQL} is a \gls{W3C} standard query language for retrieving and manipulating RDF data.
+Its core component is the graph pattern mechanism which allows users to write queries in the form of triple patterns, conjunctions, disjunctions and/or a set of optional patterns (e.g. $\verb|FILTER|$) which are matched against an RDF graph.
+This is done by replacing the variables in the triple pattern with elements fo the RDF graph such that the resulting graph is contained in the original RDF graph, known as pattern matching.
 The results of SPARQL queries are set of binding or an RDF graph.
 
-This section cover the foundation of SPARQL and its syntax.
+In the following we cover the foundation of SPARQL and its syntax as an analogue to the definitions in~\cite{Perez:2009:SCS:1567274.1567278}.
+More details can also be found in the W3C specification of SPARQL~\cite{Seaborne:08:SQL}.
+
 
 \begin{definition}[Triple Pattern]
 Let $\mathcal{V}$ be a set of variables such that $ \mathcal{V} \cap \mathcal{T} = \emptyset $. 
@@ -216,12 +218,12 @@ A query variable is a member of the set $\mathcal{V}$ where $\mathcal{V}$ is con
 
 \begin{definition}[Basic Graph Pattern (BGP)]
 Let $tp = \{ tp_1, tp_2, tp_3, \dots , tp_n \}$ be a set of triple patterns. 
-A Basic Graph Pattern (BGP) $BGP$ is a conjunction of triple patterns, i.e  $BGP = tp_1 \wedge tp_2 \wedge tp_3 \wedge , \dots , \wedge tp_n$.
+A Basic Graph Pattern $BGP$ is a conjunction of triple patterns, i.e  $BGP = tp_1 \wedge tp_2 \wedge tp_3 \wedge , \dots , \wedge tp_n$.
 \end{definition}
 
 \begin{definition}[Solution Modifiers]
 A solution modifiers is a mapping from a set of $\mathcal{V}$ to a set of $\mathcal{T}$.
-More formaly, $SM= \{ (v, modifier(v))| v \in \mathcal{V}$, where $modifer$ is one of the \verb|project|, \verb|distinct|, \verb|order|, \verb|limit|, and \verb|offset| modifiers.
+More formally, $SM= \{ (v, modifier(v))| v \in \mathcal{V}$, where $modifer$ is one of the \verb|project|, \verb|distinct|, \verb|order|, \verb|limit|, and \verb|offset| modifiers.
 \end{definition}
 
 \begin{definition}[Result Set]
@@ -237,10 +239,10 @@ Assume that we want to know "\textit{What is the project (and its homepage) that
 Listing~\ref{lst:sparqlexample} depict a simple SPARQL query to retrieve information about the project and its homepage of Gezim Sejdiu's current project.
 
 
-\begin{lstlisting}[basicstyle=\ttfamily,breaklines=true,showstringspaces=false,morekeywords={PREFIX,SELECT,WHERE,OPTIONAL,FILTER,java,rdf,rdfs,url},numbers=left,stepnumber=1,label=lst:sparqlexample,basewidth=0.5em,caption=\textbf{A SPARQL query example}. A SPARQL query to retrieve the project name and its homepage of Gezim Sejdiu's current project (as depicted in Figure~\ref{fig:preliminaries-rdf-graph-sample}).,captionpos=b,xleftmargin=1em]
-PREFIX sda: <http://sda.tech/>
+\begin{lstlisting}[basicstyle=\ttfamily,breaklines=true,showstringspaces=false,morekeywords={PREFIX,SELECT,WHERE,OPTIONAL,FILTER,java,rdf,rdfs,url},numbers=left,stepnumber=1,label=lst:sparqlexample,basewidth=0.5em,caption=\textbf{A SPARQL query example}. A SPARQL query to retrieve the project name and its homepage of Gezim Sejdiu's current project (as depicted in Figure~\ref{fig:preliminaries-rdf-graph-sample}).,captionpos=b,xleftmargin=1.5em]
+PREFIX sda:       <http://sda.tech/>
 PREFIX sdaperson: <http://sda.tech/Person/>
-PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX foaf:      <http://xmlns.com/foaf/0.1/>
 
 SELECT ?project ?homepage
 WHERE {
@@ -265,7 +267,7 @@ There are two variables $\verb|?project|$ and $\verb|?homepage|$.
 We see that variables are defined with a $\verb|?|$ symbol.
 The following statements (lines 7-8) include two BGPs.
 The first one (line 7) states that the statement with subject $\verb|sdaperson:GezimSejdiu|$ and property $\verb|foaf:currentProject|$, we assign the value of its object to a variable called $\verb|?project|$.
-When evaluated, this variable will will contain the value of $\verb|sdaproject:SANSAStack|$.
+When evaluated, this variable will contain the value of $\verb|sdaproject:SANSAStack|$.
 Afterwords (line 8), the same variable $\verb|?project|$ with an associated value will be the subject of the next statement.
 That is, the statement will be $\verb|sdaproject:SANSAStack foaf:homepage ?homepage|$.
 The remaining variable $\verb|?homepage|$ then will take the value $\verb|http://sansa-stack.net|$.
@@ -295,36 +297,126 @@ Furthermore, it also leverage the distributed processing of large-scale datasets
 \gls{HDFS} is an integral component of the Apache Hadoop ecosystem.
 
 \gls{HDFS} is designed in a way that it doesn't require highly reliable and costly hardware but instead, it can be run on a cluster of computers with commodity hardware.
-It splits files into blocks that can be replicated across the \textit{DataNodes} machines.
-A \textit{NameNode} is responsible for managing a file system namespace or a directory structure, coordinating replication process, keep track and maintain metadata about the replicated blocks.
+HDFS splits data (files) into blocks that can be replicated across the cluster in order to ensure fault-tolerance and efficiency.
 
-
+The HDFS architecture follows the master/slave model. 
+The \textit{namenode} (master) is responsible for managing a file system namespace or a directory structure, coordinating replication process, keep track and maintain metadata about the replicated blocks.
+The \textit{datanodes} (slaves) are the machines where these blocks are physically stored.
+A \textit{datanode} instance allows access for storing and retrieving the data. 
+To increase the availability, the \textit{namenode} maintains multiple copies of the metadata of the replicated blocks.
+In the earlier version of HDFS, the \textit{namenode} was consider being a single point of failure.
+Latest versions support deploying two instances configured being \textit{namenode} with the mechanism active/passive for a high availability.
+An active \textit{namenode} is the \textit{namenode} which is running in the cluster, and a passive \textit{namenode} is kept synchronized and stand by.
+In case of a failure, the passive \textit{namenode} can replace the active \textit{namenode}.
+Hence, the cluster can be recovered faster and it never fails.
 
 \subsubsection{MapReduce}
 Beside its distributed file system, Hadoop contains computing system so-called MapReduce~\cite{dg2004mapreduce}.
 MapReduce is a distributed framework that allows for the distributed processing of large data sets across a cluster of computers.
 It enables scalable, fault tolerant and massively parallel computations over a cluster of machines.
 The core of MapReduce is a distributed file system \gls{GFS} which split larger size of files into equal sized blocks of records across the cluster. 
-The fault tolerance is achieved by replication as mention on the section above (c.f. Section~\ref{sec:hdfs}).
+
+\begin{figure*}
+\centering
+\includegraphics[width=1.0\columnwidth]{images/2_preliminaries/mapreduce-dataflow.pdf}
+ \caption{\textbf{MapReduce dataflow}. A MapReduce dataflow illustrated with "Character Count" example.}
+\label{fig:preliminaries-mapreduce-dataflow}
+\end{figure*}
+%source: https://docs.google.com/presentation/d/1SlluoX2aceY2uRguuqxXfLB7yJIqsR_dBK8AUgTvPjE
 
 
+The workflow of a MapReduce job is a sequence of \textit{map} and \textit{reduce} phases performed in an iterative way.
+These phases contains a \textit{shuffle} and \textit{sort} operations (as depicted in Figure~\ref{fig:preliminaries-mapreduce-dataflow}) as an intermediate phase.
+Usually, the input data is split into a distributed blocks across the cluster for parallel execution.
+Topically, a program should contain the \textit{map} and \textit{reduce} operations which are then evaluated in a parallel setting on a partition of the data.
+During the \textit{map} phase, every record of the input dataset as key/value pairs is read and another set of intermediate key/value pairs is generated.
+Later, during the \textit{reduce} phase these key/value pairs are ingested and evaluated in order to return a single set of results.
+While performing such map/reduce phases, intermediate results are generated and need to be shuffled and/or sorted across the cluster.
 
-%\framebox[1.1\width]{\texttt{Step 3}}
+The  user has to implement the \textit{map} and \textit{reduce} functions with a signature as follows:
+
+\begin{verbatim}
+    map:    <k1, v1> --> Map() --> list(<k2, v2>)
+    reduce: <k2, list(v2)> --> Reduce() --> list(<k3, v3>)
+\end{verbatim}
+
+Figure~\ref{fig:preliminaries-mapreduce-dataflow} illustrates an example of the MapReduce dataflow.
+With such example, user wants to count the number of occurrences for all characters in the dataset.
+First, the input is split into a small subsets of the dataset, e.g. a line of text.
+The map function splits the input into a set of characters and output the key/value pairs, i.e. \textit{(character, 1)} for every character occurrence.
+Later, the shuffle \& sort phase is used to combine and partition all the pairs with the same key (character) to the same reducer and thus the reduce function is executed with a list of values for a single character.
+Finally, the sum of all these values is returned.
 
 \subsection{Apache Spark}
 Apache Spark\furl{http://spark.apache.org/} is a fast and generic-purpose cluster computing engine which is built over the Hadoop ecosystem.
 It started as a research project in 2009 within the AMPLab\furl{https://amplab.cs.berkeley.edu/} at the Unviersity of California, Berkeley.
 The main goal of the project was to keep the benefits of the MapReduce's scalable, distributed, and fault-tolerant processing framework while making it more efficient and much easier to use.
-The key features of Spark are:
-\begin{itemize}
-    \item It runs multi-threaded lightweight tasks inside the JVM processes, which provide a fast startup, massive parallelizm and multi-core CPU utilization.
-    \item It caches the data into memory across multiple parallel operations, making it especially fast for parallel processing of distributed data which involve iterative algorithms.
-\end{itemize}
-\gls{RDD}~\cite{zaharia2012resilient} which are a fault-tolerant and immutable collections of records that can be operated in a parallel setting.
-Apache Spark provides a rich set of APIs for faster, in-memory processing of RDDs. 
-It also provides a rich functional programming model and comes with higher level libraries for SQL, machine learning, streaming, and graph processing.
+
+Apache Spark follows a master/slave architecture, i.e. one central coordinator and many distributed workers.
+A Spark cluster contains a single master, a cluster manager and any number of workers (slaves).
+Figure~\ref{fig:preliminaries-spark-dataflow} depict a cluster mode overview architecture of Spark.
+Spark applications can run as an independent sets of processes on the cluster, coordinated by the so-called \textit{SparkSession} in the \textit{driver program}.
+More specifically, a Spark session connects to a cluster manager (e.g. Spark's own standalone cluster manager), which allocate resources across applications when run on the cluster.
+Once connected to the cluster manager, it acquires executors on the worker nodes, which are processes that run computations and store data for the submitted application.
+Afterword, it sends the application code to the executors. 
+Hence, the tasks are triggered to run on those executors, one task per partition.
+Such a task applies its workload to a dataset in its partition and outputs a new partition dataset.
+Some of the tasks performed on Spark may involve iterative operations where operations are run repeatedly to data, they benefit from caching datasets across iterations.
+Finally, the results are sent back to the driver application.
+They can be kept in-memory for further processing or pushed back and saved to disk.
+
+\begin{figure*}
+\centering
+\includegraphics[width=1.0\columnwidth]{images/2_preliminaries/spark-dataflow.pdf}
+ \caption{\textbf{Spark Architecture Diagram}. A Spark Cluster Mode Overview.}
+\label{fig:preliminaries-spark-dataflow}
+\end{figure*}
+%source: https://docs.google.com/presentation/d/15hAaL75__sxYyxAZDM8ysZuu8aVxntCqHucZ1-fFLX4
+
+The main data structures that Spark operates with are so-called \gls{RDD}~\cite{zaharia2012resilient} which are a fault-tolerant and immutable collections of records that can be operated in a parallel setting.
+\gls{RDD}s are considered being \textit{resilient} -- fault-tolerant and capable of rebuilding data on failure, \textit{distributed} -- able to distribute the data among the multiple nodes in the cluster, and \textit{dataset} -- collection of partitioned data with their values.
+An \gls{RDD} splits the data into chunks based on a key. 
+They are considered being highly resilient i.e being able to recover quickly from any failure as the same data chunks are replicated across multiple executor nodes in the cluster.
+Thus, even a node failure occur, the other nodes will still process the data.
+Moreover, an RDD, once created becomes immutable -- not able to be modified after it is created.
+RDD follow the concept of transformation and are considered being lazy evaluation.
+
+In a distributed setting, each dataset in \gls{RDD} is split into logical partitions which are computed on different nodes in the cluster.
+This allows us to perform any transformation or action on the whole dataset in a parallel manner.
+The distribution of the workload is taken care by Spark.
+Such an \gls{RDD} can be created using an existing collection of the data or by loading a dataset from an external storage system, such as \gls{HDFS}, or even a file system.
+With \gls{RDD}s, we can perform two types of operations: (i) \textit{Transformations} -- operations which are applied when creating an \gls{RDD} or transforming it to another one, and (ii) \textit{Actions} -- operations applied on an \gls{RDD} and retrieve the result.
+
+Apache Spark provides a rich set of APIs for faster, in-memory processing of \gls{RDD}s.
+It also provides a rich functional programming model and comes with higher level libraries, e.g. for structured querying (\textit{Spark SQL}), machine learning (\textit{MLlib}), streaming (\textit{Spark Streaming}), and graph parallel processing (\textit{GraphX}).
+
+In the following sections, we will cover those libraries we make use of.
 
 \subsubsection{GraphX}
+GraphX~\cite{Gonzalez2014GraphX} is a Spark library for graphs and parallel graph computation.
+It extends the \gls{RDD} abstraction and thus introduces \gls{RDG}, which relates records with vertices (VertexRDD) and edges (EdgeRDD) in a graph and provides an expressive set of computational primitives.
+In addition, GraphX simplifies the conventional ETL processes and analysis significantly by providing new operations for viewing, filtering, and transforming graphs.
+
+The GraphX \gls{RDG} leverages advances in distribtued graph representation by comining best of both worlds; benefits of graph-parallel and data-parallel systems.
+It exploits the graph structure in order to minimize the network communication and storage overhead.
+
+It uses the so-called efficient vertex-cut partitioning strategy (as described in~\cite{Gonzalez2012PowerGraph}) and data-parallel partitioning heuristics by assigning edges to machines and allowing vertices to span multiple machines in order to minimize the vertex span per machine.
+By adding an abstraction to the core of Spark (\gls{RDD}s) it ease the usage of graph data.
+GraphX contains a set of common graph operations, i.e \textit{filter}, \textit{map}, \textit{reduceByKey}, \textit{join}, etc.
+By using such graph-parallel and data-parallel operations, GraphX perform its computation.
+Usually, these operators take a graphs and collections as an input and produce new graphs and collections as an output.
+
 
 \subsubsection{SparkSQL}
 Spark SQL~\cite{Armbrust2015SSR} is a Spark library for SQL and structured data processing which allows querying structured data inside Spark programs.
+Essentially, the main abstraction in Spark SQL’s API is a \textit{DataFrame} which are a distributed collections of rows with a homogeneous schema.
+A \textit{DataFrame} is an \gls{RDD} with a schema.
+They can be seen as tables in a relational database and can also be manipulated in a similar ways to \gls{RDD}s.
+They are represented using a columnar storage format (while kept in-memory caching) which allows access to only those columns required, therefore it reduces the memory footprint by applying a columnar compression schemas, i.e dictionary encoding and run-length encoding.
+The main purpose of using DataFrames as compared to RDDs is that it offer a built-in optimizer for Spark SQL operators, the \textit{Catalyst}.
+It leverages advanced programming language features (e.g. Scala’s pattern matching) in order to build an extensible query optimizer by scanning the data schema and its query semantics.
+
+Spark DataFrames are considered being lazy, as a consequence, each DataFrame object represents a logical plan to compute a dataset, but no real execution occurs until an action is called, i.e. count.
+By this, Spark enables rich optimization across all operations which has been used in order to build a DataFrame.
+
+

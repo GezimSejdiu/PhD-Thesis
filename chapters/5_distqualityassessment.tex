@@ -37,7 +37,7 @@ In this chapter we address the following research question:
 \textbf{RQ2}: Can quality of large-scale RDF Datasets be assessed efficiently in a distributed manner?
 \end{tcolorbox}
 
-Contributions of this chapters are summarize as follows:
+Contributions of this chapter are summarize as follows:
 \begin{itemize}
     \item We present a Quality Assessment Pattern $\mathcal{QAP}$ to characterize scalable quality metrics.
     \item We provide DistQualityAssessment\furl{https://github.com/SANSA-Stack/SANSA-RDF/tree/develop/sansa-rdf-spark/src/main/scala/net/sansa_stack/rdf/spark/qualityassessment} -- a distributed (open source) implementation of quality metrics using Apache Spark.
@@ -526,12 +526,3 @@ As a consequence, this can enable further applications to build trusted data uti
 
 We have demonstrated empirically that our approach improves upon previous centralized approach that we have compared against.
 The benefit of using Spark is that its core concepts (RDDs) are designed to scale horizontally. Users can adapt the cluster sizes corresponding to the data sizes, by dropping when it is not needed and adding more when there is a need for it.
-
-Although we have achieved reasonable results in terms of scalability, we plan to further improve time efficiency by applying intelligent partitioning strategies and persist the data to an even higher extent in memory and perform dependency analysis in order to evaluate multiple metrics simultaneously. We also plan to explore near real-time interactive quality assessment of large-scale RDF data using Spark Streaming.
-Finally, in the future we intend to develop a declarative plugin for the current work using Quality Metric Language (QML)~\cite{debattista2016luzzu}, which gives users the ability to express, customize and enhance quality metrics.
-
-
-
-
-
-
