@@ -2,8 +2,9 @@
 \chapter{Conclusion and Future Directions}
 \label{chapter:conclusion}
 %==============================================================================
+
 In this chapter, we summarize the work done during this thesis and highlight the main results.
-During this thesis we studies the research problem of efficient distributed in-memory computation and processing of RDF datasets.
+During this thesis we study the research problem of efficient distributed in-memory computation and processing of RDF datasets.
 
 In particular, we address the problems of Scalable Computation of RDF Dataset Statistics (cf. Chapter~\ref{chapter:dist_lod_stats}), Quality Assessment of RDF Datasets at Scale (cf. Chapter~\ref{chapter:dist_quality_assessment}), Scalable and Efficient SPARQL query evaluation (cf. Chapter~\ref{chapter:scalable_rdf_querying}), and usage of such scalable approaches into real-world use cases (cf. Chapter~\ref{chapter:implementation_and_use_cases}).
 
@@ -68,7 +69,7 @@ The third problem we tackled in this thesis was the problem of querying and retr
 \textbf{\rqNr[RQ3]\label{rqc:3}}: Can distributed RDF datasets be queried efficiently and effectively?
 \end{tcolorbox}
 
-One of the key traits of Big Data is its complexity in terms of representation, structure, or formats.
+One of the key features of Big Data is its complexity in terms of representation, structure, or formats.
 One existing way to deal with it is offered by Semantic Web standards.
 Among them, RDF --which proposes to model data with triples representing edges in a graph-- has received a large success and the semantically annotated data has grown steadily towards a massive scale.
 Therefore, there is a need for scalable and efficient query engines capable of retrieving such information.
@@ -101,14 +102,15 @@ Last but not least, the question we want to answer in the scope of the thesis is
 \section{Limitations and Future Directions}
 In this section, we discuss the limitations we identified during this study and potential future directions to take in order to overcome such limitations.
 
-In the following we summarize the future directions on each of the main contributions of this thesis.
+In the following we summarize the limitations and future directions on each of the main contributions of this thesis.
 
 \begin{itemize}
     \item \textit{Large-scale RDF Dataset Statistics} -- 
-    \begin{enumerate}
-        \item First future direction...
-        \item second
-    \end{enumerate}
+    We plan to employ distributed statistics as an insight when performing joint optimization when running SPARQL queries. 
+    Sparklify and Semantic-based approaches may benefit when knowing the structure of the data and re-order joins accordingly.
+    Another scenario of benefiting from having a knowledge of the dataset charachteristics is when designing a recommended partition system when using different partitioning approaches presented during this thesis.
+    The recommender system will make use of DistLODStats as a feature engineering mechanism for better understanding of the internals of the input dataset. 
+    Later, it propose a best partition strategy to be used.
     \item \textit{Assessment of RDF Datasets at Scale} -- 
     Although we have achieved reasonable results in terms of scalability, we plan to further improve time efficiency by applying intelligent partitioning strategies and persist the data to an even higher extent in memory and perform dependency analysis in order to evaluate multiple metrics simultaneously. 
     We also plan to explore near real-time interactive quality assessment of large-scale RDF data using Spark Streaming.
@@ -120,11 +122,7 @@ In the following we summarize the future directions on each of the main contribu
     For example, we intend to investigate how OBDA tools can be combined with dictionary encoding of RDF terms as integers and evaluate the effects.
     \item \textit{Adaptability and Use Cases} -- 
     We presented some of the use cases where our contribution are used. 
-    As a future and ongoing work we plan to further 
-    \item Use DistLODStats for join optimization when querying the data.
-    \item Design a recommended partition system when using differet partitioning approches presented during this thesis.
-    The recommender system will make use of DistLODStats as a feature engineering mechanism for better understanding of the internals of the input dataset. 
-    Later, it propose a best partition strategy to be used.
+    It shows a significat adoption and easy to use of the approaches ported withing the SANSA framework, however, we further plan to improve the usability and guide of using our framework in the cloud.
 \end{itemize}
 
 \section{Closing Remarks}

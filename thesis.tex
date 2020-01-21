@@ -9,7 +9,8 @@
 
 % generate Texlive offlien version: 
 %1. latex thesis.tex, then biber thesis // will generate thesis.bbl -- needed to render references.
-%2. makeglossaries thesis // will generate acronym
+%2. latex thesis makeglossaries thesis // will generate acronym
+%3. latex thesis and then pdflatex thesis // in order to generate PDF
 
 % ------
 \usepackage{hyperref}
@@ -21,6 +22,7 @@
 \usepackage{listings}
 \usepackage{colortbl}
 \usepackage{tcolorbox}
+\usepackage[usestackEOL]{stackengine}
 
 \newtheorem{hyp}{Hypothesis}
 \newtheorem{definition}{Definition}[section]
@@ -44,9 +46,12 @@
 \newcommand\newMetricNr[1][]{#1\refstepcounter{count}\def\@currentlabel{#1}}
 \newcommand\newitem[1][]{\item[#1)]\refstepcounter{count}\def\@currentlabel{#1}}
 \newcommand\rqNr[1][]{#1\refstepcounter{count}\def\@currentlabel{#1}}
+
+
 \makeatother
 
 \makeglossaries
+\input{acronyms}
 %----
 
 \addbibresource{references.bib}
@@ -54,7 +59,7 @@
 % The following definitions are used to produce the title pages
 % needed at various stages
 \newcommand{\thesistitle}{Efficient Distributed In-Memory Processing of RDF Datasets}
-\newcommand*{\thesisauthor}{\textbf{Gezim Sejdiu}}
+\newcommand*{\thesisauthor}{Gezim Sejdiu}
 \newcommand*{\thesistown}{Kosovo}
 \renewcommand*{\InstituteName}{\PI}
 \renewcommand*{\inInstitute}{\inPI}
@@ -72,8 +77,8 @@
 \newcommand*{\thesispromotion}{ 17.12.2019}
 % Month and year of the final printed version of the thesis
 \newcommand*{\thesismonth}{MMM}
-\newcommand*{\thesisyear}{2019}
-\newcommand*{\thesisnumber}{BONN-IR-2019-XXX}
+\newcommand*{\thesisyear}{2020}
+\newcommand*{\thesisnumber}{BONN-IR-2020-XXX}
 
 %------------------------------------------------------------------------------
 
@@ -186,7 +191,7 @@
 
 \include{chapters/1_introduction}
 \include{chapters/2_preliminaries}
-%=\include{chapters/3_related_work}
+\include{chapters/3_related_work}
 %\include{chapters/4_distlodstats}
 %\include{chapters/5_distqualityassessment}
 %\include{chapters/6_scalable_rdf_querying}
@@ -220,9 +225,9 @@
 \include{appendices/appendix_sparql_benchmark_queries}
 \include{appendices/appendix_publications}
 
-\include{acronyms}
-\input{acronyms}
-\printglossaries
+%\include{acronyms}
+%\input{acronyms}
+%\printglossaries
 
 % \printbibliography[heading=subbibliography]
 
@@ -233,15 +238,16 @@
 
 \listoffigures
 \listoftables
+
 %---------------------------------------------------------
 % Print the glossary and list of acronyms
-% \printglossaries
+\printglossaries
 
 %------------------------------------------------------------------------------
 % You could instead add your acknowledgements here - don't forget to
 % also add them to \includeonly above
 %------------------------------------------------------------------------------
 % CV needed when you submit your PhD thesis
-%\input{cv}
+% \input{cv}
 
 \end{document}

@@ -27,7 +27,10 @@ In this section, we provide an overview of related work regarding RDF dataset st
 To the best of our knowledge, all but one existing approaches use small to medium scale datasets and do not horizontally scale.
 
 A dataset is large-scale w.r.t. a particular task in the scope of this article if the main memory on commodity hardware is insufficient to perform the task (without swapping to disk). 
-We mention here, for example RDF$_{Pro}$~\cite{SAC-2015-CorcoglionitiRM}, which offers a suite of stream-oriented, highly optimized processors for common tasks, such as data filtering, RDFS inference, smushing, as well as statistics extraction. 
+We mention here, for example RDF$_{Pro}$~\cite{SAC-2015-CorcoglionitiRM}, which offers a suite of stream-oriented, highly optimized processors for common tasks, such as data filtering, RDFS inference, smushing, as well as statistics extraction.
+The main component of the tool is a so-called \textit{RDF processor}, a Java component which consumes an input stream of RDF quads containing RDF triples with an optional fourth named graph component in one or more passes.
+Later, it produces an output stream of quads which could be written back to disk.
+
 The second related approach we are aware of is Aether~\cite{makela2014aether}, which is an application for generating, viewing and comparing extended VoID statistical descriptions of RDF datasets.
 The tool is useful, for example, in getting to know a newly encountered dataset, in comparing the different versions of a dataset, and in detecting outliers and errors.
 Luzzu~\cite{debattista2016luzzu} is a quality assessment framework for linked data.

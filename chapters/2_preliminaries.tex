@@ -291,7 +291,7 @@ We focus mostly on the aspects needed to understand the content of the following
 \label{sec:hdfs}
 The Hadoop Distributed File System (\gls{HDFS})~\cite{Shvachko:2010:HDF:1913798.1914427} is one of the main components of the Hadoop. 
 It is a popular file system capable of handling the distribution of the data across multiple nodes in the cluster.
-HDFS serve as a common, distributed and fault-tolerant data pool for all applications on top of the Hadoop in order to minimize the data movement and duplication.
+\gls{HDFS} serve as a common, distributed and fault-tolerant data pool for all applications on top of the Hadoop in order to minimize the data movement and duplication.
 Furthermore, it also leverage the distributed processing of large-scale datasets by adapting advanced and automatically partitioning techniques across all the nodes in the cluster.
 \gls{HDFS} was originally built as infrastructure for the Apache Nutch\furl{https://nutch.apache.org/} web search engine project and was inspired by the \gls{GFS}~\cite{Ghemawat:2003:GFS:945445.945450}. 
 \gls{HDFS} is an integral component of the Apache Hadoop ecosystem.
@@ -299,12 +299,12 @@ Furthermore, it also leverage the distributed processing of large-scale datasets
 \gls{HDFS} is designed in a way that it doesn't require highly reliable and costly hardware but instead, it can be run on a cluster of computers with commodity hardware.
 HDFS splits data (files) into blocks that can be replicated across the cluster in order to ensure fault-tolerance and efficiency.
 
-The HDFS architecture follows the master/slave model. 
+The \gls{HDFS} architecture follows the master/slave model. 
 The \textit{namenode} (master) is responsible for managing a file system namespace or a directory structure, coordinating replication process, keep track and maintain metadata about the replicated blocks.
 The \textit{datanodes} (slaves) are the machines where these blocks are physically stored.
 A \textit{datanode} instance allows access for storing and retrieving the data. 
 To increase the availability, the \textit{namenode} maintains multiple copies of the metadata of the replicated blocks.
-In the earlier version of HDFS, the \textit{namenode} was consider being a single point of failure.
+In the earlier version of \gls{HDFS}, the \textit{namenode} was consider being a single point of failure.
 Latest versions support deploying two instances configured being \textit{namenode} with the mechanism active/passive for a high availability.
 An active \textit{namenode} is the \textit{namenode} which is running in the cluster, and a passive \textit{namenode} is kept synchronized and stand by.
 In case of a failure, the passive \textit{namenode} can replace the active \textit{namenode}.
@@ -378,8 +378,8 @@ The main data structures that Spark operates with are so-called \gls{RDD}~\cite{
 An \gls{RDD} splits the data into chunks based on a key. 
 They are considered being highly resilient i.e being able to recover quickly from any failure as the same data chunks are replicated across multiple executor nodes in the cluster.
 Thus, even a node failure occur, the other nodes will still process the data.
-Moreover, an RDD, once created becomes immutable -- not able to be modified after it is created.
-RDD follow the concept of transformation and are considered being lazy evaluation.
+Moreover, an \gls{RDD}, once created becomes immutable -- not able to be modified after it is created.
+\gls{RDD} follow the concept of transformation and are considered being lazy evaluation.
 
 In a distributed setting, each dataset in \gls{RDD} is split into logical partitions which are computed on different nodes in the cluster.
 This allows us to perform any transformation or action on the whole dataset in a parallel manner.
@@ -413,7 +413,7 @@ Essentially, the main abstraction in Spark SQL’s API is a \textit{DataFrame} w
 A \textit{DataFrame} is an \gls{RDD} with a schema.
 They can be seen as tables in a relational database and can also be manipulated in a similar ways to \gls{RDD}s.
 They are represented using a columnar storage format (while kept in-memory caching) which allows access to only those columns required, therefore it reduces the memory footprint by applying a columnar compression schemas, i.e dictionary encoding and run-length encoding.
-The main purpose of using DataFrames as compared to RDDs is that it offer a built-in optimizer for Spark SQL operators, the \textit{Catalyst}.
+The main purpose of using DataFrames as compared to \gls{RDD}s is that it offer a built-in optimizer for Spark SQL operators, the \textit{Catalyst}.
 It leverages advanced programming language features (e.g. Scala’s pattern matching) in order to build an extensible query optimizer by scanning the data schema and its query semantics.
 
 Spark DataFrames are considered being lazy, as a consequence, each DataFrame object represents a logical plan to compute a dataset, but no real execution occurs until an action is called, i.e. count.

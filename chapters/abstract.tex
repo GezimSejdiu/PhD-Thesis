@@ -1,46 +1,22 @@
 \chapter*{Abstract}
 
-Over the past decade, vast amounts of machine-readable structured information has become available through the automation of research processes as well as the increasing popularity of knowledge graphs and semantic technologies. 
+Over the past decade, vast amounts of machine-readable structured information have become available through the automation of research processes as well as the increasing popularity of knowledge graphs and semantic technologies. 
 Today, we count more than 10,000 datasets made available online following Semantic Web standards.
 A major and yet unsolved challenge that research faces today is to perform scalable analysis of large scale knowledge graphs in order to facilitate applications like link prediction, knowledge base completion and question answering.
-
-In particular, applications, such as data integration, search, and interlinking, may not take the full advantage of the data without having a priori statistical information about its internal structure and coverage.
-In fact, there are already a number of tools, which offer such statistics, providing basic information about RDF datasets and vocabularies.
-However, those usually show severe deficiencies in terms of performance once the dataset size grows beyond the capabilities of a single machine.
-Here, we introduce a software component for statistical calculations of large RDF datasets, which scales out to clusters of machines.
+The main objective of this thesis is to lay foundations for efficient algorithms performing analytics, i.e. exploration, quality assessment, and querying over semantic knowledge graphs at a scale that has not been possible before.
+First, we propose DistLODStats -- a software component for statistical calculations of large RDF datasets, which scales out to clusters of machines. 
 In particular, we describe the first distributed in-memory approach for computing 32 different statistical criteria for RDF datasets using Apache Spark.
-The preliminary results show that our distributed approach improves upon a previous centralized approach we compare against and provides approximately linear horizontal scale-up. 
-The criteria are extensible beyond the 32 default criteria, is integrated into the larger SANSA framework and employed in at least four major usage scenarios beyond the SANSA community.
-
-Second, such applications may suffer of a low quality and not being able to leverage the full advantage of the data when the size of data goes beyond the capacity of the resources available.
-There exist a few approaches for the quality assessment of Linked Data, but their performance degrades with the increase in data size and quickly grows beyond the capabilities of a single machine.
-In this thesis, we present DistQualityAssessment -- an open source 
-implementation of quality assessment of large RDF datasets that can scale out to a cluster of machines.
-This is the first distributed, in-memory approach for computing different quality metrics for large RDF datasets using Apache Spark. We also provide a quality assessment pattern that can be used to generate new scalable metrics that can be applied to big data.
-The work presented here is integrated with the SANSA framework and has been applied to at least three use cases beyond the SANSA community.   
-The results show that our approach is more generic, efficient, and scalable as compared to previously proposed approaches.
-
-Finally, with the knowledge of the internals of the dataset (via statistical-driven) and its quality we want to explore and retrieve large amount of information.
-As a result,  efficient processing of such big RDF datasets has become challenging.
+Many applications such as data integration, search, and interlinking, may take full advantage of the data when having a priori statistical information about its internal structure and coverage.
+However, such applications may suffer from low quality and not being able to leverage the full advantage of the data when the size of data goes beyond the capacity of the resources available.
+Thus, we introduce DistQualityAssessment -- an open-source 
+implementation of quality assessment of large RDF datasets.
+It is the first distributed, in-memory approach for computing different quality metrics for large RDF datasets using Apache Spark. We also provide a quality assessment pattern that can be used to generate new scalable metrics that can be applied to big data.
+With the knowledge of the internals of the dataset (via statistical-driven) and it's quality we want to explore and retrieve large amounts of information.
+As a result, the efficient processing of such big RDF datasets has become challenging.
 Indeed, these processes require, both efficient storage strategies and query-processing engines, to be able to scale in terms of data size.
-In this study, we propose a scalable approach to evaluate SPARQL queries over distributed RDF datasets using a semantic-based partition and is implemented inside the state-of-the-art RDF processing framework: SANSA.
-An evaluation of the performance of our approach in processing large-scale RDF datasets is also presented. 
-The preliminary results of the conducted experiments show that our approach can scale horizontally and perform well as compared with the previous Hadoop-based system.
-It is also comparable with the in-memory SPARQL query evaluators when there is less shuffling involved.
+Therefore, we propose a scalable approach to evaluate SPARQL queries over distributed RDF datasets by translating SPARQL queries into Spark executable code.
+We conducted several empirical evaluations to asses the scalability, effectiveness, and efficiency of our proposed approaches.
+More importantly, various use cases i.e. Ethereum analysis, Mining Big Data Logs, and Scalable Integration of POIs, have been developed and leverages by our approach. 
+The empirical evaluations and concrete applications provide evidence that our methodology and techniques proposed during this thesis help to effectively analyze and process large-scale RDF datasets.
+All the proposed approaches during this thesis are integrated into a larger SANSA framework.
 
-
-
-
-Most machine learning approaches, which scale horizontally (i.e. can be executed in a distributed environment) work on simpler feature vector based input rather than more expressive knowledge structures. 
-On the other hand, the learning methods which exploit the expressive structures, e.g. Statistical Relational Learning and Inductive Logic Programming approaches, usually do not scale well to very large knowledge bases owing to their working complexity.
-This paper describes the ongoing project Semantic Analytics Stack (SANSA) which aims to bridge this research gap by creating an out of the box library for scalable, in-memory, structured learning.
-
-\defn{Sparklify}
-One of the key traits of Big Data is its complexity in terms of representation, structure, or formats.
-One existing way to deal with it is offered by Semantic Web standards.
-Among them, RDF --which proposes to model data with triples representing edges in a graph-- has received a large success and the semantically annotated data has grown steadily towards a massive scale.
-Therefore, there is a need for scalable and efficient query engines capable of retrieving such information.
-In this paper, we propose \emph{Sparklify}: a scalable software component for efficient evaluation of SPARQL queries over distributed RDF datasets. 
-It uses Sparqlify as a SPARQL-to-SQL rewriter for translating SPARQL queries into Spark executable code.
-Our preliminary results demonstrate that our approach is more extensible, efficient, and scalable as compared to state-of-the-art approaches.
-Sparklify is integrated into a larger SANSA framework and it serves as a default query engine and has been used by at least three external use scenarios.
