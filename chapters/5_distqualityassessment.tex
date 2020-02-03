@@ -3,28 +3,27 @@
 \label{chapter:dist_quality_assessment}
 %==============================================================================
 Large amounts of data are being published openly to Linked Data by different data providers. 
-A multitude of applications such as semantic search, query answering, and machine reading~\cite{rw2014} depend on these large-scale\furl{http://lodstats.aksw.org/} RDF datasets.  
-The quality of underlying RDF data plays a fundamental role in large-scale data consuming applications. 
+A multitude of applications such as semantic search, query answering, and machine reading~\cite{rw2014} depend on these large-scale\furl{http://lodstats.aksw.org/} \gls{RDF} datasets.  
+The quality of underlying \gls{RDF} data plays a fundamental role in large-scale data consuming applications. 
 Measuring the quality of linked data spans a number of dimensions including but not limited to: accessibility, interlinking, performance, syntactic validity or completeness~\cite{zaveri2015quality}.
 Each of these dimensions can be expressed through one or more quality metrics. 
 Considering that each quality metric tries to capture a particular aspect of the underlying data, numerous metrics are usually provided against the given data that may or may not be processed simultaneously.
 
-On the other hand, the limited number of existing techniques of quality assessment for RDF datasets are not adequate to assess data quality at large-scale and these approaches mostly fail to capture the increasing volume of big data. 
-To date, a limited number of solutions have been conceived to offer quality assessment of RDF datasets \cite{Debattista0AC18,farber2018,beek2018,debattista2016luzzu}.
+On the other hand, the limited number of existing techniques of quality assessment for \gls{RDF} datasets are not adequate to assess data quality at large-scale and these approaches mostly fail to capture the increasing volume of big data. 
+To date, a limited number of solutions have been conceived to offer quality assessment of \gls{RDF} datasets \cite{Debattista0AC18,farber2018,beek2018,debattista2016luzzu}.
 But, these methods can either be used on a small portion of large datasets \cite{farber2018} or narrow down to specific problems e.g., syntactic accuracy of literal values~\cite{beek2018}, or accessibility of resources~\cite{Mihindukulasooriya2016LDSA}.
 In general, these existing efforts show severe deficiencies in terms of performance when data grows beyond the capabilities of a single machine.
 This limits the applicability of existing solutions to medium-sized datasets only, in turn, paralyzing the role of applications in embracing the increasing volumes of the available datasets.
 
 To deal with big data, tools like Apache Spark\furl{https://spark.apache.org/} have recently gained a lot of interest. 
-Apache Spark provides scalability, resilience, and efficiency for dealing with large-scale data. Spark uses the concepts of \gls{RDD}~\cite{zaharia2012resilient} and performs operations like transformations and actions on this data in order to effectively deal with large-scale data. 
+Apache Spark provides scalability, resilience, and efficiency for dealing with large-scale data. 
+Spark uses the concepts of \gls{RDD}~\cite{zaharia2012resilient} and performs operations like transformations and actions on this data in order to effectively deal with large-scale data. 
 
-To handle large-scale RDF data, it is important to develop flexible and extensible methods that can assess the quality of data at scale. 
-At the same time, due to the broadness and variety of quality assessment domain and resulting metrics, there is a strong need to provide a generic pattern
-%profile
-to characterize the quality assessment of RDF data in terms of scalability and applicability to big data.
+To handle large-scale \gls{RDF} data, it is important to develop flexible and extensible methods that can assess the quality of data at scale. 
+At the same time, due to the broadness and variety of quality assessment domain and resulting metrics, there is a strong need to provide a generic pattern to characterize the quality assessment of \gls{RDF} data in terms of scalability and applicability to big data.
 
 In this chapter, we borrow the concepts of data \textit{transformation} and \textit{action} from Spark and present a 
-pattern for designing quality assessment metrics over large RDF datasets, which is inspired by design patterns.
+pattern for designing quality assessment metrics over large \gls{RDF} datasets, which is inspired by design patterns.
 In software engineering, design patterns are general and reusable solutions to common problems. 
 Akin to design pattern, where each pattern acts like a blueprint that can be customized to solve a particular design problem, 
 the introduced concept of Quality Assessment Pattern ($\mathcal{QAP}$) represents a generalized blueprint of scalable quality assessment metrics. 
@@ -34,16 +33,16 @@ In addition, we also provide an open source implementation and assessment of the
 In this chapter we address the following research question:
 
 \begin{tcolorbox}
-\textbf{RQ2}: Can quality of large-scale RDF Datasets be assessed efficiently in a distributed manner?
+\textbf{RQ2}: Can quality of large-scale \gls{RDF} Datasets be assessed efficiently in a distributed manner?
 \end{tcolorbox}
 
 Contributions of this chapter are summarize as follows:
 \begin{itemize}
     \item We present a Quality Assessment Pattern $\mathcal{QAP}$ to characterize scalable quality metrics.
-    \item We provide DistQualityAssessment\furl{https://github.com/SANSA-Stack/SANSA-RDF/tree/develop/sansa-rdf-spark/src/main/scala/net/sansa_stack/rdf/spark/qualityassessment} -- a distributed (open source) implementation of quality metrics using Apache Spark.
+    \item We provide DistQualityAssessment -- a distributed (open source) implementation of quality metrics using Apache Spark.
     \item We perform an analysis of the complexity of the metric evaluation in the cluster.
     \item We evaluate our approach and demonstrate empirically its superiority over a previous centralized approach.
-    \item We integrated the approach into the SANSA\furl{http://sansa-stack.net/} framework.
+    \item We integrated the approach into the SANSA framework.
     SANSA is actively maintained and uses the community ecosystem (mailing list, issues trackers, continues integration, web-site etc.).
 \end{itemize}
 
@@ -54,7 +53,8 @@ This chapter is based on the following publication (\cite{sejdiu-2019-sansa-dist
 \end{itemize}
 
 The remainder of this chapter is organized as follows:
-Our approach for the computation of RDF dataset quality metrics is detailed in Section~\ref{sec:distqualityassessment-approach} and evaluated in Section~\ref{sec:distqualityassessment-evaluation}.
+Our approach for the computation of \gls{RDF} dataset quality metrics is detailed in Section~\ref{sec:distqualityassessment-approach} and evaluated in Section~\ref{sec:distqualityassessment-evaluation}.
+Finally, we summarize our work in  Section~\ref{sec:distqualityassesment-summary}.
 
 \section{A Scalable Framework for Quality Assessment of RDF Datasets}
 \label{sec:distqualityassessment-approach}
@@ -67,7 +67,7 @@ The following definitions form the basis of $\mathcal{QAP}$.
 
 \begin{definition}[Filter]
 Let $\mathcal{F} = \{f_1,f_2,~\dots~f_l\}$ be a set of filters where each filter $f_i$ sets a criteria for extracting predicates, objects, subjects, or their combination.
-A filter $f_i$ takes a set of RDF triples as input and returns a subgraph that satisfies the filtering criteria.
+A filter $f_i$ takes a set of \gls{RDF} triples as input and returns a subgraph that satisfies the filtering criteria.
 \end{definition}
 
 \begin{definition}[Rule]
@@ -76,13 +76,13 @@ Let $\mathcal{R} = \{r_1,r_2,~\dots~r_j\}$ be a set of rules where each rule $r_
 
 \begin{definition}[Transformation]
 \label{def:tr}
-A \textit{transformation} $\tau:\mathcal{G} \rightarrow \mathcal{G'}$ is an operation that applies rules defined by $\mathcal{R}$ on the RDF graph $\mathcal{G}$ and returns an RDF subgraph $\mathcal{G'}$. 
+A \textit{transformation} $\tau:\mathcal{G} \rightarrow \mathcal{G'}$ is an operation that applies rules defined by $\mathcal{R}$ on the \gls{RDF} graph $\mathcal{G}$ and returns an \gls{RDF} subgraph $\mathcal{G'}$. 
 A transformation $\tau$ can be a union $\cup$ or intersection $\cap$ of other transformations. 
 \end{definition}
 
 \begin{definition}[Action]
 \label{def:ac}
-An \textit{action} $ \alpha: \mathcal{G}\rightarrow \mathbb{R}$ is an operation that triggers the transformation of rules on the filtered RDF graph $\mathcal{G'}$ and generates a numerical value. 
+An \textit{action} $ \alpha: \mathcal{G}\rightarrow \mathbb{R}$ is an operation that triggers the transformation of rules on the filtered \gls{RDF} graph $\mathcal{G'}$ and generates a numerical value. 
 Action $\alpha$ is the count of elements obtained after performing a $\tau$ operation.
 \end{definition}
 
@@ -97,9 +97,7 @@ $\mathcal{QAP}$ is inspired by Apache Spark operations and designed to fit diffe
 
 \begin{table}[t]
 \centering
-\caption{Quality Assessment Pattern}\label{Table:QM}
 \begin{tabular}{>{\scriptsize}l>{\scriptsize}l>{\scriptsize}l}
-\toprule
     \verb|Quality Metric| &  \verb|:=| &  \verb|Action|   \textbar   \verb|(Action| $\mathcal{OP} $  \verb|Action)|\\
     $\mathcal{OP} $   &  \verb|:=| & $\mathcal{*}$ \textbar  $\mathcal{-}$ \textbar / \textbar $\mathcal{+}$ \\
   %$\mathcal{OP} $   & $\mathcal{* \textbar  - \textbar / \textbar + }$ \\
@@ -115,8 +113,11 @@ $\mathcal{QAP}$ is inspired by Apache Spark operations and designed to fit diffe
  \verb|isExternal(Filter)| \textbar  \verb|hasType((Filter)|\\
 &&  \textbar \verb|isLabeled(Filter)| \\
  \verb|BOP| &  \verb|:=| & $\cap$ | $\cup$ \\
-
+ \bottomrule
 \end{tabular}
+\caption{\textbf{Quality Assessment Pattern}.
+A reusable template for quality metric implementation composed of transformations and actions.}
+\label{Table:QM}
 \end{table}
 
 Each data \textit{quality metric} can be defined following the $\mathcal{QAP}$. 
@@ -190,13 +191,14 @@ Table~\ref{tab:MetricRules} demonstrates a few selected quality metrics defined 
       &  & &  & $\alpha$\verb|_2 = count(triples)| \\
       &  & &  &\verb|(|$\alpha$\verb|_2-| $\alpha$\verb|_1)/| $\alpha$\verb|_2| \\
       \end{tabular}
-\caption{Definition of selected metrics following $\mathcal{QAP}$.}
+\caption{\textbf{Definition of selected metrics following $\mathcal{QAP}$}.
+List of few selected quality metrics defined against proposed QAP.}
 \label{tab:MetricRules}
 \end{table*}
 
 As shown in Table~\ref{tab:MetricRules}, each quality metric can contain multiple rules, filters or actions. 
-It is worth mentioning that action count(triples) returns the total number of triples in the given data. 
-This can also be seen that the action can be an arithmetic combination of multiple actions i.e. ratio, sum etc. 
+It is worth mentioning that action $\verb|count(triples)|$ returns the total number of triples in the given data. 
+This can also be seen that the action can be an arithmetic combination of multiple actions i.e. ratio, sum, etc. 
 We illustrate our proposed approach on some metrics selected from~\cite{debattista2016luzzu,zaveri2015quality}. 
 Given that the aim of this paper is to show the applicability of the proposed approach and comparison with existing methods, we have only selected those which are already provided out-of-box in Luzzu.
 
@@ -204,12 +206,12 @@ Given that the aim of this paper is to show the applicability of the proposed ap
 \subsection{System Overview}
 
 In this section, we give an overall description of the data model and the architecture of DistQualityAssessment.
-We model and store RDF graphs $\mathcal{G}$ based on the basic building block of the Spark framework, RDDs. 
-RDDs are in-memory collections of records that can be operated in parallel on a large distributed cluster.
-RDDs provide an interface based on \emph{coarse-grained} transformations (e.g \emph{map}, \emph{filter} and \emph{reduce}): operations applied on an entire RDD. 
-A \emph{map} function transforms each value from an input RDD into another value while applying $\tau$ rules.
-A \emph{filter} transforms an input RDD to an output RDD, which contains only the elements that satisfy a given condition.
-\emph{Reduce} aggregates the RDD elements using a specific function from $\tau$.
+We model and store \gls{RDF} graphs $\mathcal{G}$ based on the basic building block of the Spark framework, \gls{RDD}s. 
+\gls{RDD}s are in-memory collections of records that can be operated in parallel on a large distributed cluster.
+\gls{RDD}s provide an interface based on \emph{coarse-grained} transformations (e.g \emph{map}, \emph{filter} and \emph{reduce}): operations applied on an entire \gls{RDD}. 
+A \emph{map} function transforms each value from an input \gls{RDD} into another value while applying $\tau$ rules.
+A \emph{filter} transforms an input \gls{RDD} to an output \gls{RDD}, which contains only the elements that satisfy a given condition.
+\emph{Reduce} aggregates the \gls{RDD} elements using a specific function from $\tau$.
 
 The computation of the set of quality metrics $\mathcal{QM}$ is performed using Spark as depicted in Figure~\ref{fig:DistQualityAssessmentSystem}.
 Our approach consists of four steps: 
@@ -217,25 +219,25 @@ Our approach consists of four steps:
 \begin{figure*}
 \centering
 \includegraphics[width=1.0\columnwidth]{images/5_distqualityassessment/distqualityassessment-architecture.pdf}
-\caption{Overview of distributed quality assessment's abstract architecture.}
+\caption{\textbf{Overview of distributed quality assessment's abstract architecture}.
+Main components of DistQualityAssessment: 1) Definitions -- defining quality metrics parameters, 2) Retrieving the RDF data, 3) Parsing and mapping RDF data into the main dataset (RDD of triples), and 4) Quality metric evaluation.}
 \label{fig:DistQualityAssessmentSystem}
 \end{figure*}
 % source: https://docs.google.com/presentation/d/1JP_urfFpIzPKH4z1TXKSN3d00TmzbQ2YxGL7nQ7-IgI
-% source: https://docs.google.com/presentation/d/1WBxwiGkXrM2Tme7I2whwXqFGOPNRxndweI6Hhhniexk -- deprecated
 
-\paragraph{Defining quality metrics parameters (step 1)} The metric definitions are kept in a dedicated file which contains most of the configurations needed for the system to evaluate quality metrics and gather result sets.
+\defn{Defining quality metrics parameters (Step 1)} The metric definitions are kept in a dedicated file which contains most of the configurations needed for the system to evaluate quality metrics and gather result sets.
 
-\paragraph{Retrieving the RDF data (step 2)} RDF data first needs to be loaded into a large-scale storage that Spark can efficiently read from.
+\defn{Retrieving the \gls{RDF} data (Step 2)} \gls{RDF} data first needs to be loaded into a large-scale storage that Spark can efficiently read from.
 We use \gls{HDFS}.
-HDFS is able to fit and stores any type of data in its Hadoop-native format and parallelizes them across a cluster while replicating them for fault tolerance.
-In such a distributed environment, Spark automatically adopts different data locality strategies to perform computations as close to the needed data as possible in HDFS and thus avoids data transfer overhead.
+\gls{HDFS} is able to fit and stores any type of data in its Hadoop-native format and parallelizes them across a cluster while replicating them for fault tolerance.
+In such a distributed environment, Spark automatically adopts different data locality strategies to perform computations as close to the needed data as possible in \gls{HDFS} and thus avoids data transfer overhead.
  
-\paragraph{Parsing and mapping RDF into the main dataset (step 3)} We first create a distributed dataset called \emph{main dataset} that represent the HDFS file as a collection of triples.
-In Spark, this dataset is parsed and loaded into an RDD of triples having the format 
+\defn{Parsing and mapping \gls{RDF} into the main dataset (Step 3)} We first create a distributed dataset called \emph{main dataset} that represent the \gls{HDFS} file as a collection of triples.
+In Spark, this dataset is parsed and loaded into an \gls{RDD} of triples having the format 
 \emph{Triple$<$(s,p,o)$>$}.
 
-\paragraph{Quality metric evaluation (step 4)} Considering the particular quality metric, Spark generates an execution plan, which is composed of one or more $\tau$ transformations and $\alpha$ actions. The numerical output of the final action is the quality of the input RDF corresponding to the given metric.
-
+\defn{Quality metric evaluation (Step 4)} Considering the particular quality metric, Spark generates an execution plan, which is composed of one or more $\tau$ transformations and $\alpha$ actions. 
+The numerical output of the final action is the quality of the input \gls{RDF} corresponding to the given metric.
 
 \subsection{Implementation}
 \label{subsection:distqualityassessment-implementation}
@@ -266,18 +268,19 @@ We have used the Scala\furl{https://www.scala-lang.org/} programming language AP
 \Return{$(dqv, metric)$} \label{line:qa-result}
 \end{algorithm}
 
-The DistQualityAssessment (see Algorithm~\ref{alg:DistQualityAssessment}) constructs the \emph{main dataset} (Line \ref{line:qa-rdf2rdd}) while reading RDF data (e.g. NTriples file or any other RDF serialization format) and converts it into an RDD of triples.
-This latter undergoes the transformation operation of applying the filtering through rules in $R$ and producing a new \emph{filtered} RDD ($\mathcal{G'}$) (Line \ref{line:qa-filter}).
+The DistQualityAssessment (see Algorithm~\ref{alg:DistQualityAssessment}) constructs the \emph{main dataset} (Line \ref{line:qa-rdf2rdd}) while reading \gls{RDF} data (e.g. NTriples file or any other \gls{RDF} serialization format) and converts it into an \gls{RDD} of triples.
+This latter undergoes the transformation operation of applying the filtering through rules in $R$ and producing a new \emph{filtered} \gls{RDD} ($\mathcal{G'}$) (Line \ref{line:qa-filter}).
 At the end, $\mathcal{G'}$ will serve as an input to the next step which applies a set of $\alpha$ actions (Line \ref{line:qa-action}).
 The output of this step is the metric output represented as a numerical value (Line \ref{line:qa-action}). 
 The result set of different quality metrics (Line \ref{line:qa-result}) can be further visualized and monitored using SANSA-Notebooks~\cite{iermilov-2017-sansa-iswc-demo}.\\
 The user can also choose to extract the output in a machine-readable format (Line \ref{line:dqvify}). 
-We have used the data quality vocabulary\furl{https://www.w3.org/TR/vocab-dqv/} (DQV) to represent the quality metrics. 
+We have used the data quality vocabulary (DQV)~\cite{Isaac:16:dqv} to represent the quality metrics. 
 
 Furthermore, we also provide a Docker image of the system integrated within the BDE platform\furl{https://github.com/big-data-europe} - an open source Big Data processing platform allowing users to install numerous big data processing tools and frameworks and create working data flow applications.
 
-The work done here (available under \textit{Apache License 2.0}) has been integrated into SANSA~\cite{lehmann-2017-sansa-iswc}, an open source\furl{https://github.com/SANSA-Stack} \emph{data flow processing engine} for scalable processing of large-scale RDF datasets. 
-SANSA uses Spark offering fault-tolerant, highly available and scalable approaches to process massive sized datasets efficiently. SANSA provides the facilities for semantic data representation, querying, inference, and analytics at scale.
+The work done here (available under \textit{Apache License 2.0}) has been integrated into SANSA~\cite{lehmann-2017-sansa-iswc}, an open source\furl{https://github.com/SANSA-Stack} \emph{data flow processing engine} for scalable processing of large-scale \gls{RDF} datasets. 
+SANSA uses Spark offering fault-tolerant, highly available and scalable approaches to process massive sized datasets efficiently. 
+SANSA provides the facilities for semantic data representation, querying, inference, and analytics at scale.
 Being part of this integration, DistQualityAssessment can take advantage of having the same user community as well as infrastructure build via SANSA project.
 Doing so, it can also ensure the sustainability of the tool given that SANSA is supported by several grants until at least 2021.
 
@@ -287,20 +290,20 @@ The performance of metrics computation depends on data shuffling (while filterin
 Our approach performs a direct mapping of any quality metric designed using $\mathcal{QAP}$ into a sequence of Spark-compliant Scala-commands, as a consequence, most of the operators used are a series of transformations like $map$, $filter$ and $reduce$.
 The complexity of $map$ and $filter$ is considered to be linear with respect to the number of triples associated with it. 
 The complexity of a metric then depends on the $\alpha$ operation that returns the count of the filtered output.
-This later step works on the distributed RDD between $p$ nodes which imply that the complexity of each node then becomes $O(n/p)$, where $n$ is number of input triples.
+This later step works on the distributed \gls{RDD} between $p$ nodes which imply that the complexity of each node then becomes $O(n/p)$, where $n$ is number of input triples.
 Let be $O(\tau)$ a complexity of $\tau$, then the complexity of the metric will be $O(n/p*O(\tau))$.
-This indicates that the runtime increases linearly when the size of an RDD increases and decreases linearly when more nodes $p$ are added to the cluster.
+This indicates that the runtime increases linearly when the size of an \gls{RDD} increases and decreases linearly when more nodes $p$ are added to the cluster.
 
 
 \section{Evaluation}
 \label{sec:distqualityassessment-evaluation}
 
-The main aim of DistQualityAssessment is to serve massive large-scale real-life RDF datasets. 
+The main aim of DistQualityAssessment is to serve massive large-scale real-life \gls{RDF} datasets. 
 We are interested in addressing the following additional questions.
 
 \begin{itemize}
     \item \textbf{Flexibility}: How fast our approach processes different types of metrics?
-    \item \textbf{Scalability}: How large are the RDF datasets that DistQualityAssessment can scale to? 
+    \item \textbf{Scalability}: How large are the \gls{RDF} datasets that DistQualityAssessment can scale to? 
     What is the system speedup w.r.t the number of nodes in a cluster mode?
     \item \textbf{Efficiency}: How well our approach performs compared with other state-of-the-art systems on real-world datasets?
 \end{itemize}
@@ -315,15 +318,14 @@ We chose two real-world and one synthetic datasets for our experiments:
  DBpedia is a knowledge base with a large ontology.
  We build a set of 3 pipelines of increasing complexity: (i) $M_{DBpedia}^{en}$ ($\approx$ 813M triples); (ii) $M_{DBpedia}^{de}$ ($\approx$ 337M triples); (iii) $M_{DBpedia}^{fr}$ ($\approx$ 341M triples). 
 DBpedia has been chosen because of its popularity in the Semantic Web community.
-\item \emph{LinkedGeoData}~\cite{SLHA11} -- a spatial RDF knowledge base derived from OpenStreetMap.
-\item \emph{Berlin SPARQL Benchmark (BSBM})~\cite{Bizer2009TheBS}  -- a synthetic dataset based on an e-commerce use case containing a set of products that are offered by different vendors and reviews posted by consumers about products.
+\item \emph{LinkedGeoData}~\cite{SLHA11} -- a spatial \gls{RDF} knowledge base derived from OpenStreetMap.
+\item \emph{Berlin \gls{SPARQL} Benchmark (BSBM})~\cite{Bizer2009TheBS}  -- a synthetic dataset based on an e-commerce use case containing a set of products that are offered by different vendors and reviews posted by consumers about products.
 The benchmark provides a data generator, which can be used to create sets of connected triples of any particular size.
  \end{enumerate}
 Properties of the considered datasets are given in Table~\ref{tab:qa-dataset_info}.
 
 \begin{table*}
 \centering
-{\caption{Dataset summary information (nt format).}\label{tab:qa-dataset_info}}
 \begin{tabularx}{\textwidth}{Xcccccccc}	
 \toprule
 \multirow{2}{*}{$\longrightarrow$} & \multicolumn{1}{c}{} & \multicolumn{3}{c|}{DBpedia} & \multicolumn{4}{c}{BSBM} \\
@@ -334,9 +336,13 @@ Properties of the considered datasets are given in Table~\ref{tab:qa-dataset_inf
 \scriptsize{size (GB)} & \scriptsize{191.17} & \scriptsize{114.4} & \scriptsize{48.6} & \scriptsize{49.77} & \scriptsize{2} &\scriptsize{20} &\scriptsize{200} &\\
 \bottomrule
 \end{tabularx}
+{\caption{\textbf{Dataset summary information (nt format)}.
+Lists dataset information used on the evaluation of the DistQualityAssessment.
+The size (in GB) and the number of triples are given.}
+\label{tab:qa-dataset_info}}
 \end{table*}
 
-We implemented DistQualityAssessment using Spark-2.4.0, Scala 2.11.11 and Java 8, and all the data were stored on the the HDFS cluster using Hadoop 2.8.0.
+We implemented DistQualityAssessment using Spark-2.4.0, Scala 2.11.11 and Java 8, and all the data were stored on the the \gls{HDFS} cluster using Hadoop 2.8.0.
 The experiments in local mode are all performed on a single instance of the cluster.
 Specifically, we compare our approach with Luzzu~\cite{debattista2016luzzu} v4.0.0, a state-of-the-art quality assessment system\furl{https://github.com/Luzzu/Framework}.
 All distributed experiments were carried out on a small cluster of 7 nodes (1 master, 6 workers): Intel(R) Xeon(R) CPU E5-2620 v4 @ 2.10GHz (32 Cores), 128 GB RAM, 12 TB SATA RAID-5.
@@ -367,7 +373,6 @@ Luzzu was run in a local environment on a single machine with two strategies: (1
 
 \begin{table*}
 \centering
-{\caption{Performance evaluation on large-scale RDF datasets.}\label{tbl:distqualityassessment-performance-evaluation}}
 \begin{tabularx}{\textwidth}{Xcccccc}	
 \toprule
 \multicolumn{1}{l}{}& \multicolumn{5}{c}{\scriptsize{Runtime (m)} (\scriptsize{mean/std})} \\
@@ -379,11 +384,11 @@ Luzzu was run in a local environment on a single machine with two strategies: (1
 & & & & & \scriptsize{Luzzu \textbar DistQualityAssessment$^{c)}$} \\
 \midrule
 \multirow{5}{*}{\rotatebox{90}{\textbf{Large-scale}}}
-$LinkedGeoData$ & \scriptsize{Fail} & \scriptsize{Fail} & \scriptsize{446.9/63.34} & \win \scriptsize{7.79/0.54} & \win \scriptsize{n/a\textbar56.4x}\\
-\hspace{0.2cm} $DBpedia_{en}$ & \scriptsize{Fail} & \scriptsize{Fail} & \scriptsize{274.31/38.17} & \win \scriptsize{1.99/0.04} & \win \scriptsize{n/a\textbar136.8x} \\
-\hspace{0.2cm} $DBpedia_{de}$ & \scriptsize{Fail} & \scriptsize{Fail} & \scriptsize{161.4/24.18} & \win \scriptsize{0.46/0.04} & \win \scriptsize{n/a\textbar349.9x}\\
-\hspace{0.2cm} $DBpedia_{fr}$ & \scriptsize{Fail} & \scriptsize{Fail} & \scriptsize{195.3/26.16} & \win \scriptsize{0.38/0.04} & \win \scriptsize{n/a\textbar512.9x}\\
-\hspace{0.2cm} $BSBM_{200GB}$ & \scriptsize{Fail} & \scriptsize{Fail} & \scriptsize{454.46/78.04} & \win \scriptsize{7.27/0.64} & \win \scriptsize{n/a\textbar61.5x}\\
+$LinkedGeoData$ & \textcolor{red}{\scriptsize{Fail}} & \textcolor{red}{\scriptsize{Fail}} & \scriptsize{446.9/63.34} & \win \scriptsize{7.79/0.54} & \win \scriptsize{n/a\textbar56.4x}\\
+\hspace{0.2cm} $DBpedia_{en}$ & \textcolor{red}{\scriptsize{Fail}} & \textcolor{red}{\scriptsize{Fail}} & \scriptsize{274.31/38.17} & \win \scriptsize{1.99/0.04} & \win \scriptsize{n/a\textbar136.8x} \\
+\hspace{0.2cm} $DBpedia_{de}$ & \textcolor{red}{\scriptsize{Fail}} & \textcolor{red}{\scriptsize{Fail}} & \scriptsize{161.4/24.18} & \win \scriptsize{0.46/0.04} & \win \scriptsize{n/a\textbar349.9x}\\
+\hspace{0.2cm} $DBpedia_{fr}$ & \textcolor{red}{\scriptsize{Fail}} & \textcolor{red}{\scriptsize{Fail}} & \scriptsize{195.3/26.16} & \win \scriptsize{0.38/0.04} & \win \scriptsize{n/a\textbar512.9x}\\
+\hspace{0.2cm} $BSBM_{200GB}$ & \textcolor{red}{\scriptsize{Fail}} & \textcolor{red}{\scriptsize{Fail}} & \scriptsize{454.46/78.04} & \win \scriptsize{7.27/0.64} & \win \scriptsize{n/a\textbar61.5x}\\
 \midrule
 \multirow{10}{*}{\rotatebox{90}{\textbf{Small to medium}}}
 $BSBM_{0.01GB}$ & \scriptsize{2.64/0.02} & \scriptsize{2.65/0.01} & \win \scriptsize{0.04/0.0} & \scriptsize{0.42/0.04} & \win \scriptsize{65x\textbar (-0.9x)}\\
@@ -393,11 +398,18 @@ $BSBM_{0.01GB}$ & \scriptsize{2.64/0.02} & \scriptsize{2.65/0.01} & \win \script
 \hspace{0.2cm} $BSBM_{0.2GB}$ & \scriptsize{101.8/0.72} & \scriptsize{101.78/0.64} & \win \scriptsize{0.07/0.0} & \scriptsize{0.4/0.03} & \win \scriptsize{1453.3\textbar (-0.8x)}\\
 \hspace{0.2cm} $BSBM_{0.5GB}$ & \scriptsize{459.19/18.72} & \scriptsize{468.64/21.7} & \win \scriptsize{0.15/0.01} & \scriptsize{0.48/0.03} & \win \scriptsize{3060.3x\textbar (-0.7x)}\\
 \hspace{0.2cm} $BSBM_{1GB}$ & \scriptsize{1454.16/10.55} & \scriptsize{1532.95/51.6} & \win \scriptsize{0.4/0.02} & \scriptsize{0.56/0.02} & \win \scriptsize{3634.4x\textbar (-0.3x)}\\
-\hspace{0.2cm} $BSBM_{2GB}$ & \scriptsize{Timeout} & \scriptsize{Timeout} & \scriptsize{3.19/0.16} & \win \scriptsize{0.62/0.04} & \win \scriptsize{n/a\textbar 4.1x}\\
-\hspace{0.2cm} $BSBM_{10GB}$ & \scriptsize{Timeout} & \scriptsize{Timeout} & \scriptsize{29.44/0.14} & \win \scriptsize{0.52/0.01} & \win \scriptsize{n/a\textbar 55.6x}\\
-\hspace{0.2cm} $BSBM_{20GB}$ & \scriptsize{Fail} & \scriptsize{Fail} & \scriptsize{34.32/9.22} & \win \scriptsize{0.75/0.29} & \win \scriptsize{n/a\textbar 44.8x}\\
+\hspace{0.2cm} $BSBM_{2GB}$ & \textcolor{blue}{\scriptsize{Timeout}} & \textcolor{blue}{\scriptsize{Timeout}} & \scriptsize{3.19/0.16} & \win \scriptsize{0.62/0.04} & \win \scriptsize{n/a\textbar 4.1x}\\
+\hspace{0.2cm} $BSBM_{10GB}$ & \textcolor{blue}{\scriptsize{Timeout}} & \textcolor{blue}{\scriptsize{Timeout}} & \scriptsize{29.44/0.14} & \win \scriptsize{0.52/0.01} & \win \scriptsize{n/a\textbar 55.6x}\\
+\hspace{0.2cm} $BSBM_{20GB}$ & \textcolor{red}{\scriptsize{Fail}} & \textcolor{red}{\scriptsize{Fail}} & \scriptsize{34.32/9.22} & \win \scriptsize{0.75/0.29} & \win \scriptsize{n/a\textbar 44.8x}\\
 \bottomrule
 \end{tabularx}
+{\caption{\textbf{Performance evaluation on large-scale RDF datasets}.
+A \textit{speedup} analysis gained by DistQualityAssessment as compared with Luzzu.
+The experiments were run on five datasets
+($DBpedia_{en}$, $DBpedia_{de}$, $DBpedia_{fr}$, $LinkedGeoData$ and $BSBM_{200GB}$).
+Luzzu was run in a local environment on a single machine with two strategies: (1) streaming the data for each metric separately, and (2) one stream/load -- all metrics evaluated just once.
+}
+\label{tbl:distqualityassessment-performance-evaluation}}
 \end{table*}
 
 
@@ -408,11 +420,11 @@ Column Luzzu$^{a)}$ represents the performance of Luzzu on bulk load -- consider
 The last columns reports on the performance of DistQualityAssessment run on a local mode $c)$, cluster mode $d)$ and speedup ratio of our approach compared to Luzzu$^{b)}$ ($d)/b)-1$) and itself evaluated on local mode ($d)/c)-1$) is reported on the column $e)$.
 We observe that the execution of our approach finishes with all the datasets whereas this is not the case with Luzzu which either timeout or fail at some point.
 
-Unfortunately, Luzzu was not capable of evaluating the metrics over large-scale RDF datasets from Table~\ref{tbl:distqualityassessment-performance-evaluation} (part one). 
+Unfortunately, Luzzu was not capable of evaluating the metrics over large-scale \gls{RDF} datasets from Table~\ref{tbl:distqualityassessment-performance-evaluation} (part one). 
 For that reason we run yet another set of experiments on very small datasets which Luzzu was able to handle. 
-Second part of the Table~\ref{tbl:distqualityassessment-performance-evaluation} shows a performance evaluation of our approach compared with Luzzu on very small RDF datasets.
+Second part of the Table~\ref{tbl:distqualityassessment-performance-evaluation} shows a performance evaluation of our approach compared with Luzzu on very small \gls{RDF} datasets.
 In some cases (e.g. \ref{qm:RC1}, \ref{qm:SV3}) for a very small dataset Luzzu performs better than our approach with a small margin of runtime in the local mode.
-It is due to the fact that in the streaming mode, when Luzzu$^{a)}$ finds the first statement which fulfills the condition (e.g.finding the shortest URIs), it stops the evaluation and return the results.
+It is due to the fact that in the streaming mode, when Luzzu$^{a)}$ finds the first statement which fulfills the condition (e.g.finding the shortest \gls{URI}s), it stops the evaluation and return the results.
 On the contrary, our approach evaluates the metrics over the whole dataset exploiting the fault-tolerance and resilient features build in Spark.
 In other cases Luzzu suffers from significant slowdowns, which are several orders of magnitude slower.
 Therefore, its average runtime over all metrics is worst as compared to our approach. 
@@ -433,7 +445,10 @@ Figure~\ref{fig:distqualityassessment-sizeup-scalability} and \ref{fig:distquali
 \begin{figure*}
 \centering
  \includegraphics[width=1.0\columnwidth]{images/5_distqualityassessment/distqualityassessment-sizeup-scalability.pdf}
-    \caption{Sizeup performance evaluation.}
+    \caption{\textbf{Sizeup performance evaluation of DistQualityAssessment}.
+    The analysis fix the number of nodes to 6 and grow the size of datasets to measure whether DistQualityAssessment can deal with larger datasets.
+    We see that the execution time increases linearly and is near-constant when the size of the dataset increases. 
+    As expected, it stays near-constant as long as the data fits in memory.}
     \label{fig:distqualityassessment-sizeup-scalability}
 \end{figure*}
 
@@ -461,7 +476,11 @@ The number of workers have varied from 1, 2, 3, 4 and 5 to 6.
 \begin{figure*}
 \centering
   \includegraphics[width=1.0\columnwidth]{images/5_distqualityassessment/distqualityassessment-node-scalability.pdf}
-    \caption{Node scalability performance evaluation.}
+    \caption{\textbf{Node scalability performance evaluation of DistQualityAssessment}.
+    The analysis keeps the size of the dataset constant ($BSBM_{200GB}$) and varies the number of workers on the cluster.
+    The number of workers varies from 1, 2, 3, 4 and 5 to 6.
+    We can see that as the number of workers increases, the execution time cost-decrease is almost linear. 
+    It decreases about 14 times (from 433.31 minutes down to 28.8 minutes) as cluster nodes increase from one to six worker nodes. The results shown here imply that our approach can achieve near-linear scalability in performance in the context of speedup.}
     \label{fig:distqualityassessment-node-scalability}
 \end{figure*}
 
@@ -477,7 +496,10 @@ Efficiency is defined as a ratio $E = S/n =T_s/n T_n$ which measures the process
 
 \begin{figure*}
 \includegraphics[width=1.0\columnwidth]{images/5_distqualityassessment/distqualityassessment-effectiveness.pdf}
-\caption{Effectiveness of DistQualityAssessment.}
+\caption{\textbf{Effectiveness of DistQualityAssessment}.
+The speedup performance trend shows that it achieves almost linear speedup and even super linear in some cases.
+The speedup grows faster than the number of worker nodes due to the computation task for the metric being computationally intensive, and the data does not fit in the cache when executed on a single node but fits into several machines when the workload is divided amongst the cluster for parallel evaluation.
+}
 \label{fig:distqualityassessment-effectiveness}
 \end{figure*}
 
@@ -500,7 +522,10 @@ Figure~\ref{fig:distqualityassessment-overall-analysis} reports on the run-time 
 
 \begin{figure*}
 \includegraphics[width=1.0\columnwidth]{images/5_distqualityassessment/distqualityassessment-overall-analysis.pdf}
-\caption{Overall analysis by metric in the cluster mode (log scale).}
+\caption{\textbf{Overall analysis of by metric in the cluster mode (log scale)}.
+It shows that the execution is sometimes a little longer when there is a shuffling involved in the cluster compared to when data is processed without movement e.g. Metric L2 and L1. 
+Metric SV3 and CN2 are the most expensive ones in terms of runtime. This is due to the extra overhead caused by extracting the literals for objects, and checking the lexical form of its datatype.
+}
 \label{fig:distqualityassessment-overall-analysis}
 \end{figure*}
 
@@ -518,11 +543,12 @@ Overall, the evaluation study carried out in this paper demonstrates that distri
 \label{sec:distqualityassesment-summary}
 The data quality assessment becomes challenging with the increasing sizes of data.
 Many existing tools mostly contain a customized data quality functionality to detect and analyze data quality issues within their own domain. 
-However, this process is both data-intensive and computing-intensive and it is a challenge to develop fast and efficient algorithms that can handle large scale RDF datasets.
+However, this process is both data-intensive and computing-intensive and it is a challenge to develop fast and efficient algorithms that can handle large scale \gls{RDF} datasets.
 
-In this paper, we have introduced DistQualityAssessment, a novel approach for distributed in-memory evaluation of RDF quality assessment metrics implemented on top of the Spark framework.
+In this thesis, we have introduced DistQualityAssessment, a novel approach for distributed in-memory evaluation of \gls{RDF} quality assessment metrics implemented on top of the Spark framework.
 The presented approach offers generic features to solve common data quality checks.
 As a consequence, this can enable further applications to build trusted data utilities. 
 
 We have demonstrated empirically that our approach improves upon previous centralized approach that we have compared against.
-The benefit of using Spark is that its core concepts (RDDs) are designed to scale horizontally. Users can adapt the cluster sizes corresponding to the data sizes, by dropping when it is not needed and adding more when there is a need for it.
+The benefit of using Spark is that its core concepts (\gls{RDD}s) are designed to scale horizontally. 
+Users can adapt the cluster sizes corresponding to the data sizes, by dropping when it is not needed and adding more when there is a need for it.

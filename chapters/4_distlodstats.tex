@@ -15,7 +15,7 @@ This limits their capabilities to medium-sized datasets only, which paralyzes th
 
 As the memory limitation was the main shortcoming in the existing works, we investigated parallel approaches that distribute the workload among several separate memories.
 One solution that gained traction over the past years is the concept of \gls{RDD}, initially suggested at~\cite{zaharia2012resilient}, which are in-memory data structures. 
-Using RDDs, we are able to perform operations on the whole dataset stored in a significantly enlarged distributed memory.
+Using \gls{RDD}s, we are able to perform operations on the whole dataset stored in a significantly enlarged distributed memory.
 
 Apache Spark~\furl{http://spark.apache.org} is an implementation of the concept of \gls{RDD}s.
 It allows performing coarse-grained operations over voluminous datasets in a distributed manner in parallel.
@@ -24,16 +24,16 @@ It extends earlier efforts in the area such as Hadoop MapReduce.
 
 In this chapter we address the following research question:
 \begin{tcolorbox}
-\textbf{RQ1}: How can we efficiently explore the structure of the large-scale RDF datasets?
+\textbf{RQ1}: How can we efficiently explore the structure of the large-scale \gls{RDF} datasets?
 \end{tcolorbox}
 
 Contributions of this chapter are summarize as follows:
 \begin{itemize}
-    \item We propose an algorithm for computing RDF dataset statistics and implement it using an efficient framework for large-scale, distributed and in-memory computations: Apache Spark.
+    \item We propose an algorithm for computing \gls{RDF} dataset statistics and implement it using an efficient framework for large-scale, distributed and in-memory computations: Apache Spark.
     \item We perform an analysis of the complexity of the computational steps and the data exchange between nodes in the cluster. 
     \item We evaluate our approach and demonstrate empirically its superiority over a previous centralized approach.
     \item We integrated the approach into the SANSA framework, where it is actively maintained and re-uses the community infrastructure (mailing list, issues trackers, website etc.).
-    \item An approach for triggering RDF statistics calculation remotely simply using HTTP requests. 
+    \item An approach for triggering \gls{RDF} statistics calculation remotely simply using HTTP requests. 
     DistLODStats is built as a plugin into the larger SANSA Framework and makes use of Apache Livy, a novel lightweight solution for interacting with Spark cluster via a REST Interface.
 \end{itemize}
 
@@ -45,9 +45,11 @@ This chapter is based on the following publications (\cite{sejdiu-2018-dist-lod-
 \end{itemize}
 
 The remainder of this chapter is organized as follows: 
-% We first introduce the main challenges while designing a scalabele approach for computing statistics over RDF datasets.
-Our approach for the computation of RDF dataset statistics is detailed in Section~\ref{sec:approach} and evaluated in Section~\ref{sec:evaluation}.
-Finally, we conclude and suggest planned extensions of our approach in Section~\ref{sec:distlodstats-summary}.
+Our approach for the computation of \gls{RDF} dataset statistics is detailed in Section~\ref{sec:approach}.
+An analysis of the complexity of the computational steps and the data exchange between nodes is conducted in Subsection~\ref{subsection:complexAnalys} to assess the complexity of each statistical criterion.
+The evaluation of the approach is elaborated in Subsection~\ref{sec:evaluation}.
+STATisfy, a component for triggering \gls{RDF} statistics calculation remotely by using HTTP request has been described in Section~\ref{sec:distlodstats-statisfy}.
+Finally, we summarize our work in Section~\ref{sec:distlodstats-summary}.
 
 \section{A Scalable Distributed Approach for Computation of RDF Dataset Statistics}
 \label{sec:approach}
@@ -64,7 +66,7 @@ In our approach, we adapt the definition of those elements to be applicable to \
 A statistical criterion $\mathcal{C}$ is a triple $\mathcal{C} = (F, D, P)$, where:
   
  \begin{itemize}
- \item $F$ is a SPARQL filter condition. 
+ \item $F$ is a \gls{SPARQL} filter condition. 
  \item $D$ is a derived dataset from the main dataset (\gls{RDD} of triples) after applying F.
  \item $P$ is a post-processing filter operating on the data structure $D$.
 \end{itemize}
@@ -109,30 +111,31 @@ Our approach consists of three steps: (1) saving \gls{RDF} data in scalable stor
 \begin{figure}
 \centering
 \includegraphics[width=.45\columnwidth]{images/4_distlodstats/distlodstats-rdd-lineage.pdf}
-\caption{RDD lineage of a Criterion execution.}
+\caption{\textbf{RDD lineage of a Criterion execution}. 
+It consists of three steps: (1) saving RDF data into a scalable storage, (2) parsing and mapping RDF into the main dataset (RDD of triples), and (3) performing statistical criteria evaluation on the main dataset.}
 \label{fig:RDD_Lineage}
 \end{figure}
 
-\textit{Fetching the \gls{RDF} data (Step 1):} \gls{RDF} data needs first to be loaded into a large-scale storage that Spark can efficiently read from.
-For this purpose, we use \gls{HDFS}~\furl{https://hadoop.apache.org/docs/r1.2.1/hdfs\_design.html}.
+\defn{Fetching the \gls{RDF} data (Step 1):} \gls{RDF} data needs first to be loaded into a large-scale storage that Spark can efficiently read from.
+For this purpose, we use \gls{HDFS}~\footnote{\scriptsize \url{https://hadoop.apache.org/docs/r1.2.1/hdfs\_design.html} (Retrieved in September 2019)}.
 \gls{HDFS} is able to accommodate any type of data in its raw format, horizontally scale to arbitrary number of nodes, and replicate data among the cluster nodes for fault tolerance.
 In such a distributed environment, Spark adopts different data locality strategies to try to perform computations as close to the needed data as possible in \gls{HDFS} and thus avoid data transfer overhead.
  
-\textit{Parsing and mapping RDF into the main dataset (Step 2):} In the course of Spark execution, data is parsed into triples and loaded into an \gls{RDD} of the following format: \emph{Triple$<$Subj,Pred,Obj$>$} (by using the Spark \textit{map} transformation).
+\defn{Parsing and mapping \gls{RDF} into the main dataset (Step 2):} In the course of Spark execution, data is parsed into triples and loaded into an \gls{RDD} of the following format: \emph{Triple$<$Subj,Pred,Obj$>$} (by using the Spark \textit{map} transformation).
 
-\textit{Statistical criteria evaluation (Step 3):} For each criterion, Spark generates an execution plan, which is composed of one or more of the following Spark transformations: \textit{map}, \textit{filter}, \textit{reduce} and \textit{group-by}. 
+\defn{Statistical criteria evaluation (Step 3):} For each criterion, Spark generates an execution plan, which is composed of one or more of the following Spark transformations: \textit{map}, \textit{filter}, \textit{reduce} and \textit{group-by}. 
 
 \subsection{Algorithm}
 \label{sec:Algorithm}
 
-The DistLODStats algorithm (see Algorithm~\ref{alg:DistLODStats}) constructs the \emph{main dataset} from an RDF file (Line \ref{line:rdf2rdd}).
+The DistLODStats algorithm (see Algorithm~\ref{alg:DistLODStats}) constructs the \emph{main dataset} from an \gls{RDF} file (Line \ref{line:rdf2rdd}).
 Afterwards, the algorithm iterates over the criteria defined inside the DistLODStats framework and evaluates them (Lines \ref{line:filter}, \ref{line:action} and \ref{line:postProc}).
 
 To define a statistical criterion inside the DistLODStats framework, one must specify \emph{filter}, \emph{action}, and \emph{postProc} methods. 
 The evaluation of the criterion then starts first by the \emph{filter} method (Line \ref{line:filter}) that is used to apply the rule filters of the criterion (Rule Filter in Table~\ref{tab:SparkRules}). 
-Applied on a \emph{main dataset}, this latter will return a new RDD with a subset of the triples.
+Applied on a \emph{main dataset}, this latter will return a new \gls{RDD} with a subset of the triples.
 Next, the \emph{action} method is used to apply the criterion's rule action (Rule Action in Table~\ref{tab:SparkRules}).
-Applied on the filtered RDD, this either computes statistics directly or reorganizes the RDD so statistics can be computed in the next step.
+Applied on the filtered \gls{RDD}, this either computes statistics directly or reorganizes the \gls{RDD} so statistics can be computed in the next step.
 At the end, the \emph{postProc} method is used as an optional operation to perform further statistical computations (e.g.~average after count or sort).
 
 \begin{algorithm}
@@ -163,10 +166,10 @@ At the end, the \emph{postProc} method is used as an optional operation to perfo
 
 In our work, we make use of Spark caching techniques. 
 Basically, if an \gls{RDD} is constructed from a data source e.g. file, or through a lineage of
-RDDs, and then cached, there is no need to construct the RDD again the next time it is needed.
-We have used two different approaches for caching: (1) caching the \emph{main dataset} entirely (Line~\ref{line:cache}), and (2) caching a derived RDD after applying the criteria \emph{filter} on the \emph{main dataset} (Line~\ref{line:cache_triples}). 
-In the first approach, the RDD is constructed from the RDF source during the first criteria computation, so the next criteria do not need to fetch it again. 
-In the second approach, the RDD resulting from executing the \emph{filter} of one criterion is cached and used by any other criterion sharing the same \textit{filter} pattern. 
+\gls{RDD}s, and then cached, there is no need to construct the \gls{RDD} again the next time it is needed.
+We have used two different approaches for caching: (1) caching the \emph{main dataset} entirely (Line~\ref{line:cache}), and (2) caching a derived \gls{RDD} after applying the criteria \emph{filter} on the \emph{main dataset} (Line~\ref{line:cache_triples}). 
+In the first approach, the \gls{RDD} is constructed from the \gls{RDF} source during the first criteria computation, so the next criteria do not need to fetch it again. 
+In the second approach, the \gls{RDD} resulting from executing the \emph{filter} of one criterion is cached and used by any other criterion sharing the same \textit{filter} pattern. 
 
  \begin{table*}
     \centering
@@ -373,7 +376,9 @@ In the second approach, the RDD resulting from executing the \emph{filter} of on
       $\rightarrow$ \verb|map(f => (f.o.getNS())).map(f => (f, 1)).reduceByKey(_ + _)| & 
       --  \\ 
     \end{tabular}
-\caption{Definition of  Spark rules (using Scala notation) per criterion.}
+\caption{\textbf{Definition of Spark rules (using Scala notation) per criterion}.
+A list of statistical criteria following the Rule (Filter->Action) -> Postproc paradigm using the Spark/Scala notation.
+}
 \label{tab:SparkRules}
 \end{table*}
 
@@ -450,7 +455,8 @@ The count is performed locally and the individual counts are summed up for the c
  \\
 \hline
 \end{tabularx}
-\caption{Complexity and data shuffling breakdown by statistical criterion. Notation conventions: n = number of triples; V = number of vertices; E = number of edges.}
+\caption{\textbf{Complexity and data shuffling breakdown by statistical criterion}.
+Notation conventions: n = number of triples; V = number of vertices; E = number of edges.}
 \label{tab:criteriacomplexity}
 \end{table*}
 
@@ -466,29 +472,26 @@ Finally, if data is shuffled across cluster nodes, then a new scan is needed as 
 
 \noindent
 \textbf{Per-criterion complexity analysis.} Based on the two previous factors, we performed a complexity analysis of each statistical criterion. The results are reported in Table~\ref{tab:criteriacomplexity}. 
-%As noted, data movement can occur then there is an attempt to group distributed data together in order to perform some computations like counting the number of similar elements. 
 We deem the complexity is mostly linear corresponding to cases where only one or limited number of scans is required. 
 However there are situations where the complexity can increase when there are iterative executions, like the case of data sorting or graph-based computations (e.g. finding cycles or getting the path between two edges).
 
 \noindent
 Below we give an overview of complexity analysis for our most operators used through our approach.
 
-The complexity of $map()$ and $filter()$ itself is linear with respect to the number of input triples. %considered to be linear.
-%Their complexity depends on the function passed to them.
+The complexity of $map()$ and $filter()$ itself is linear with respect to the number of input triples.
 The overall complexity depends on the functions passed to them. 
-%Apart from this, the scale number plays a big role in the complexity in general. 
-Consider an RDD as a single data structure on memory, any other operations (such as map and filter) are linear, or $O(n)$. 
-The subsequent step is to split this RDD between $s$ nodes, the complexity on each node then becomes $O(n/s)$.
+Consider an \gls{RDD} as a single data structure on memory, any other operations (such as map and filter) are linear, or $O(n)$. 
+The subsequent step is to split this \gls{RDD} between $s$ nodes, the complexity on each node then becomes $O(n/s)$.
 Let be $f$ a function with complexity $O(f)$, then its complexity will be $O(n/s * O(f))$.
-As evident from the formula $O(n/s * O(f))$, the runtime increases linearly when the size of RDD increases and \emph{decreases} linearly with the number of nodes in the cluster in case of a function $f$ with with $O(f)=O(1)$.
+As evident from the formula $O(n/s * O(f))$, the runtime increases linearly when the size of \gls{RDD} increases and \emph{decreases} linearly with the number of nodes in the cluster in case of a function $f$ with with $O(f)=O(1)$.
 
-The complexity of the $sortBy$ operation according to Spark\furl{https://github.com/apache/spark/blob/d5b1d5fc80153571c308130833d0c0774de62c92/core/src/main/scala/org/apache/spark/Partitioner.scala\#L101} is a sampled $O(n)$, which means only the unique sample keys $m$ (with $m \le n$) are sorted and lead to a complexity of $O(m*log(m))$ plus the ranges of key sets. 
+The complexity of the $sortBy$ operation according to Spark~\footnote{\scriptsize \url{http://tiny.cc/jn91iz} (Retrieved in September 2019)} is a sampled $O(n)$, which means only the unique sample keys $m$ (with $m \le n$) are sorted and lead to a complexity of $O(m*log(m))$ plus the ranges of key sets. 
 Afterwords, the data is shuffled around in $O(n)$ which is costly as sorting needs to be applied internally for the range of keys collected on a given partition $p$, i.e.~$O(p*log(p))$ time is required.
 
 \subsection{Implementation}
 \label{subsection:implementation}
 DistLODStats comprises three main phases depicted in Figure~\ref{fig:DistLODStatsSystem} and explained previously.
-The output of the \emph{Computing} phase will be the statistical results represented in a human-readable format e.g.~VoID, or row data.
+The output of the \emph{Computing} phase will be the statistical results represented in a human-readable format e.g.~VoID~\cite{Zhao:11:VoID}, or row data.
 
 We expressed the three phases of the 32 criteria using the basic operations defined in Definition~\ref{def:basicdefination}.
 Next, those have been mapped to Spark transformations and actions in Table~\ref{tab:SparkRules}, where: \textit{map} is mapped directly to Spark \verb|Map()|, \textit{reduce} is mapped to \verb|groupByKey()|, and \textit{group-by} is mapped to \verb|reduceByKey()|.
@@ -498,13 +501,16 @@ Exceptions of this general strategy were done for the implementation of the post
 \begin{figure*}
 \centering
 \includegraphics[width=1.0\textwidth]{images/4_distlodstats/distlodstats-system.pdf}
-\caption{Overview of DistLODStats's abstract architecture.}
+\caption{\textbf{Overview of DistLODStats's abstract architecture}. It is composed of three steps: First, it reads RDF data from HDFS and converts them into RDD of triples. Second, this latter undergoes a Filtering operation applying the Rule's Filter and producing a new filtered RDD. Third, the filtered RDD will serve as an input to the next step: Computing where the rule's action and/or post processing are effectively applied. As a result, a statistical representation is generated.}
 \label{fig:DistLODStatsSystem}
 \end{figure*}
 Furthermore, we provide a Docker image of the system\furl{https://github.com/SANSA-Stack/Spark-RDF-Statistics} available under \textit{Apache License 2.0}, integrated within the BDE platform\furl{https://github.com/big-data-europe} - an open source Big Data Processing Platform allowing users to install numerous big data processing tools and frameworks and create working data flow applications.
 
 We implemented DistLODStats using Spark-2.2.0, Scala 2.11.11 and Java 8. 
-DistLODStats has meanwhile been integrated into SANSA~\cite{lehmann-2017-sansa-iswc,iermilov-2017-sansa-iswc-demo}, an open source\furl{https://github.com/SANSA-Stack} \emph{data flow processing engine} for performing distributed computation over large-scale RDF datasets. It provides data distribution, communication, and fault tolerance for manipulating large RDF graphs and applying machine learning algorithms on the data at scale. Via this integration, DistLODStats can also leverage the developer and user community as well as infrastructure behind the SANSA project. This also ensure the sustainability of DistLODStats given that SANSA is backed by several grants until at least 2021.
+DistLODStats has meanwhile been integrated into SANSA~\cite{lehmann-2017-sansa-iswc,iermilov-2017-sansa-iswc-demo}, an open source\furl{https://github.com/SANSA-Stack} \emph{data flow processing engine} for performing distributed computation over large-scale \gls{RDF} datasets. 
+It provides data distribution, communication, and fault tolerance for manipulating large \gls{RDF} graphs and applying machine learning algorithms on the data at scale. 
+Via this integration, DistLODStats can also leverage the developer and user community as well as infrastructure behind the SANSA project. 
+This also ensure the sustainability of DistLODStats given that SANSA is backed by several grants until at least 2021.
 
 
 \subsection{Evaluation}
@@ -524,11 +530,11 @@ In the following, we present our experimental setup including the datasets used.
 We used one synthetic and two real world datasets for our experiments:
 \begin{enumerate}
  
- \item We chose the geospatial dataset LinkedGeoData~\cite{SLHA11} which offers a spatial RDF knowledge base derived from OpenStreetMap.
+ \item We chose the geospatial dataset LinkedGeoData~\cite{SLHA11} which offers a spatial \gls{RDF} knowledge base derived from OpenStreetMap.
  
  \item As a cross domain dataset, we selected \emph{DBpedia}~\cite{dbpedia-swj} (v 3.9). DBpedia is a knowledge base with a large ontology.
  
- \item As a synthetic dataset, we chose to use the Berlin SPARQL Benchmark (BSBM)~\cite{Bizer2009TheBS}.
+ \item As a synthetic dataset, we chose to use the Berlin \gls{SPARQL} Benchmark (BSBM)~\cite{Bizer2009TheBS}.
  It is based on an e-commerce use case which is built around a set of products that are offered by different vendors.
  The benchmark provides a data generator, which can be used to create sets of connected triples of any particular size.
  
@@ -538,7 +544,6 @@ Properties of these datasets are given in Table~\ref{tab:dataset_info}.
 
 \begin{table*}
 \centering
-{\caption{Dataset summary information (nt format).}\label{tab:dataset_info}}
 \begin{tabularx}{\textwidth}{Xcccccccc}	
 \toprule
 \multirow{2}{*}{$\longrightarrow$} & \multicolumn{1}{c}{} & \multicolumn{3}{c|}{DBpedia} & \multicolumn{3}{c}{BSBM} \\
@@ -549,9 +554,13 @@ Properties of these datasets are given in Table~\ref{tab:dataset_info}.
 \scriptsize{size (GB)} & \scriptsize{191.17} & \scriptsize{114.4} & \scriptsize{48.6} & \scriptsize{49.77} & \scriptsize{2} &\scriptsize{20} &\scriptsize{200} & \\
 \bottomrule
 \end{tabularx}
+{\caption{\textbf{Dataset summary information (nt format)}.
+Lists dataset characteristics used on the evaluation of the DistLODStats.
+The size (in GB) and the number of triples are given.}
+\label{tab:dataset_info}}
 \end{table*}
 
-For the evaluation, all data is stored on the same HDFS cluster using Hadoop 2.8.0.
+For the evaluation, all data is stored on the same \gls{HDFS} cluster using Hadoop 2.8.0.
 All experiments were carried out on a 6 nodes cluster (1 master, 5 workers): Intel(R) Xeon(R) CPU E5-2620 v4 @ 2.10GHz (32 Cores), 128 GB RAM, 12 TB SATA RAID-5.
 The experiments on a local mode are all performed on a single instance of the cluster.
 The machines were connected via a Gigabit network.
@@ -574,7 +583,6 @@ We run the experiments on four datasets
 
 \begin{table*}
 \centering
-{\caption{Distributed Processing on Large-Scale Datasets.}\label{tbl:statistics}}
 \begin{tabularx}{\textwidth}{Xcccccc}	
 \toprule
 \multicolumn{1}{l}{}& \multicolumn{5}{c}{\scriptsize{Runtime (h)} (\scriptsize{mean/std})} \\
@@ -584,11 +592,16 @@ We run the experiments on four datasets
 \cline{2-6}  \rule{0pt}{10pt}
 & \scriptsize{a) files} & \scriptsize{b) bigfile}  & \scriptsize{c) local} & \scriptsize{d) cluster} & \scriptsize{e) speedup ratio} \\
 \midrule
-\scriptsize{LinkedGeoData}& \scriptsize{n/a} & \scriptsize{n/a} & \scriptsize{36.65/0.13} & \win \scriptsize{4.37/0.15} & \scriptsize{7.4x}\\ \scriptsize{M$_{DBpedia}^{en}$} & \win \scriptsize{24.63/0.57} & \scriptsize{fail} & \scriptsize{25.34/0.11} & \win \scriptsize{2.97/0.08} & \scriptsize{7.6x} \\
-\scriptsize{M$_{DBpedia}^{de}$} & \scriptsize{n/a} & \scriptsize{n/a} & \scriptsize{10.34/0.06} & \win \scriptsize{1.2/0.0} & \scriptsize{7.3x}\\
-\scriptsize{M$_{DBpedia}^{fr}$} & \scriptsize{n/a} & \scriptsize{n/a} & \scriptsize{10.49/0.09} & \win \scriptsize{1.27/0.04} & \scriptsize{7.3x}\\
+\scriptsize{LinkedGeoData}& \textcolor{blue}{\scriptsize{n/a}} & \textcolor{blue}{\scriptsize{n/a}} & \scriptsize{36.65/0.13} & \win \scriptsize{4.37/0.15} & \scriptsize{7.4x}\\ \scriptsize{M$_{DBpedia}^{en}$} & \win \scriptsize{24.63/0.57} & \textcolor{red}{\scriptsize{fail}} & \scriptsize{25.34/0.11} & \win \scriptsize{2.97/0.08} & \scriptsize{7.6x} \\
+\scriptsize{M$_{DBpedia}^{de}$} & \textcolor{blue}{\scriptsize{n/a}} & \textcolor{blue}{\scriptsize{n/a}} & \scriptsize{10.34/0.06} & \win \scriptsize{1.2/0.0} & \scriptsize{7.3x}\\
+\scriptsize{M$_{DBpedia}^{fr}$} & \textcolor{blue}{\scriptsize{n/a}} & \textcolor{blue}{\scriptsize{n/a}} & \scriptsize{10.49/0.09} & \win \scriptsize{1.27/0.04} & \scriptsize{7.3x}\\
 \bottomrule
 \end{tabularx}
+{\caption{\textbf{Distributed Processing on Large-Scale Datasets}.
+Reports the performance analysis of the \textit{speedup} gained by DistLODStats as compared with the original centralized version.
+The experiments were run on four datasets ($DBpedia_{en}$, $DBpedia_{de}$, $DBpedia_{fr}$, and $LinkedGeoData$) in a local environment on a single instance with two configurations:  (1) files of the dataset are considered separately, and (2) one big file--all files concatenated.
+}
+\label{tbl:statistics}}
 \end{table*}
 
 Table~\ref{tbl:statistics} shows the performance of two algorithms applied to the four datasets.
@@ -603,11 +616,11 @@ However, with small data as input, the processing can finish in short amount of 
 
 \begin{figure}
   \includegraphics[width=1.0\columnwidth]{images/4_distlodstats/distlodstats-speedup-performance.pdf}
-    \caption{Speedup performance evaluation of DistLODStats.}
+    \caption{\textbf{Speedup performance evaluation of DistLODStats}. Reports speedup performance analysis for large-scale RDF Datasets for DistLODStats on local mode and cluster mode, respectively. All results illustrate consistent improvement for each dataset when running on a cluster. The geometric mean of the speedup is 7.4x}
     \label{fig:Speedup}
 \end{figure}
 
-Figure~\ref{fig:Speedup} shows the speedup performance evaluation for large-scale RDF Datasets for DistLODStats on local mode and cluster mode, respectively.
+Figure~\ref{fig:Speedup} shows the speedup performance evaluation for large-scale \gls{RDF} Datasets for DistLODStats on local mode and cluster mode, respectively.
 All results illustrate consistent improvement for each dataset when running on a cluster. 
 The maximum speedup is 7.6x and the geometric mean of the speedup is 7.4x.
 
@@ -619,7 +632,6 @@ The reason why the time spent on local mode extremely decreases is that the size
 To measure the performance of \textit{size-up} i.e.~scalability of our approach, we run experiments on three different sizes.
 This analysis keeps the number of nodes in a cluster constant, we fix the number of workers (nodes) to 5 and grow the size of datasets to measure whether a given algorithm can deal with larger datasets.
 Since real-world datasets are considered to be unique in the size and also on other aspects e.g.~number of unique terms, we chose the BSBM benchmark tool to generate artificial datasets of different sizes.
-%
 We started by generating a dataset of 2GB.
 Then we iteratively increased the size of datasets by one order of magnitude.
 
@@ -628,7 +640,11 @@ The $x$-axis is a generated BSBM dataset per each order of 10x magnitude.
 
 \begin{figure}
  \includegraphics[width=1.0\columnwidth]{images/4_distlodstats/distlodstats-sizeup-performance.pdf}
-\caption{Sizeup performance evaluation of DistLODStats.}
+\caption{\textbf{Sizeup performance evaluation of DistLODStats}.
+The analysis keeps the number of nodes in a cluster constant (5 worker nodes) and grow the size of datasets (BSBM) to measure whether our approach can deal with larger datasets.
+We see that the execution time cost grows linearly and is near-constant when the size of the dataset increases.
+It stays near-constant as long as the data fits in memory which demonstrates one of the advantages of utilizing an in-memory approach in performing the statistics computation.
+}
 \label{fig:Sizeup}
 \end{figure}
 
@@ -645,7 +661,10 @@ The number of workers varies from 1, 2, 3 and 4 to 5.
 
 \begin{figure}
 \includegraphics[width=1.0\columnwidth]{images/4_distlodstats/distlodstats-node-scalability.pdf}
-\caption{Scalability performance evaluation on DistLODStats.}
+\caption{\textbf{Scalability performance evaluation on DistLODStats}.
+The analysis keeps the size of the dataset constant ($BSBM_{50GB}$) and vary the number of the workers on the cluster.
+The number of workers varies from 1, 2, 3, and 4 to 5.
+We can see that as the number of workers increases, the execution time cost is super-linear on $BSBM_{50GB}$ dataset.}
 \label{fig:Scalability}
 \end{figure}
 
@@ -664,7 +683,10 @@ As depicted in Figure~\ref{fig:Effectiveness}, the speedup performance trend is 
 
 \begin{figure}
 \includegraphics[width=1.0\columnwidth]{images/4_distlodstats/distlodstats-effectiveness.pdf}
-\caption{Speedup Ratio and Efficiency of DistLODStats.}
+\caption{\textbf{Speedup Ratio and Efficiency of DistLODStats}.
+The speedup performance trend is consistent as the number of workers increases.
+Efficiency increased only up to the 4th worker for $BSBM_{50GB}$ dataset.
+The results imply that DistLODStats can achieve near linear or even super linear scalability in performance.}
 \label{fig:Effectiveness}
 \end{figure}
 
@@ -679,7 +701,11 @@ Figure~\ref{fig:Breakdown} reports on the runtime of each criterion on both $BSB
 \begin{figure*}
 \centering
 \includegraphics[width=1\columnwidth]{images/4_distlodstats/distlodstats-overall-breakdown.pdf}
-\caption{Overall Breakdown by Criterion Analysis (log scale).}
+\caption{\textbf{Overall Breakdown by Criterion Analysis (log scale)}.
+The execution time is longer when there is data movement in the cluster compared to when data is processed without movement.
+There are some criteria that are quite efficient to compute even with data movement e.g. 22, 23. 
+This is because data is largely filtered before the movement.
+}
 \label{fig:Breakdown}
 \end{figure*}
 
@@ -700,19 +726,19 @@ Overall, the evaluation study conducted demonstrates that parallel and distribut
 
 \section{STATisfy: A REST Interface for DistLODStats}
 \label{sec:distlodstats-statisfy}
-The increasing adoption of the Linked Data format, RDF, over the last two decades has brought new opportunities.
-It has also raised new challenges though, especially when it comes to managing and processing large amounts of RDF data.
+The increasing adoption of the Linked Data format, \gls{RDF}, over the last two decades has brought new opportunities.
+It has also raised new challenges though, especially when it comes to managing and processing large amounts of \gls{RDF} data.
 In particular, assessing the internal structure of a data set is important, since it enables users to understand the data better.
 One prominent way of assessment is computing statistics about the instances and schema of a data set.
-However, computing statistics of large RDF data is computationally expensive.
-To overcome this challenging situation, we previously built DistLODStats, a framework for parallel calculation of 32 statistical criteria over large RDF datasets, based on Apache Spark.
+However, computing statistics of large \gls{RDF} data is computationally expensive.
+To overcome this challenging situation, we previously built DistLODStats, a framework for parallel calculation of 32 statistical criteria over large \gls{RDF} datasets, based on Apache Spark.
 Running DistLODStats is, thus, done via submitting jobs to a Spark cluster.
 Often times, this process is done manually, either by connecting to the cluster machine or via a dedicated resource manager. 
 
 SANSA and DistLODStats use Apache Spark\furl{http://spark.apache.org/} as an underlying engine, which is a popular framework for processing large datasets in-memory.
 Spark provides two possibilities of running and interacting with applications: 
 \begin{itemize}
-    \item \textit{Interactive} - via a command line interface (CLI) called \textit{Spark Shell}, or via Spark \textit{Notebooks} (e.g. SANSA-Notebooks~\cite{iermilov-2017-sansa-iswc-demo}),
+    \item \textit{Interactive} - via a \gls{CLI} called \textit{Spark Shell}, or via Spark \textit{Notebooks} (e.g. SANSA-Notebooks~\cite{iermilov-2017-sansa-iswc-demo}),
     \item \textit{Batch} - which includes a bash script called \textit{spark-submit} used to submit a Spark application to the cluster without interaction during run time.
 \end{itemize}
 
@@ -732,7 +758,10 @@ Usually, this process is done manually either entering the cluster gateway  mach
 \begin{figure*}
 \centering
 \includegraphics[width=1.0\columnwidth]{images/4_distlodstats/distlodstats-statisfy.pdf}
-\caption{STATisfy overview architecture.}
+\caption{\textbf{STATisfy overview architecture}.
+Main services of STATisfy: \textit{Client} -- will create a remote Spark cluster for initialization, and submit jobs through REST APIs.
+\textit{Livy REST Server} -- it will then discover this job and sent through RCP to SparkSession, where the code will be initialized and execuded usind DistLODStats.
+}
 \label{fig:STATisfy}
 %source:https://docs.google.com/presentation/d/1bV83Rik_xwzmYPigCwHWV9OMQC5Wtl3gSF4UoaNilIQ
 \end{figure*}
@@ -740,17 +769,18 @@ Usually, this process is done manually either entering the cluster gateway  mach
 For users with little experience in cluster management and the Hadoop infrastructure, it can be challenging to run Spark.
 As an alternative, we introduce \textbf{STATisfy}\furl{https://github.com/GezimSejdiu/STATisfy}: REST Interface for DistLODStats. 
 
-Instead of computing RDF statistics directly on the cluster the interaction is done via REST APIs (as it is depicted in the Figure~\ref{fig:STATisfy}).
+Instead of computing \gls{RDF} statistics directly on the cluster the interaction is done via REST APIs (as it is depicted in the Figure~\ref{fig:STATisfy}).
 
 The client side will create a remote Spark cluster for initialization, and submit jobs through REST APIs. 
-Livy REST Server will then discover this job and send through remote procedure call (RPC) to SparkSession, where the code will be initialized and executed. 
+Livy REST Server will then discover this job and send through \gls{RCP} to SparkSession, where the code will be initialized and executed. 
 In the meantime, the client will be waiting for the result of this job coming from the same direction.
 
 Running the STATisfy is similar to using DistLODStats via \textit{spark-submit}.
 The difference is that this shell is not running locally, instead, it runs in a cluster and transfers the data back and forth through the network.
 
-For demonstrating the usage of the tool, we have deployed it on the comprehensive statistics catalogue LODStats\furl{http://lodstats.aksw.org/} which crawls RDF data from metadata portals such as CKAN dataset metadata registry. By doing this, it obtains a comprehensive picture of the current state of the Web of Data.
-As we use DistLODStats as an underlying engine for computing RDF statistics afterwards, the limitation was that the user has to interact with the cluster manually and initiate the job for computing such statistics.
+For demonstrating the usage of the tool, we have deployed it on the comprehensive statistics catalogue LODStats\furl{http://lodstats.aksw.org/} which crawls \gls{RDF} data from metadata portals such as CKAN dataset metadata registry. 
+By doing this, it obtains a comprehensive picture of the current state of the Web of Data.
+As we use DistLODStats as an underlying engine for computing \gls{RDF} statistics afterwards, the limitation was that the user has to interact with the cluster manually and initiate the job for computing such statistics.
 By using STATisfy REST interface, LODStats will interact with the cluster from anywhere which provides the capabilities necessary to do this without compromising on ease of use or security.
 
 As it is shown on the Figure~\ref{fig:STATisfy}, user starts a session via REST API using Livy for submitting a job to the Spark cluster.
@@ -762,12 +792,13 @@ As a result, the output will be curled by their end in the format of VoID descri
 \section{Summary}
 \label{sec:distlodstats-summary}
 For obtaining an overview over the Web of Data as well as evaluating the quality of individual datasets, it is important to gather statistical information describing characteristics of the internal structure of datasets.
-However, this process is both data-intensive and computing-intensive and it is a challenge to develop fast and efficient algorithms that can handle large scale RDF datasets.
+However, this process is both data-intensive and computing-intensive and it is a challenge to develop fast and efficient algorithms that can handle large scale \gls{RDF} datasets.
 
-In this chapter, we presented DistLODStats, a novel software component for distributed in-memory computation of RDF Datasets statistics implemented using the Spark framework.
-DistLODStats is maintained and has an active community due to its integration in SANSA. Our definition of statistical criteria provides a framework reducing the implementation effort required for adding further statistical criteria. 
+In this chapter, we presented DistLODStats, a novel software component for distributed in-memory computation of \gls{RDF} Datasets statistics implemented using the Spark framework.
+DistLODStats is maintained and has an active community due to its integration in SANSA. 
+Our definition of statistical criteria provides a framework reducing the implementation effort required for adding further statistical criteria. 
 We showed that our approach improves upon a previous centralized approach we compare against.
-Since Spark RDDs are designed to scale horizontally, cluster sizes can be adapted to dataset sizes accordingly. 
+Since Spark \gls{RDD}s are designed to scale horizontally, cluster sizes can be adapted to dataset sizes accordingly. 
 
 DistLODStats is a prominent solution, however, it requires setup and managing of the the cluster configuration and job submission.
 To make the process easier, we have introduced STATisfy, a tool for interacting with DistLODStats via a REST Interface.

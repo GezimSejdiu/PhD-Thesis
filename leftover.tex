@@ -26,3 +26,30 @@ As one of the main drawbacks of the semantic-based approach was the joint optimi
 It uses SPARQL-to-SQL rewriter techniques for translating SPARQL queries into Spark executable code.
 Our preliminary results demonstrate that our approach is more extensible, efficient, and scalable as compared to state-of-the-art approaches.
 Sparklify is integrated into a larger SANSA framework and it serves as a default query engine and has been used by at least three external use scenarios.
+
+
+% QUery 
+
+One of the key features of Big Data is its complexity in terms of representation, structure, or formats.
+One existing way to deal with it is offered by Semantic Web standards.
+Among them, \gls{RDF} --which proposes to model data with triples representing edges in a graph-- has received a large success and the semantically annotated data has grown steadily towards a massive scale.
+Therefore, there is a need for scalable and efficient query engines capable of retrieving such information.
+
+Recently, significant amounts of data have been created, published and managed using the Semantic Web standards.
+Currently, the \gls{LOD} cloud comprises more than 10\,000 datasets available online\furl{http://lodstats.aksw.org/} using the Semantic Web standards. 
+\gls{RDF} is a standard that represents data linked as a graph of resources following the idea of the linking structure of the Web and using \gls{URI}s for representation.
+To facilitate better maintenance and faster access to this scale of data, efficient data partitioning is needed.
+One of such partitioned strategies is semantic-based partitioning. 
+It groups the facts based on the subject and its associated triples.
+We want to explore and evaluate the effect of semantic-based partitioning on query performance when dealing with such a volume of \gls{RDF} datasets.
+
+\gls{SPARQL} is a \gls{W3C} standard query language for querying data modeled as \gls{RDF}.
+Querying \gls{RDF} data efficiently becomes challenging when the size of the data increases.
+This has motivated a considerable amount of work on designing distributed \gls{RDF} systems able to efficiently evaluate \gls{SPARQL} queries (\cite{Schatzle:2016:SRQ:2977797.2977806,sparqlgx-iswc-2016}).
+Being able to query a large amount of data in an efficient and faster way is one of the key requirements for every \gls{SPARQL} engine.
+
+
+To facilitate better maintenance and faster access to this scale of data, efficient data partitioning is needed.
+One of such partitioned strategies is semantic-based partitioning. 
+It groups the facts based on the subject and its associated triples.
+We want to explore and evaluate the effect of semantic-based partitioning on query performance when dealing with such a volume of \gls{RDF} datasets.

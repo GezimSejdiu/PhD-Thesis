@@ -1,47 +1,41 @@
 %==============================================================================
-\chapter{Scalable RDF querying} % via statistics-driven partitioning and ranking}
+\chapter{Scalable RDF querying}
 \label{chapter:scalable_rdf_querying}
 %==============================================================================
-One of the key features of Big Data is its complexity in terms of representation, structure, or formats.
-One existing way to deal with it is offered by Semantic Web standards.
-Among them, RDF --which proposes to model data with triples representing edges in a graph-- has received a large success and the semantically annotated data has grown steadily towards a massive scale.
-Therefore, there is a need for scalable and efficient query engines capable of retrieving such information.
+In the recent years, our information society has reached the stage where it produces billions of data records, amounting to multiple quintillion of bytes\furl{https://www.domo.com/learn/data-never-sleeps-5}, on a daily basis.
+Extraction, cleansing, enrichment and refinement of information are key to fuel value-adding processes, such as analytics as a premise for decision making.
+Devising appropriate (ideally uniform) representations and facilitating efficient querying of data, metadata and provenance arising from such phases constantly poses challenges, especially when data volumes are vast.
+The most prominent and promising effort is the \gls{W3C} consortium with encouraging \gls{RDF} as a common data representation and vocabularies (e.g. RDFS, \gls{OWL}) as a way to include meta-information about the data.
+These data and meta-data can be further processed and analyzed using the de-facto query language for \gls{RDF} data, \gls{SPARQL}.
+\gls{SPARQL} serves as a standard query language for manipulating and retrieving \gls{RDF} data.
 
-Recently, significant amounts of data have been created, published and managed using the Semantic Web standards.
-Currently, the Linked Open Data (LOD) cloud comprises more than 10\,000 datasets available online\furl{http://lodstats.aksw.org/} using the Semantic Web standards. 
-RDF is a standard that represents data linked as a graph of resources following the idea of the linking structure of the Web and using URIs for representation.
+Querying \gls{RDF} data becomes challenging when the size of the data increases. 
+This has motivated a considerable amount of work on designing distributed \gls{RDF} systems able to efficiently evaluate \gls{SPARQL} queries (\cite{Schatzle:2016:SRQ:2977797.2977806,sparqlgx-iswc-2016}).
+Being able to query a large amount of data in an efficient and faster way is one of the key requirements for every \gls{SPARQL} engine.
 
-To facilitate better maintenance and faster access to this scale of data, efficient data partitioning is needed.
-One of such partitioned strategies is semantic-based partitioning. 
-It groups the facts based on the subject and its associated triples.
-We want to explore and evaluate the effect of semantic-based partitioning on query performance when dealing with such a volume of RDF datasets.
-
-SPARQL is a W3C standard query language for querying data modeled as RDF.
-Querying RDF data efficiently becomes challenging when the size of the data increases.
-This has motivated a considerable amount of work on designing distributed RDF systems able to efficiently evaluate SPARQL queries (\cite{Schatzle:2016:SRQ:2977797.2977806,sparqlgx-iswc-2016,2019-sansa-sparklify-iswc}).
-Being able to query a large amount of data in an efficient and faster way is one of the key requirements for every SPARQL engine.
-
-To address these challenges, in this paper, we propose a scalable semantic-based distributed approach\furl{https://github.com/SANSA-Stack/SANSA-Query/tree/develop/sansa-query-spark/src/main/scala/net/sansa_stack/query/spark/semantic} for efficient evaluation of SPARQL queries over distributed RDF datasets. 
-The main component of the system is the data partitioning and query evaluation over this data representation.
+To address these challenges, in this thesis, we propose a scalable \gls{RDF} querying engine based on two different partitioning strategies.
+First, Sparklify -- SPARQL-to-SQL rewriter based on the vertical partitioning implemented on top of Apache Spark.
+As a second approach, we investigated and developed the so-called Semantic-based query system. 
+Both approaches are a scalable and efficient evaluation of \gls{SPARQL} queries over distributed \gls{RDF} datasets. 
+The main component of the both systems are the data partitioning and query evaluation over this data representation.
 
 In this chapter we address the following research question:
 \begin{tcolorbox}
-\textbf{RQ3}: Can distributed RDF datasets be queried efficiently and effectively?
+\textbf{RQ3}: Can distributed \gls{RDF} datasets be queried efficiently and effectively?
 \end{tcolorbox}
 
 Contributions of this chapter are summarized as follows:
 
 \begin{itemize}
- \item We present a novel approach for vertical partitioning including RDF terms using the distributed computing framework, Apache Spark.
- \item We developed a scalable query engine using Sparqlify -- a SPARQL-to-SQL rewriter on top of Apache Spark (under the \textit{Apache Licence 2.0}).
- \item We evaluate our approach with state-of-the-art engines and demonstrate it empirically.
- \item We integrated the approach into the SANSA~\cite{lehmann-2017-sansa-iswc}\furl{http://sansa-stack.net/} larger framework.
- Sparklify serves as a default query engine in SANSA.
- SANSA is an active project and maintained, including issue tracker, mailing list, changelogs, website, etc.
+ \item We present a novel approach for vertical partitioning including \gls{RDF} terms using the distributed computing framework, Apache Spark.
+ \item We developed a scalable query system using Sparqlify -- a SPARQL-to-SQL rewriter on top of Apache Spark (under the \textit{Apache Licence 2.0}).
+ \item We evaluate Sparklify with state-of-the-art engines and demonstrate it empirically.
  \item A scalable approach for semantic-based partitioning using the distributed computing framework, Apache Spark.
  \item A scalable semantic-based query engine (\textit{SANSA.Semantic}) on top of Apache Spark (under the \textit{Apache Licence 2.0}).
- \item Comparison with state-of-the-art engines and demonstrate the performance empirically.
- \item Integration with the SANSA~\cite{lehmann-2017-sansa-iswc}\furl{http://sansa-stack.net/} framework.
+ \item Comparison of the semantic-based system with state-of-the-art engines and demonstrate the performance empirically.
+ \item We integrated the proposed approaches into the SANSA~\cite{lehmann-2017-sansa-iswc}\furl{http://sansa-stack.net/} larger framework.
+ Sparklify serves as a default query engine in SANSA.
+ SANSA is an active project and maintained, including issue tracker, mailing list, changelogs, website, etc.
 \end{itemize}
 
 
@@ -50,20 +44,26 @@ This chapter is based on the following publications (\cite{sejdiu-2019-sansa-sem
      \item \textbf{Gezim Sejdiu}; Damien Graux; Imran Khan; Ioanna Lytra; Hajira Jabeen; and Jens Lehmann, “\href{https://gezimsejdiu.github.io/publications/semantic_based_query_paper_SEMANTICS2019.pdf}{Towards A Scalable Semantic-based Distributed Approach for SPARQL query evaluation},” 15th International Conference on Semantic Systems (SEMANTiCS), Research \& Innovation , 2019.
      
     \item Claus Stadler; \textbf{Gezim Sejdiu}; Damien Graux; and Jens Lehmann, “\href{http://jens-lehmann.org/files/2019/iswc_sparklify.pdf}{Sparklify: A Scalable Software Component for Efficient evaluation of SPARQL queries over distributed RDF datasets},” in Proceedings of 18th International Semantic Web Conference (ISWC), 2019. 
-    This is a joint work with Claus Stadler.
-    My contribution involve the 
+    This article is a joint work with Claus Stadler, a PhD student at the University of Leipzig. 
+    In this article, I devised the implementation of the conceptual architecture, helped on the implementation of the proposed approach, reviewed related work, and prepared of the experiments and analysis of the obtained results.
     
     \item Claus Stadler; \textbf{Gezim Sejdiu}; Damien Graux; and Jens Lehmann. "\href{https://gezimsejdiu.github.io/publications/sansa-sparklify-ISWC-demo.pdf}{Querying large-scale RDF datasets using the SANSA framework}".  In Proceedings of 18th International Semantic Web Conference (ISWC), Poster \& Demos, 2019.
 \end{itemize}
 
 The rest of the chapter is structured as follows:
-Our approach for data modeling, data partitioning, and query translation using a distributed framework are detailed in Section~\ref{sec:semantic-based-approach} and evaluated in Section~\ref{sec:semantic-based-evaluation}.
+Sparklify, a scalable software component for \gls{SPARQL} evaluation of large \gls{RDF} data is presented in Section~\ref{sec:sparklify-approach}.
+Its data modeling, data partitioning, and query translation using a distributed framework (Apache Spark) are detailed in Subsection~\ref{sec:sparklify-architecture} and evaluated in Subsection~\ref{sec:sparklify-evaluation}.
+Second part of the chapter, Suction~\ref{sec:semantic-based-approach} elaborate the Semantic-based approach, including its system architecture overview as presented in Section~\ref{fig:semantic-based-architecture}.
+The Semantic-based approach is evaluated in Subsection~\ref{sec:semantic-based-evaluation}.
+Finally, we summarize our work in  Section~\ref{sec:scalable-rdf-querying-summary}.
 
 \section{Sparklify: Scalable Software for SPARQL evaluation of large RDF data}
 \label{sec:sparklify-approach}
-In this section, we present the overall architecture of our proposed approach, the SPARQL-to-SQL rewriter, and mapping to Spark Scala-compliant code.
+In this section, we present the overall architecture of Sparklify, the SPARQL-to-SQL rewriter, and mapping to Spark Scala-compliant code.
 
 \subsection{System Architecture Overview}
+\label{sec:sparklify-architecture}
+
 The overall system architecture is shown in Figure~\ref{fig:sparklify-architecture}.
 It consists of four main components: Data Model, Mappings, Query Translator and Query Evaluator.
 In the following, each component is discussed in details.
@@ -71,7 +71,9 @@ In the following, each component is discussed in details.
 \begin{figure*}
 \centering
 \includegraphics[width=1.0\textwidth]{images/6_scalable_rdf_querying/sparklify-architecture.pdf}
-\caption{Sparklify Architecture Overview.}
+\caption{\textbf{Sparklify Architecture Overview}.
+It consists of four main components: Data modeling -- data ingestion and data partitioning (using the extensible vertical paritioning), Mappings/Views -- the relational-to-RDF mapping, Query Translator -- SQL query generator from the SPARQL query, and Query Evaluator - SQL query evaluated directly into the Spark SQL engine.
+}
 % source : https://docs.google.com/presentation/d/16XlT4u3bFn8XdP_eoLJOAu5WPl_q_9zIjAZbllfEEic 
 \label{fig:sparklify-architecture}
 % source : 
@@ -80,42 +82,43 @@ In the following, each component is discussed in details.
 
 \defn{Data Model}
 SANSA~\cite{lehmann-2017-sansa-iswc} comes with different data structures and different partitioning strategies.
-We model and store RDF graph following the concept of RDDs -- a basic building blocks of the Spark Framework.
-RDDs are in-memory collections of records which are capable of operating in parallel overall larger cluster.
-Sparklify makes use of SANSA bottom layer which corresponds with the extended vertical partitioning (VP) including RDF terms.
-This partition model is the most convenient storage model for fast processing of RDF datasets on top of HDFS.
-\paragraph{Data Ingestion (step 1)} RDF data first needs to be loaded into a large-scale storage that Spark can efficiently read from.
-We use Hadoop Distributed File-System (HDFS)\furl{https://hadoop.apache.org/docs/r1.2.1/hdfs_design.html}.
-Spark employ different data locality scheme in order to accomplish computations nearest to the desired data in HDFS, as a result avoiding i/o overhead. 
-\paragraph{Data Partition (step 2)}
-VP approach in SANSA is designed to support extensible partitioning of RDF data.
-Instead of dealing with a single three-column table $(s, p, o)$, data is partitioned into multiple tables based on the used RDF predicates, RDF term types and literal datatypes.
+We model and store \gls{RDF} graph following the concept of \gls{RDD}s -- a basic building blocks of the Spark Framework.
+\gls{RDD}s are in-memory collections of records which are capable of operating in parallel overall larger cluster.
+Sparklify makes use of SANSA bottom layer which corresponds with the extended vertical partitioning (VP) including \gls{RDF} terms.
+This partition model is the most convenient storage model for fast processing of \gls{RDF} datasets on top of \gls{HDFS}.
+\paragraph{Data Ingestion (Step 1)} \gls{RDF} data first needs to be loaded into a large-scale storage that Spark can efficiently read from.
+We use \gls{HDFS}.
+Spark employ different data locality scheme in order to accomplish computations nearest to the desired data in \gls{HDFS}, as a result avoiding i/o overhead. 
+\paragraph{Data Partition (Step 2)}
+VP approach in SANSA is designed to support extensible partitioning of \gls{RDF} data.
+Instead of dealing with a single three-column table $(s, p, o)$, data is partitioned into multiple tables based on the used \gls{RDF} predicates, \gls{RDF} term types and literal datatypes.
 The first column of these tables is always a string representing the subject.
 The second column always represents the literal value as a Scala/Java datatype.
 Tables for storing literals with language tags have an additional third string column for the language tag.
 
 \defn{Mappings/Views}
-After the RDF data has been partitioned using the extensible VP (as it has been described on \textit{step 2}) the relational-to-RDF mapping is performed. 
-Sparqlify supports both the W3C standard R2RML
+After the \gls{RDF} data has been partitioned using the extensible VP (as it has been described on \textit{Step 2}) the relational-to-RDF mapping is performed. 
+Sparqlify supports both the \gls{W3C} standard R2RML
 sparqlification~\cite{sml}.
 
 The main entities defined with SML are \textit{view definitions}.
-See \textit{step 5} in the Figure~\ref{fig:sparklify-architecture} as an example.
+See \textit{Step 5} in the Figure~\ref{fig:sparklify-architecture} as an example.
 The actual view definition is declared by the \emph{Create View} \ldots \emph{As} in the first line.
-The remainder of the view contains these parts: (1) the \emph{From} directive defines the logical table based on the partitioned table (see \textit{step 2}).
-(2) an RDF template is defined in the \emph{Construct} block containing, URI, blank node or literals constants (e.g. \emph{ex:worksAt}) and variables (e.g. \emph{?emp}, \emph{?institute}).
-The \emph{With} block defines the variables used in the template by means of RDF term constructor expressions whose arguments refer to columns of the logical table.
+The remainder of the view contains these parts: (1) the \emph{From} directive defines the logical table based on the partitioned table (see \textit{Step 2}).
+(2) an RDF template is defined in the \emph{Construct} block containing, \gls{URI}, blank node or literals constants (e.g. \emph{ex:worksAt}) and variables (e.g. \emph{?emp}, \emph{?institute}).
+The \emph{With} block defines the variables used in the template by means of \gls{RDF} term constructor expressions whose arguments refer to columns of the logical table.
 
 \defn{Query Translation}
-This process generates a SQL query from the SPARQL query using the bindings determined in the mapping/view construction phases.
-It walks through the SPARQL query (\textit{step 4}) using Jena ARQ\furl{https://jena.apache.org/documentation/query/} and generates the SPARQL Algebra Expression Tree (AET). Essentially, rewriting SPARQL basic graph patterns and filters over views yields AETs that are UNIONS of JOINS.
-Further, these AETs are normalized and pruned in order to remove UNION members that are known to yield empty results, such as joins based on IRIs with disjoint sets of known namespaces, or joins between different RDF term types (e.g. literal and IRI).
-Finally, the SQL is generated (\textit{step 6}) using the bindings corresponding to the views (\textit{step 5}).
+This process generates a SQL query from the \gls{SPARQL} query using the bindings determined in the mapping/view construction phases.
+It walks through the \gls{SPARQL} query (\textit{Step 4}) using Jena ARQ\furl{https://jena.apache.org/documentation/query/} and generates the \gls{SPARQL} \gls{AET}. 
+Essentially, rewriting \gls{SPARQL} basic graph patterns and filters over views yields \gls{AET}s that are UNIONS of JOINS.
+Further, these AETs are normalized and pruned in order to remove UNION members that are known to yield empty results, such as joins based on \gls{IRI}s with disjoint sets of known namespaces, or joins between different \gls{RDF} term types (e.g. literal and \gls{IRI}).
+Finally, the SQL is generated (\textit{Step 6}) using the bindings corresponding to the views (\textit{Step 5}).
 
 \defn{Query Evaluator}
 The SQL query created as described in the previous section can now be evaluated directly into the Spark SQL engine.
-The result set of this SQL query is distributed data structure of Spark (e.g. DataFrame)(\textit{step 7}) which then is mapped into a SPARQL bindings.
-The result set can further used for analysis and visualization using the SANSA-Notebooks (\textit{step 8})~\cite{iermilov-2017-sansa-iswc-demo}.
+The result set of this SQL query is distributed data structure of Spark (e.g. DataFrame) (\textit{Step 7}) which then is mapped into a \gls{SPARQL} bindings.
+The result set can further used for analysis and visualization using the SANSA-Notebooks (\textit{Step 8})~\cite{iermilov-2017-sansa-iswc-demo}.
 
 
 \subsection{Evaluation}
@@ -134,7 +137,7 @@ In the following, we present our experiments setting including the benchmarks us
 Afterword, we elaborate on our findings.
 
 \subsubsection{Experimental Setup}
-We used two well-known SPARQL benchmarks for our evaluation. 
+We used two well-known \gls{SPARQL} benchmarks for our evaluation. 
 The \textit{Lehight University Benchmak (LUBM)} v3.1~\cite{Guo2005LUBMAB} and \textit{Waterloo SPARQL Diversity Test Suite (WatDiv)} v0.6~\cite{Alu2014DiversifiedST}.
 Characteristics of the considered datasets are given in Table~\ref{tab:sparklify-dataset_info}.
 
@@ -160,17 +163,19 @@ It comes with a set of 20 predefined query templates so-called \textit{Basic Tes
 \scriptsize{size (GB)}  & \scriptsize{24} & \scriptsize{116} & \scriptsize{232} & \scriptsize{1.5} &\scriptsize{15} &\scriptsize{149} &\\
 \bottomrule
 \end{tabularx}
-{\caption{Summary information of used datasets (nt format).}\label{tab:sparklify-dataset_info}}
+{\caption{\textbf{Summary information of used datasets (nt format)}.
+Lists dataset characteristics used on the evaluation.
+The size (in GB) and the number of triples are given.}
+\label{tab:sparklify-dataset_info}}
 \end{table*}
 
-We implemented Sparklify using Spark-2.4.0, Scala 2.11.11, Java 8, and Sparqlify 0.8.3 and all the data were stored on the HDFS cluster using Hadoop 2.8.0.
+We implemented Sparklify using Spark-2.4.0, Scala 2.11.11, Java 8, and Sparqlify 0.8.3 and all the data were stored on the \gls{HDFS} cluster using Hadoop 2.8.0.
 All experiments were carried out on a commodity cluster of 7 nodes (1 master, 6 workers): Intel(R) Xeon(R) CPU E5-2620 v4 @ 2.10GHz (32 Cores), 128 GB RAM, 12 TB SATA RAID-5, connected via a Gigabit network.
 The experiments have been executed three times and the average runtime has been reported into the results.
 
 \subsubsection{Results}
-We evaluate Sparklify using the above datasets and compare it with the chosen state-of-the-art distributed SPARQL query evaluator.
-%Due to the space limit
-Since our approach does not involve any pre-processing of the RDF data before being able to evaluate SPARQL queries on it, Sparklify is thereby closer to the so-called direct evaluators.
+We evaluate Sparklify using the above datasets and compare it with the chosen state-of-the-art distributed \gls{SPARQL} query evaluator.
+Since our approach does not involve any pre-processing of the RDF data before being able to evaluate \gls{SPARQL} queries on it, Sparklify is thereby closer to the so-called direct evaluators.
 Indeed, Sparklify only needs to virtually partition the data prior.
 As a consequence, we omit other distributed evaluators (such as e.g. S2RDF~\cite{Schatzle:2016:SRQ:2977797.2977806}) and compare it with SPARQGX~\cite{sparqlgx-iswc-2016} as it outperforms other approaches as noted by Graux et.al~\cite{sparqlgx-iswc-2016}.
 We compare our approach with \emph{SPARQLGX}'s direct evaluator named SDE and report the loading time for partitioning and query execution time, see Table~\ref{tbl:sparklify-performance-analysis}.
@@ -224,9 +229,12 @@ $Q1$ & \win \scriptsize{1056.83} & \scriptsize{627.72} & \scriptsize{718.11} & \
 \hspace{0.2cm} $Q14$ & \win \scriptsize{526.15} & \scriptsize{633.39} & \scriptsize{258.32} &  \scriptsize{891.89}\\
 \bottomrule
 \end{tabularx}
-{\caption{Performance analysis on large-scale RDF datasets.}\label{tbl:sparklify-performance-analysis}}
+{\caption{\textbf{Performance analysis on large-scale RDF datasets}.
+Comparison analysis of Sparklify as compared with \emph{SPARQLGX}'s direct evaluator named SDE.
+The loading time for partitioning and query execution time is reported.
+}
+\label{tbl:sparklify-performance-analysis}}
 \end{table*} %source : https://docs.google.com/spreadsheets/d/16CcsZcmrGF0yevu8L5mlAALGB2JZvHNkS4-6WQV0edo
-
 
 Table~\ref{tbl:sparklify-performance-analysis} shows the performance analysis of two approaches run on three different datasets.
 Column SPARQLGX-SDE$^{a}$ reports on the performance of SPARQLGX-SDE considering the total runtime to evaluate the given queries.
@@ -248,7 +256,9 @@ To measure the performance of the data scalability (e.g. size-up) of both approa
 
 \begin{figure*}
  \includegraphics[width=1.0\columnwidth]{images/6_scalable_rdf_querying/sparklify-sizeup-scalability.pdf}
-    \caption{Sizeup analysis (on Watdiv dataset).}
+    \caption{\textbf{Sizeup analysis (on Watdiv dataset)}.
+    The analysis keep the number of nodes constant i.e. 6 worker nodes and grow the size of the dataset (Watdiv) in order to measure whether the approaches chosen for evaluation can deal with larger datasets.
+    As depicted, the execution time for Sparklify grows linearly as compared with SPARQLGX-SDE, and keep staying near-linear when the size of the dataset increases.}
     \label{fig:sparklify-sizeup-scalability}
 \end{figure*}
 
@@ -262,7 +272,10 @@ We vary them from 1, 3 to 6 worker nodes.
 
 \begin{figure*}
   \includegraphics[width=1.0\columnwidth]{images/6_scalable_rdf_querying/sparklify-node-scalability.pdf}
-    \caption{Node scalability (on Watdiv-100M).}
+    \caption{\textbf{Node scalability (on Watdiv-100M)}.
+    The analysis vary the number of worker nodes e.g. from 1, 3, to 6 worker nodes and keep the size of the dataset constant i.e. \textit{Watdiv-100M}.
+    It shows that as the number of nodes increases, the runtime cost for Sparklify decreases linearly.
+    It decreases about 0.6 times (from 2547.26 seconds down to 1588.4 seconds) as worker nodes increase from one to three nodes.}
     \label{fig:sparklify-node-scalability}
 \end{figure*}
 
@@ -279,19 +292,22 @@ Result presented here shows that Sparklify can achieve linear scalability in the
 In order to assess the correctness of the result set, we computed the count of the result set for the given queries and compare it within both approaches.
 We conclude that both approaches return exactly the same result set which implies the correctness of the results.
 
-\defn{Overall analysis by SPARQL queries}
+\defn{Overall analysis by \gls{SPARQL} queries}
 Here we analyze Watdiv queries run on \textit{Watdiv-100M} dataset in a cluster mode on both approaches.
 
 \begin{figure}
   \includegraphics[width=1.0\columnwidth]{images/6_scalable_rdf_querying/sparklify-overall-analysis.pdf}
-    \caption{Overall analysis of queries on Watdiv-100M dataset (cluser mode).}
+    \caption{\textbf{Overall analysis of queries on Watdiv-100M dataset (cluser mode)}.
+    This analysis gives more insights about running Watdiv queries on \textit{Watdiv-100M} dataset in a cluster mode on both approaches, Sparklify and SPARQLGX-SDE.
+    The findings show that SPARQLGX-SDE performance decreases as the number of triple patterns involved in the query increase.
+    In contrast to SPARQLGX-SDE, Sparklify seems to perform well when there are more triple pattern involved (i.e. \textit{QC}, \textit{QF} and \textit{QS}) but slightly worst when there are linear queries (see \textit{QL}) evaluated. }
     \label{fig:sparklify-overall-analysis}
 \end{figure}
 
 According to Figure~\ref{fig:sparklify-overall-analysis}, SPARQLGX-SDE performance decreases as the number of triple patterns involved in the query increase.
 This might be due to the fact that SPARQLGX-SDE has to read the whole triple file each time.
 In contrast to SPARQLGX-SDE, Sparklify seems to perform well when there are more triple pattern involved (see queries \textit{QC}, \textit{QF} and \textit{QS} in the Figure~\ref{fig:sparklify-overall-analysis}) but slightly worst when there are linear queries (see \textit{QL}) evaluated. 
-This may be due to the reason that Sparqlify typically rewrites a SPARQL query into a single SQL query, thus maximizing the opportunities given to the Spark SQL optimizer. Conversely, SPARQLGX-SDE constructs the workflow by chaining Scala API calls, which may restrict the possibilities e.g. in regard to join ordering.
+This may be due to the reason that Sparqlify typically rewrites a \gls{SPARQL} query into a single SQL query, thus maximizing the opportunities given to the Spark SQL optimizer. Conversely, SPARQLGX-SDE constructs the workflow by chaining Scala API calls, which may restrict the possibilities e.g. in regard to join ordering.
 Based on our findings and the evaluation study carried out in this paper, we show that Sparklify is scalable and the execution time ends in a reasonable time given the size of the dataset.
 
 %----Semantic-based approach--------
@@ -299,7 +315,7 @@ Based on our findings and the evaluation study carried out in this paper, we sho
 \section{A Scalable Semantic-based Distributed Approach for SPARQL query evaluation}
 \label{sec:semantic-based-approach}
 
-In this section, we present the system architecture of our proposed approach, the semantic-based partitioning, and mapping SPARQL to Spark Scala-compliant code.
+In this section, we present the system architecture of the Semantic-based approach, the semantic-based partitioning, and mapping \gls{SPARQL} to Spark Scala-compliant code.
 
 \subsection{System Architecture Overview}
 The system architecture overview is shown in the Figure~\ref{fig:semantic-based-architecture}.
@@ -307,35 +323,36 @@ The system architecture overview is shown in the Figure~\ref{fig:semantic-based-
 \begin{figure*}
 \centering
 \includegraphics[width=1.0\columnwidth]{images/6_scalable_rdf_querying/semantic-based-architecture.pdf}
-\caption{System Architecture Overview.}
+\caption{\textbf{Semantic-based System Architecture Overview}.
+It consists of three main facets: Data Storage Model -- model and partition the data using the semantic-based approach, SPARQL Query Fragments Translator -- the process of generating the Scala code in the format of Spark RDD operations, and Query Evaluator -- the SPARQL evaluation using the Spark RDD executable code (generated from the previous step).}
 \label{fig:semantic-based-architecture}
 % source : https://docs.google.com/presentation/d/14KAs3q_gfB9iTR6ZrIrzrLGU19-A_UUbqO1Xaz84auw
 \end{figure*}
 
-It consists of three main facets: Data Storage Model, SPARQL Query Fragments Translator, and Query Evaluator.
+It consists of three main facets: Data Storage Model, \gls{SPARQL} Query Fragments Translator, and Query Evaluator.
 Below, each facet is discussed in more details.
 
 \subsubsection{Data Storage Model}
-We model the RDF data following the concept of RDDs. 
-RDDs are immutable collections of records, which represent the basic building blocks of the Spark framework.
-RDDs can be kept in-memory and are able to operate in parallel throughout the Spark cluster.
+We model the \gls{RDF} data following the concept of \gls{RDD}s. 
+\gls{RDD}s are immutable collections of records, which represent the basic building blocks of the Spark framework.
+\gls{RDD}s can be kept in-memory and are able to operate in parallel throughout the Spark cluster.
 We make use of SANSA~\cite{lehmann-2017-sansa-iswc}'s data representation and distribution layer for such representation.
 
 \defn{Data Partitioning}
-Partitioning the RDF data is the process of dividing datasets in a specific logical and/or physical representation in order to ease faster access and better maintenance.
+Partitioning the \gls{RDF} data is the process of dividing datasets in a specific logical and/or physical representation in order to ease faster access and better maintenance.
 Often, this process is performed for improving the system availability, load balancing and query processing time.
 There are many different data partitioning techniques proposed in the literature. 
-We choose to investigate the so-called \textit{semantic-based partitioning} behaviors when dealing with large-scale RDF datasets.
+We choose to investigate the so-called \textit{semantic-based partitioning} behaviors when dealing with large-scale \gls{RDF} datasets.
 This partitioned technique was proposed in the SHARD~\cite{Rohloff2010SHARD} system.
 We have implemented this technique using in-memory processing engine, Apache Spark for better performance.
-A semantically partitioned fact is a tuple $(S, R)$ containing pieces of information $R \in (P, O)$ about the same $S$ where $S$ is a unique subject on the RDF graph and $R$ represents all its associated facts i.e predicates $P$ and objects $O$.
+A semantically partitioned fact is a tuple $(S, R)$ containing pieces of information $R \in (P, O)$ about the same $S$ where $S$ is a unique subject on the \gls{RDF} graph and $R$ represents all its associated facts i.e predicates $P$ and objects $O$.
 
 \defn{Data Model}
-First, the RDF data (see \textit{Step 1} as an example) needs to be loaded into a large-scale distributed storage (\textit{Step 2}).
+First, the \gls{RDF} data (see \textit{Step 1} as an example) needs to be loaded into a large-scale distributed storage (\textit{Step 2}).
 We use \gls{HDFS}.
-We choose HDFS as Spark is capable of performing operations based on data locality in order to choose the nearest data for faster and efficient computation over the cluster.
+We choose \gls{HDFS} as Spark is capable of performing operations based on data locality in order to choose the nearest data for faster and efficient computation over the cluster.
 Second, we partition (\textit{Step 3}) the data using semantic-based partitioning (see \textit{Step 4} as an example of such partition).
-Instead of working with table-wise representation where the triples are kept in the format of $RDD<Triple>$, data is partitioned into subject-based grouping (e.g. all entities which are associated with a unique subject).
+Instead of working with table-wise representation where the triples are kept in the format of $\verb|RDD<Triple>|$, data is partitioned into subject-based grouping (e.g. all entities which are associated with a unique subject).
 Consider the example in the Figure~\ref{fig:semantic-based-architecture} (\textit{Step 2}, first line), which represents two triples associated with the entity \verb|Joy|:
 $$\verb|Joy :owns Car1 :livesIn Bonn|$$
 This line represents that the entity \verb|Joy| owns a car entity \verb|Car1|, and that \verb|Joy| lives in \verb|Bonn|.
@@ -346,27 +363,27 @@ Although, it slightly degrades the performance when it comes to multiple scans o
 We will discuss this on the Section~\ref{sec:semantic-based-evaluation} into more detail.
 
 \subsubsection{SPARQL Query Fragments Translation}
-This process generates the Scala code in the format of Spark RDD operations using the key-value pairs mechanism.
+This process generates the Scala code in the format of Spark \gls{RDD} operations using the key-value pairs mechanism.
 With Spark pairRDD, one can manipulate the data by splitting it into key-value pairs and group all associated values with the same keys. 
-It walks through the SPARQL query (\textit{Step 4}) using the Jena ARQ\furl{https://jena.apache.org/documentation/query/} and iterate through clauses in the SPARQL query and bind the variables into the RDF data while fulfilling the clause conditions.
+It walks through the \gls{SPARQL} query (\textit{Step 4}) using the Jena ARQ\furl{https://jena.apache.org/documentation/query/} and iterate through clauses in the \gls{SPARQL} query and bind the variables into the \gls{RDF} data while fulfilling the clause conditions.
 Such iteration corresponds to a single clause with one of the Spark operations (e.g. \emph{map}, \emph{filter}, \emph{reduce}).
 Often this operation needs to be materialized i.e the result set of the next iteration depends on the previous clauses and therefore a \emph{join} operation is needed.
 This is a bottleneck since scanning and shuffling is required.
 In order to keep these joins as small as possible, we leverage the caching techniques of the Spark framework by keeping the intermediate results in-memory while the next iteration is performed.
 Finally, the Spark-Scala executable code is generated (\textit{Step 5}) using the bindings corresponding the query.
-Besides simple BGP translation, our system supports \emphb{UNION}, \emphb{LIMIT} and \emphb{FILTER} clauses.
+Besides simple \gls{BGP} translation, our system supports \emphb{UNION}, \emphb{LIMIT} and \emphb{FILTER} clauses.
 
 \subsubsection{Query Evaluator}
-The mappings created as shown in the previous section can now be evaluated directly into the Spark RDD executable code.
-The result set of these operations is distributed data structure of Spark (e.g. RDD)(\textit{Step 6}).
+The mappings created as shown in the previous section can now be evaluated directly into the Spark \gls{RDD} executable code.
+The result set of these operations is distributed data structure of Spark (e.g. \gls{RDD}) (\textit{Step 6}).
 The result set can be used for further processing and visualization using the SANSA-Notebooks (\textit{Step 7})~\cite{iermilov-2017-sansa-iswc-demo}.
 
 
 \subsection{Distributed Algorithm Description}
 \label{subsection:semantic-based-algorithm}
 We implement our approach using the Apache Spark framework (see Algorithm~\ref{alg:semantic-based-algorithm}). 
-It constructs the graph (\textit{Line \ref{line:semantic-based-rdf2rdd}}) while reading RDF data and converts it into an RDD of triples.
-Later, it partitions the data (\textit{Line \ref{line:semantic-based-partitionGraph}}, for more details see Algorithm~\ref{alg:semantic-based-partitionGraph}) using the semantic-based partitioning strategy.
+It constructs the graph (\textit{Line \ref{line:semantic-based-rdf2rdd}}) while reading \gls{RDF} data and converts it into an \gls{RDD} of triples.
+Later, it partitions the data (\textit{Line \ref{line:semantic-based-partitionGraph}}, for more details see Algorithm~\ref{alg:semantic-based-partitionGraph}) using the semantic-based partitioning (SP) strategy.
 Finally, the query evaluator is constructed (\textit{Line \ref{line:semantic-based-sparql}}) which is detailed in Algorithm~\ref{alg:semantic-based-sparql}.
 
 \begin{algorithm*}
@@ -384,11 +401,11 @@ Finally, the query evaluator is constructed (\textit{Line \ref{line:semantic-bas
 \Return{$result$}
 \end{algorithm*}
 
-The partition algorithm (see Algorithm~\ref{alg:semantic-based-partitionGraph}) transforms the RDF graph into a convenient SP (\textit{Line \ref{line:semantic-based-partitionGraph}}).
+The partition algorithm (see Algorithm~\ref{alg:semantic-based-partitionGraph}) transforms the \gls{RDF} graph into a convenient SP (\textit{Line \ref{line:semantic-based-partitionGraph}}).
 For each unique triple in the graph in a distributed fashion, it does the following: It gets the values about subjects and objects (\textit{Line \ref{line:semantic-based-subject_object_values}}) and local name of the predicate (\textit{Line \ref{line:semantic-based-predicate}}).
 It generates the key-value pairs of the subject and its associated triples with predicate and object separated with the space in between (\textit{Line \ref{line:semantic-based-partition_data}}).
 After the mapping is done, the data is grouped by key (in our case \emph{subject}) (\textit{Line \ref{line:semantic-based-groupBy}}).
-Afterward, when this information is collected, the block is partitioned using the \emph{map} transformation function of Spark to refactor the format of the lines based on the above information (\textit{\autoref{line:semantic-based-partitionGraph_map}}).
+Afterward, when this information is collected, the block is partitioned using the \emph{map} transformation function of Spark to refactor the format of the lines based on the above information (\textit{Line \ref{line:semantic-based-partitionGraph_map}}).
 
 \begin{algorithm*}
 \caption{\textbf{partitonAsSemanticGraph}: Semantic-based partition algorithm.}
@@ -408,17 +425,17 @@ $partitonedData \leftarrow \emptyset $\\
 \end{algorithm*}
 
 
-This SPARQL query rewriter includes multiple Spark operations.
-First, partitioned data is mapped to a list of variable bindings satisfying the first basic graph pattern (BGP) of the query (\textit{Line \ref{line:semantic-based-firstVariable}}). 
-During this process, the duplicates are removed and the intermediate result is kept in-memory (RDD) with the variable bindings as a key.
+This \gls{SPARQL} query rewriter includes multiple Spark operations.
+First, partitioned data is mapped to a list of variable bindings satisfying the first \gls{BGP} of the query (\textit{Line \ref{line:semantic-based-firstVariable}}). 
+During this process, the duplicates are removed and the intermediate result is kept in-memory (\gls{RDD}) with the variable bindings as a key.
 The consequent step is to iterate through other variables and bind them by processing the upcoming query clauses and/or filtering the other ones unseen on the new clause.
-These intermediate steps perform Spark operations over both, the partitioned data and the previously bound variables which were kept on Spark RDDs.
+These intermediate steps perform Spark operations over both, the partitioned data and the previously bound variables which were kept on Spark \gls{RDD}s.
 
 The \textit{i}th step discovers all variables in the partitioned data which satisfy the \textit{i}th clause appeared and keep this intermediate result in-memory with the key being any variable in the \textit{i}th step which has been introduced on the previous step.
 During this iteration, the intermediate results are reconstructed in the way that the variables not seen in this iteration are mapped (\textit{Line \ref{line:semantic-based-mapByKey}}) with the variables of the previous clause and generate a key-value pair of variable bindings.
 Afterward, the \emph{join} operation is performed over the intermediate results from the previous clause and the new ones with the same key.
 This process iterates until all clauses are seen and variables are assigned.
-Finally, the variable binding (\textit{Line \ref{line:semantic-based-filter_variables}}) to fulfill the \emph{SELECT} clause of the SPARQL query happens and returns the result (\textit{Line \ref{line:semantic-based-result}}) of only those variables which are present in the SELECT clause.
+Finally, the variable binding (\textit{Line \ref{line:semantic-based-filter_variables}}) to fulfill the \emph{SELECT} clause of the \gls{SPARQL} query happens and returns the result (\textit{Line \ref{line:semantic-based-result}}) of only those variables which are present in the SELECT clause.
 
 \begin{algorithm*}
 \caption{\textbf{sparql}: Semantic-based query algorithm.}
@@ -447,14 +464,14 @@ In our evaluation, we observe the impact of semantic-based partitioning and anal
 In the following subsections, we present the benchmarks used along with the server configuration setting, and finally, we discuss our findings.
 
 \subsubsection{Experimental Setup}
-We make use of two well-known SPARQL benchmarks for our experiments: 
-the \textit{Waterloo SPARQL Diversity Test Suite (WatDiv)} v0.6~\cite{Alu2014DiversifiedST} and \textit{Lehigh University Benchmark (LUBM)} v3.1~\cite{Guo2005LUBMAB}.
+We make use of two well-known \gls{SPARQL} benchmarks for our experiments: 
+the \textit{Waterloo \gls{SPARQL} Diversity Test Suite (WatDiv)} v0.6~\cite{Alu2014DiversifiedST} and \textit{Lehigh University Benchmark (LUBM)} v3.1~\cite{Guo2005LUBMAB}.
 The dataset characteristics of the considered benchmarks are given in Table~\ref{tab:semantic-based-dataset_info}.
 
 \textit{WatDiv} comes with a test suite with different query shapes which allows us to compare the performance of our approach and the other approaches. 
 In particular, it comes with a predefined set of 20 query templates which are grouped into four categories, based on the query shape: \textit{star-shaped} queries, \textit{linear-shaped} queries, \textit{snowflake-shaped} queries, and \textit{complex-shaped} queries.
 We have used \textit{WatDiv} datasets with 10M to 100M triples with scale factors 10 and 100, respectively.
-In addition, we have generated the SPARQL queries using \textit{WatDiv Query Generator}.
+In addition, we have generated the \gls{SPARQL} queries using \textit{WatDiv Query Generator}.
 
 \textit{LUBM} comes with a \textit{Data Generator (UBA)} which generates synthetic data over the \textit{Univ-Bench} ontology in the unit of a university. 
 \textit{LUBM} provides Test Queries, more specifically 14 test queries.
@@ -474,21 +491,24 @@ The number of triples varies from 138M for 1000 universities, to 414M triples fo
 \scriptsize{size (GB)}  & \scriptsize{24} & \scriptsize{49}  & \scriptsize{70} & \scriptsize{1.5} &\scriptsize{15} &\\
 \bottomrule
 \end{tabularx}
-{\caption{Dataset characteristics (nt format).}\label{tab:semantic-based-dataset_info}}
+{\caption{\textbf{Dataset characteristics (nt format)}.
+Lists dataset information used on the evaluation.
+The size (in GB) and the number of triples are given.}
+\label{tab:semantic-based-dataset_info}}
 \end{table*}
 
-We implemented our approach using Spark-2.4.0, Scala 2.11.11, Java 8, and all the data were stored on the HDFS cluster using Hadoop 2.8.0.
+We implemented our approach using Spark-2.4.0, Scala 2.11.11, Java 8, and all the data were stored on the \gls{HDFS} cluster using Hadoop 2.8.0.
 All experiments were carried out on a commodity cluster of 6 nodes (1 master, 5 workers): Intel(R) Xeon(R) CPU E5-2620 v4 @ 2.10GHz (32 Cores), 128 GB RAM, 12 TB SATA RAID-5.
 We executed each experiment three times and the average query execution time has been reported.
 
 \subsubsection{Preliminary Results}
 We run experiments on the same cluster and evaluate our approach using the above benchmarks. 
-In addition, we compare our proposed approach with selected state-of-the-art distributed SPARQL query evaluators.
+In addition, we compare our proposed approach with selected state-of-the-art distributed \gls{SPARQL} query evaluators.
 In particular, we compare our approach with SHARD~\cite{Rohloff2010SHARD} -- the original approach implemented on Hadoop MapReduce, \emph{SPARQLGX}~\cite{sparqlgx-iswc-2016}'s direct evaluator SDE, and Sparklify~\cite{2019-sansa-sparklify-iswc} and report the query execution time (cf.\ Table~\ref{tbl:semantic-based-performance-analysis}).
-We have selected these approaches as they do not include any pre-processing steps (e.g. statistics) while evaluating the SPARQL query, similar to our approach.
+We have selected these approaches as they do not include any pre-processing steps (e.g. statistics) while evaluating the \gls{SPARQL} query, similar to our approach.
 
-Our evaluation results for performance analysis, sizeup analysis, node scalability, and breakdown analysis by SPARQL queries are shown in Table~\ref{tbl:semantic-based-performance-analysis}, Figure~\ref{fig:semantic-based-sizeup-scalability}, \ref{fig:semantic-based-node-scalability}, and \ref{fig:semantic-based-overall-analysis} respectively.
-In Table\ref{tbl:semantic-based-performance-analysis} we use ``fail'' whenever the system fails to complete the task and ``n/a'' when the task could not be completed due to a parser error (e.g.\ not able to translate some of the basic patterns to RDDs operations).
+Our evaluation results for performance analysis, sizeup analysis, node scalability, and breakdown analysis by \gls{SPARQL} queries are shown in Table~\ref{tbl:semantic-based-performance-analysis}, Figure~\ref{fig:semantic-based-sizeup-scalability}, \ref{fig:semantic-based-node-scalability}, and \ref{fig:semantic-based-overall-analysis} respectively.
+In Table\ref{tbl:semantic-based-performance-analysis} we use ``fail'' whenever the system fails to complete the task and ``n/a'' when the task could not be completed due to a parser error (e.g.\ not able to translate some of the basic patterns to \gls{RDD}s operations).
 
 In order to evaluate our approach with respect to the \textit{speedup}, we analyze and compare it with other approaches.
 
@@ -534,7 +554,10 @@ $Q1$ & \scriptsize{774.93} & \scriptsize{103.74} & \win \scriptsize{103.57} & \s
 \hspace{0.2cm} $Q14$ & \scriptsize{688.44} & \win \scriptsize{74.64} & \scriptsize{100.58} & \scriptsize{204.43}\\
 \bottomrule
 \end{tabularx}
-{\caption{Performance analysis on large-scale RDF datasets.}\label{tbl:semantic-based-performance-analysis}}
+{\caption{\textbf{Performance analysis on large-scale RDF datasets}.
+An comparison of our approach with SHARD – the original approach implemented on Hadoop MapReduce, SPARQLGX’s direct evaluator SDE, and Sparklify w.r.t query execution time.
+}
+\label{tbl:semantic-based-performance-analysis}}
 \end{table*} %source : https://docs.google.com/spreadsheets/d/1pGLuknI6EsTApGEZHqPhN4VEFBa63vVpNpA4r4BYXbQ
 
 Table~\ref{tbl:semantic-based-performance-analysis} presents the performance analysis of the systems on three different datasets.
@@ -557,11 +580,16 @@ We run experiments on three different sizes of \textit{LUBM} (see Figure~\ref{fi
 
 \begin{figure*}
  \includegraphics[width=1.0\columnwidth]{images/6_scalable_rdf_querying/semantic-based-sizeup-scalability.pdf}
-    \caption{Sizeup analysis (on LUBM dataset).}
+    \caption{\textbf{Sizeup analysis (on LUBM dataset)}.
+    The analysis keep the number of nodes constant i.e. 5 worker nodes and increase the size of the datasets to measure whether semantic-based approach deals with larger datasets.
+    The query execution time for our approach grows linearly when the size of the datasets increases.
+    This shows the scalability of our approach as compared to SHARD, in context of the sizeup.
+    SHARD suffers from the expensive overhead of MapReduce joins which impact its performance, as a result, it is significantly worse than other systems.
+    }
     \label{fig:semantic-based-sizeup-scalability}
 \end{figure*}
 
-We keep the number of nodes constant i.e.\ 5 worker nodes and increase the size of the datasets to semantic-based-measure whether our approach deals with larger datasets.
+We keep the number of nodes constant i.e.\ 5 worker nodes and increase the size of the datasets to measure whether our approach deals with larger datasets.
 
 We see that the query execution time for our approach grows linearly when the size of the datasets increases.
 This shows the scalability of our approach as compared to SHARD, in context of the sizeup.
@@ -572,7 +600,11 @@ We vary them from 1, 3 to 5 worker nodes.
 
 \begin{figure*}
   \includegraphics[width=1.0\columnwidth]{images/6_scalable_rdf_querying/semantic-based-node-scalability.pdf}
-    \caption{Node scalability (on LUBM-1K).}
+    \caption{\textbf{Node scalability (on LUBM-1K)}.
+     The analysis increase the number of worker nodes and keep the size of the dataset constant. 
+    We vary them from 1, 3 to 5 worker nodes.
+    As the number of nodes increases, the runtime cost of our query engine decreases linearly as compared with the SHARD, which keeps staying constant. 
+    SHARD performance stays constant (high) even when more worker nodes are added. This trend is due to the communication overhead SHARD needs to perform between map and reduce steps. The execution time of our approach decreases about 1.7 times (from 1,821.75 seconds down to 656.85 seconds) as the worker nodes increase from one to five nodes.}
     \label{fig:semantic-based-node-scalability}
 \end{figure*}
 
@@ -590,43 +622,51 @@ In order to assess the correctness of the result set, we computed the count of t
 As a result of it, we conclude that all approaches return exactly the same result set.
 This implies the correctness of the results.
 
-~\\ \defn{Breakdown by SPARQL queries}
+~\\ \defn{Breakdown by \gls{SPARQL} queries}
 Here we analyze some of the LUBM queries (Q1, Q5, Q14) run on a \textit{LUBM-1K} dataset in a cluster mode on all the systems.
 
 \begin{figure*}
    \includegraphics[width=1.0\columnwidth]{images/6_scalable_rdf_querying/semantic-based-overall-analysis.pdf}
-    \caption{Overall analysis of queries on LUBM-1K dataset (cluser mode).}
+    \caption{\textbf{Overall analysis of queries on LUBM-1K dataset (cluser mode)}.
+    This analysis depict some of LUBM queries (Q1, Q5, Q14) run on a \textit{LUBM-1K} dataset in a cluster mode on all the systems. 
+    Overall, our approach performs better compared to Hadoop-based system, SHARD due to the use of the Spark framework which leverages the in-memory computation for faster performance.
+    However, the performance declines as compared to other approaches which use vertical partitioning (e.g., SPARQLGX-SDE on RDD and Sparklify on Spark SQL).
+    This is due to the fact that our approach performs de-duplication of triples that involves shuffling and incurs network overhead.
+    }
     \label{fig:semantic-based-overall-analysis}
 \end{figure*}
 
 We can see from Figure~\ref{fig:semantic-based-overall-analysis} that our approach performs better compared to Hadoop-based system, SHARD. 
 This is due to the use of the Spark framework which leverages the in-memory computation for faster performance.
-However, the performance declines as compared to other approaches which use vertical partitioning (e.g., SPARQLGX-SDE on RDD and Sparklify on Spark SQL).
+However, the performance declines as compared to other approaches which use vertical partitioning (e.g., SPARQLGX-SDE on \gls{RDD} and Sparklify on Spark SQL).
 This is due to the fact that our approach performs de-duplication of triples that involves shuffling and incurs network overhead.
 The results show that the performance of SPARQLGX-SDE decreases as the number of triple patterns involved in the query increases (see \textit{Q5}) when compared to Sparklify. 
 However, SPARQLGX-SDE performs better when there are simple queries (see \textit{Q14}). 
 This occurs because SPARQLGX-SDE must read the whole RDF graph each time when there is a triple pattern involved.
 In contrast to SPARQLGX-SDE, Sparklify performs better when there are more triple patterns involved (see \textit{Q5}) but slightly worse when linear queries (see \textit{Q14}) are evaluated. 
 
-Based on our findings and the evaluation study carried out in this paper, we show that our approach can scale up with the increasing size of the dataset.
+Based on our findings and the evaluation study carried out, we show that our approach can scale up with the increasing size of the dataset.
 
 \section{Summary}
 \label{sec:scalable-rdf-querying-summary}
-Querying RDF data becomes challenging when the size of the data increases.
-Existing Spark-based SPARQL systems mostly
-do not retain all RDF term information consistently while transforming them to a dedicated storage model such as using vertical partitioning.
-Often, this process is both data and computing intensive and raises the need for a scalable, efficient and comprehensive query engine which can handle large scale RDF datasets.
+Querying \gls{RDF} data becomes challenging when the size of the data increases.
+Existing Spark-based \gls{SPARQL} systems mostly
+do not retain all \gls{RDF} term information consistently while transforming them to a dedicated storage model such as using vertical partitioning.
+Often, this process is both data and computing intensive and raises the need for a scalable, efficient and comprehensive query engine which can handle large scale \gls{RDF} datasets.
 
-In this chapter, we propose \emph{Sparklify}: a scalable software component for efficient evaluation of SPARQL queries over distributed RDF datasets. 
-It uses Sparqify as a SPARQL-to-SQL rewriter for translating SPARQL queries into Spark executable code.
+In this chapter, we propose scalable approaches for \gls{SPARQL} query evaluation over distributed \gls{RDF} data. 
+First, \emph{Sparklify}: a scalable software component for efficient evaluation of \gls{SPARQL} queries over distributed \gls{RDF} datasets. 
+It uses Sparqify as a SPARQL-to-SQL rewriter for translating \gls{SPARQL} queries into Spark executable code.
 By doing so, it leverages the advantages of the Spark framework.
-SANSA features methods to execute SPARQL queries directly as part of Spark workflows instead of writing the code corresponding to those queries (sorting, filtering, etc.).
-It also provides a command-line interface and a W3C standard compliant SPARQL endpoint for externally querying data that has been loaded using the SANSA framework.
-We have shown empirically that our approach can scale horizontally and perform well w.r.t to the state-of-the-art approaches.
+SANSA features methods to execute \gls{SPARQL} queries directly as part of Spark workflows instead of writing the code corresponding to those queries (sorting, filtering, etc.).
+It also provides a command-line interface and a \gls{W3C} standard compliant \gls{SPARQL} endpoint for externally querying data that has been loaded using the SANSA framework.
+We have shown empirically that Sparklify can scale horizontally and perform well w.r.t to the state-of-the-art approaches.
 
 With this work, we showed that the application of OBDA tooling to Big Data frameworks achieves promising results in terms of scalability. 
-We present a working prototype implementation that can serve as a baseline for further research. 
+We present a working prototype implementation that can serve as a baseline for further research.
 
-
-
-
+As a second approach, we investigated and implemented a scalable semantic-based query engine for efficient evaluation of SPARQL queries over distributed \gls{RDF} datasets. 
+It uses a semantic-based partitioning strategy as the data distribution and converts \gls{SPARQL} to Spark executable code.
+By doing so, it leverages the advantages of the Spark framework's rich APIs.
+We have shown empirically that semantic-based approach can scale horizontally and perform well as compared with the previous Hadoop-based system: the SHARD triple store.
+It is also comparable with other in-memory SPARQL query evaluators when there is less shuffling involved i.e. less duplicate values.
