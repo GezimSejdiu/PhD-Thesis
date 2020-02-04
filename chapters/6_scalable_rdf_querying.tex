@@ -31,7 +31,7 @@ Contributions of this chapter are summarized as follows:
  \item We developed a scalable query system using Sparqlify -- a SPARQL-to-SQL rewriter on top of Apache Spark (under the \textit{Apache Licence 2.0}).
  \item We evaluate Sparklify with state-of-the-art engines and demonstrate it empirically.
  \item A scalable approach for semantic-based partitioning using the distributed computing framework, Apache Spark.
- \item A scalable semantic-based query engine (\textit{SANSA.Semantic}) on top of Apache Spark (under the \textit{Apache Licence 2.0}).
+ \item A scalable semantic-based query engine (\textit{SANSA.Semantic}) on top of Apache Spark.
  \item Comparison of the semantic-based system with state-of-the-art engines and demonstrate the performance empirically.
  \item We integrated the proposed approaches into the SANSA~\cite{lehmann-2017-sansa-iswc}\furl{http://sansa-stack.net/} larger framework.
  Sparklify serves as a default query engine in SANSA.
@@ -667,6 +667,6 @@ We present a working prototype implementation that can serve as a baseline for f
 
 As a second approach, we investigated and implemented a scalable semantic-based query engine for efficient evaluation of SPARQL queries over distributed \gls{RDF} datasets. 
 It uses a semantic-based partitioning strategy as the data distribution and converts \gls{SPARQL} to Spark executable code.
-By doing so, it leverages the advantages of the Spark framework's rich APIs.
+By doing so, it leverages the advantages of the Spark framework's rich \gls{API}s.
 We have shown empirically that semantic-based approach can scale horizontally and perform well as compared with the previous Hadoop-based system: the SHARD triple store.
-It is also comparable with other in-memory SPARQL query evaluators when there is less shuffling involved i.e. less duplicate values.
+It is also comparable with other in-memory \gls{SPARQL} query evaluators when there is less shuffling involved i.e. less duplicate values.

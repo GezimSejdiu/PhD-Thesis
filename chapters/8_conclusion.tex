@@ -64,7 +64,7 @@ Overall, we provide the following contributions to the state-of-the-art:
     \item We provide DistQualityAssessment -- a distributed (open source) implementation of quality metrics using Apache Spark.
     \item We perform an analysis of the complexity of the metric evaluation in the cluster.
     \item We evaluate our approach and demonstrate empirically its superiority over a previous centralized approach.
-    \item We integrated the approach into the SANSA\furl{http://sansa-stack.net/} framework.
+    \item We integrated the approach into the SANSA framework.
     SANSA is actively maintained and uses the community ecosystem (mailing list, issues trackers, continues integration, web-site etc.).
 \end{itemize}
 
@@ -78,30 +78,44 @@ One of the key features of Big Data is its complexity in terms of representation
 One existing way to deal with it is offered by Semantic Web standards.
 Among them, \gls{RDF} --which proposes to model data with triples representing edges in a graph-- has received a large success and the semantically annotated data has grown steadily towards a massive scale.
 Therefore, there is a need for scalable and efficient query engines capable of retrieving such information.
-To answer~\ref{rqc:3}, we propose \emph{Sparklify}: a scalable software component for efficient evaluation of SPARQL queries over distributed RDF datasets. 
+To answer~\ref{rqc:3}, we propose scalable approaches for \gls{SPARQL} query evaluation over distributed \gls{RDF} data. 
+First, Sparklify -- a scalable software component for efficient evaluation of \gls{SPARQL} queries over distributed \gls{RDF} datasets. 
 It uses Sparqlify as a SPARQL-to-SQL rewriter for translating SPARQL queries into Spark executable code.
 Our preliminary results demonstrate that our approach is more extensible, efficient, and scalable as compared to state-of-the-art approaches.
-Sparklify is integrated into a larger SANSA framework and it serves as a default query engine and has been used by at least three external use scenarios.
+As a second approach, we investigated and implemented a scalable semantic-based query engine for efficient evaluation of \gls{SPARQL} queries over distributed \gls{RDF} datasets. 
+It uses a semantic-based partitioning strategy as the data distribution and converts \gls{SPARQL} to Spark executable code.
+We have shown empirically that semantic-based approach can scale horizontally and perform well as compared with the previous Hadoop-based system: the SHARD triple store.
+It is also comparable with other in-memory \gls{SPARQL} query evaluators when there is less shuffling involved i.e. less duplicate values.
+Both approaches are integrated into a larger SANSA framework and Sparklify serves as a default query engine and has been used by at least three external use scenarios.
 Overall, we provide the following contributions to the state-of-the-art:
 
 \begin{itemize}
  \item We present a novel approach for vertical partitioning including \gls{RDF} terms using the distributed computing framework, Apache Spark.
- \item We developed a scalable query system using Sparqlify -- a SPARQL-to-SQL rewriter on top of Apache Spark (under the \textit{Apache Licence 2.0}).
+ \item We developed a scalable query system using Sparqlify -- a SPARQL-to-SQL rewriter on top of Apache Spark.
  \item We evaluate Sparklify with state-of-the-art engines and demonstrate it empirically.
  \item A scalable approach for semantic-based partitioning using the distributed computing framework, Apache Spark.
- \item A scalable semantic-based query engine (\textit{SANSA.Semantic}) on top of Apache Spark (under the \textit{Apache Licence 2.0}).
+ \item A scalable semantic-based query engine (\textit{SANSA.Semantic}) on top of Apache Spark.
  \item Comparison of the semantic-based system with state-of-the-art engines and demonstrate the performance empirically.
  \item We integrated the proposed approaches into the SANSA larger framework.
  Sparklify serves as a default query engine in SANSA.
  SANSA is an active project and maintained, including issue tracker, mailing list, changelogs, website, etc.
 \end{itemize}
 
-
 Last but not least, the question we want to answer in the scope of the thesis is the following:
 
 \begin{tcolorbox}
 \textbf{\rqNr[RQ4]\label{rqc:4}}: How can we exploit large-scale \gls{RDF} datasets for a particular use case and ensure scalability?
 \end{tcolorbox}
+
+With the increase of \gls{RDF} data, new challenges arise.
+With that in mind, new technologies need to be adaptable enough to work on different domain-specific applications.
+To answer~\ref{rqc:4}, we implemented and integrated all the proposed approaches throughout this thesis into a larger SANSA framework.
+Within SANSA, we have applied our approaches into three different use cases.
+For the Ethereum analysis use case, we show some of the potential use cases of scalable analysis of large Ethereum \gls{RDF} data, i.e. the Hub and Authorities transaction network analysis, and Crypto Kitties analysis.
+During the development and evaluation of this use case, we were able to show and demonstrate the feasibility and scalability of our approach when dealing with a large amount of data.
+For the Big Data logs mining, we show how our approaches can be used to mine different logs generated by the stack of Big Data components for further analysis such as root cause analysis.
+Lastly, in the geospatial domain, we show how the scalable integration of big \gls{POI} data can be used for better hints about \gls{AOI}s within the region.
+
 
 
 \section{Limitations and Future Directions}
@@ -110,33 +124,33 @@ In this section, we discuss the limitations we identified during this study and 
 In the following we summarize the limitations and future directions on each of the main contributions of this thesis.
 
 \begin{itemize}
-    \item \textit{Large-scale RDF Dataset Statistics} -- 
-    We plan to employ distributed statistics as an insight when performing joint optimization when running SPARQL queries. 
+    \item \textit{Large-scale \gls{RDF} Dataset Statistics} -- 
+    We plan to employ distributed statistics as an insight when performing joint optimization when running \gs{SPARQL} queries. 
     Sparklify and Semantic-based approaches may benefit when knowing the structure of the data and re-order joins accordingly.
-    Another scenario of benefiting from having a knowledge of the dataset charachteristics is when designing a recommended partition system when using different partitioning approaches presented during this thesis.
+    Another scenario of benefiting from having a knowledge of the dataset characteristics is when designing a recommended partition system when using different partitioning approaches presented during this thesis.
     The recommender system will make use of DistLODStats as a feature engineering mechanism for better understanding of the internals of the input dataset. 
     Later, it propose a best partition strategy to be used.
-    \item \textit{Assessment of RDF Datasets at Scale} -- 
+    \item \textit{Assessment of \gls{RDF} Datasets at Scale} -- 
     Although we have achieved reasonable results in terms of scalability, we plan to further improve time efficiency by applying intelligent partitioning strategies and persist the data to an even higher extent in memory and perform dependency analysis in order to evaluate multiple metrics simultaneously. 
-    We also plan to explore near real-time interactive quality assessment of large-scale RDF data using Spark Streaming.
+    We also plan to explore near real-time interactive quality assessment of large-scale \gls{RDF} data using Spark Streaming.
     Finally, in the future we intend to develop a declarative plugin for the current work using Quality Metric Language (QML)~\cite{debattista2016luzzu}, which gives users the ability to express, customize and enhance quality metrics.
-    \item \textit{Scalable RDF querying} -- 
+    \item \textit{Scalable \gls{RDF} querying} -- 
     In this thesis, we showed that the application of OBDA tooling to Big Data frameworks achieves promising results in terms of scalability. 
     We present a working prototype implementation that can serve as a baseline for further research. 
     Our next steps include evaluating other tools, such as Ontop~\cite{Calvanese2017OntopAS}, and analyze how their performance in the Big Data setting can be improved further. 
-    For example, we intend to investigate how OBDA tools can be combined with dictionary encoding of RDF terms as integers and evaluate the effects.
-    Our next steps include expanding our parser to support more SPARQL fragments and adding statistics to the query engine while evaluating queries. 
-    We want to analyze the query performance in the large-scale RDF datasets and explore prospects for the improvement.
-    For example, we intend to investigate the re-ordering of the BGPs and evaluate the effects on query execution time.
+    For example, we intend to investigate how OBDA tools can be combined with dictionary encoding of \gls{RDF} terms as integers and evaluate the effects.
+    Our next steps include expanding our parser to support more \gls{SPARQL} fragments and adding statistics to the query engine while evaluating queries. 
+    We want to analyze the query performance in the large-scale \gls{RDF} datasets and explore prospects for the improvement.
+    For example, we intend to investigate the re-ordering of the \gls{BGP}s and evaluate the effects on query execution time.
     \item \textit{Adaptability and Use Cases} -- 
     We presented some of the use cases where our contribution are used. 
-    It shows a significat adoption and easy to use of the approaches ported withing the SANSA framework, however, we further plan to improve the usability and guide of using our framework in the cloud.
+    It shows a significant adoption and easy to use of the approaches ported withing the SANSA framework, however, we further plan to improve the usability and guide of using our framework in the cloud.
 \end{itemize}
 
 \section{Closing Remarks}
-With the increase amount of the RDF data, processing large-scale RDF datasets is constantly facing challenges and lot of potential for exploration.
-During this thesis, we have shown the benefits of distributed computing frameworks when combining with semantic web technologies to successfully tackle the problem of scalable and efficient processing of RDF datasets.
-Future research work can build upon the contributions presented during this thesis as a starting point for an comprehensive and out-of-the-box scalable processing of large-scale RDF datasets.
-Main contributions of this thesis have been integrated within the SANSA framework and are making an impact to the semantic web community and several application domains.
+With the increase amount of the \gls{RDF} data, processing large-scale \gls{RDF} datasets is constantly facing challenges and lot of potential for exploration.
+During this thesis, we have shown the benefits of distributed computing frameworks to successfully tackle the problem of scalable and efficient processing of \gls{RDF} datasets.
+Future research work can build upon the contributions presented during this thesis as a starting point for an comprehensive and out-of-the-box scalable processing of large-scale \gls{RDF} datasets.
+Main contributions of this thesis have been integrated within the SANSA framework and are making an impact to the semantic web community and several application domains -- resulting in a SANSA framework and being used in many European research projects.
 
 
