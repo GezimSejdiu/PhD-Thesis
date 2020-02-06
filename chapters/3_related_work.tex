@@ -27,9 +27,15 @@ In this section, we provide an overview of related work regarding \gls{RDF} data
 To the best of our knowledge, all but one existing approaches use small to medium scale datasets and do not horizontally scale.
 
 A dataset is large-scale w.r.t. a particular task in the scope of this article if the main memory on commodity hardware is insufficient to perform the task (without swapping to disk). 
-We mention here, for example RDF$_{Pro}$~\cite{SAC-2015-CorcoglionitiRM}, which offers a suite of stream-oriented, highly optimized processors for common tasks, such as data filtering, RDFS inference, smushing, as well as statistics extraction.
-The main component of the tool is a so-called \textit{RDF processor}, a Java component which consumes an input stream of RDF quads containing \gls{RDF} triples with an optional fourth named graph component in one or more passes.
-It does by downloading and filtering the desired RDF quads and place them into a separate graphs in order to track the provenance.
+We mention here, for example 
+RDFStats~\cite{conf/dexaw/LangeggerW09}, which is a framework for generating statistics from \gls{RDF} data that can be used for \gls{SPARQL} query optimization while processing \gls{RDF} data over \gls{SPARQL} endpoints.
+Such statistics includes histograms about subjects (\gls{URI}s, and blank nodes) and histograms about properties and corresponding ranges.
+The tool can be integrated into user interfaces and other applications that utilize the Jena toolkit in order to provide such statistics for better performance when processing \gls{RDF} data.
+But, the main purpose of the tool is to collect statistics for query optimization rather than generating VoID~\cite{Zhao:11:VoID}.
+
+RDF$_{Pro}$~\cite{SAC-2015-CorcoglionitiRM} offers a suite of stream-oriented, highly optimized processors for common tasks, such as data filtering, RDFS inference, smushing, as well as statistics extraction.
+The main component of the tool is a so-called \textit{\gls{RDF} processor}, a Java component which consumes an input stream of \gls{RDF} quads containing \gls{RDF} triples with an optional fourth named graph component in one or more passes.
+It does by downloading and filtering the desired \gls{RDF} quads and place them into a separate graphs in order to track the provenance.
 A metadata file is added as a link between each graph generated during the process, to the \gls{URI} of the associated sources (e.g. DBpedia).
 Afterwords, it extracts the TBox information from such filtered data and then sorts them. 
 The consequence step drop unnecessary top level classes and vocabulary alignments.
@@ -39,13 +45,23 @@ These intermediate results contains duplicate data, e.g. the same subject, predi
 RDF$_{Pro}$ does a deduplication process, by removing such duplicates.
 Finally, \gls{RDF} dataset statistics are extracted and merged with the TBox data.
 
-The second related approach we are aware of is Aether~\cite{makela2014aether}, which is an application for generating, viewing and comparing extended VoID~\cite{Zhao:11:VoID} statistical descriptions of \gls{RDF} datasets.
+ExpLOD~\cite{KhatchadourianExpLOD2010} explores summaries of \gls{RDF} usage and interlinking among datasets. 
+These summaries include information about the structure of the \gls{RDF} graph, such as the instantiated \gls{RDF} classes of a resource or the property usage.
+The tool also provides statistics about the number of corresponding entities connected using the $\verb|owl:sameAs|$ predicate to describe the interlinking between datasets.
+The tool can also produce \gls{SPARQL} queries from a summary.
+
+ProLOD~\cite{Bhm2010ProfilingLO} is a web-based profiling tool, with a possibility to analyze \gls{RDF} data and thus provide a deeper understanding of the underlying structure and semantics. 
+It analyzes the object values of RDF triples and generates statistics upon them such as data type and pattern distribution.
+ProLOD++~\cite{Abedjan2014ProfilingAM} which is an extension of ProLOD is also a browser-based tool that implements several algorithms with the aim to compute different profiling, mining or cleansing tasks. In the profiling, the task includes features like finding frequencies and distribution of distinct subjects, predicates, and objects, range of the predicates, string pattern analysis, link analysis and data type analysis.
+\fixme{rephrase}
+
+Another related approach we are aware of is Aether~\cite{makela2014aether}, which is an application for generating, viewing and comparing extended VoID statistical descriptions of \gls{RDF} datasets.
 The tool is useful, for example, in getting to know a newly encountered dataset, in comparing the different versions of a dataset, and in detecting outliers and errors.
 By giving a \gls{SPARQL} endpoint, the Aether tool can generate an extended VoID description containing a wide variety of characteristics describing the dataset.
 Later, these statistics can then be viewed in order to get a better overview of the dataset.
 The viewer component of the Aether can be also useful on comparing dataset descriptions to each other, so that the changes between two different versions of the dataset can be captured.
 
-However, only one work we came across that provided a distributed framework for \gls{RDF} statistics computation: LODOP~\cite{Forchhammer:PROFILES:14}. 
+However, only one work we came across that provided a distributed framework for \gls{RDF} statistics computation: \textbf{LODOP}~\cite{Forchhammer:PROFILES:14}. 
 LODOP adopts a MapReduce approach for computing, optimizing, and benchmarking data profiling techniques.
 It uses Apache Pig as the underlying computation engine (Hadoop-based). 
 LODOP implements 15 data profiling tasks comparing to 32 in our work. 
@@ -103,7 +119,7 @@ In our approach, we tackle partitioning and querying of big \gls{RDF} datasets i
 Partitioning-based approaches for distributed \gls{RDF} systems propose to partition an \gls{RDF} graph in fragments which are hosted in centralized \gls{RDF} stores at different sites. 
 Such approaches use either standard partitioning algorithms like METIS~\cite{GurajadaSMT14} or introduce their own partitioning strategies. 
 For instance, Lee et al.~\cite{LeeL2013} define a partition unit as a vertex with its closest neighbors based on heuristic rules while DiploCloud~\cite{WylotC16} and AdPart~\cite{harbi2016accelerating} use physiological \gls{RDF} partitioning based on \gls{RDF} molecules. 
-In our proposal, we use a semantic-based partitioning approach.
+In our proposal, we use both, vertical partitioning and semantic-based partitioning approaches.
 
 \defn{Hadoop-based systems}
 Cloud-based approaches for managing large-scale \gls{RDF} mainly use NoSQL distributed data stores or employ various partitioning approaches on top of Hadoop infrastructure, i.e., the \gls{HDFS} and its MapReduce implementation, in order to leverage computational resources of multiple nodes. 

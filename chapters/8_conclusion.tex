@@ -125,7 +125,7 @@ In the following we summarize the limitations and future directions on each of t
 
 \begin{itemize}
     \item \textit{Large-scale \gls{RDF} Dataset Statistics} -- 
-    We plan to employ distributed statistics as an insight when performing joint optimization when running \gs{SPARQL} queries. 
+    We plan to employ distributed statistics as an insight when performing joint optimization when running \gls{SPARQL} queries. 
     Sparklify and Semantic-based approaches may benefit when knowing the structure of the data and re-order joins accordingly.
     Another scenario of benefiting from having a knowledge of the dataset characteristics is when designing a recommended partition system when using different partitioning approaches presented during this thesis.
     The recommender system will make use of DistLODStats as a feature engineering mechanism for better understanding of the internals of the input dataset. 
@@ -142,6 +142,8 @@ In the following we summarize the limitations and future directions on each of t
     Our next steps include expanding our parser to support more \gls{SPARQL} fragments and adding statistics to the query engine while evaluating queries. 
     We want to analyze the query performance in the large-scale \gls{RDF} datasets and explore prospects for the improvement.
     For example, we intend to investigate the re-ordering of the \gls{BGP}s and evaluate the effects on query execution time.
+    
+    %A comprehensive, open-source \gls{RDF} processing and analytics stack
     \item \textit{Adaptability and Use Cases} -- 
     We presented some of the use cases where our contribution are used. 
     It shows a significant adoption and easy to use of the approaches ported withing the SANSA framework, however, we further plan to improve the usability and guide of using our framework in the cloud.

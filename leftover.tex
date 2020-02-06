@@ -53,3 +53,11 @@ To facilitate better maintenance and faster access to this scale of data, effici
 One of such partitioned strategies is semantic-based partitioning. 
 It groups the facts based on the subject and its associated triples.
 We want to explore and evaluate the effect of semantic-based partitioning on query performance when dealing with such a volume of \gls{RDF} datasets.
+
+
+% Related Work -- statistics
+
+Some earlier work on the \gls{RDF} statistics was done also by make-void\furl{https://github.com/cygri/make-void} and RDFStats~\cite{conf/dexaw/LangeggerW09}.
+Make-void is a Java system that utilizes the Jena toolkit in order to import \gls{RDF} data and generate statistics using the VoID description. 
+It uses \gls{SPARQL} queries processed via Jena's ARQ \gls{SPARQL} processor.
+Same as make-void, RDFStats uses Jena for processing \gls{RDF} data but the main purpose of the tool is to collect statistics for query optimization rather than generating VoID.
