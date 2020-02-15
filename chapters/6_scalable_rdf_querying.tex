@@ -14,7 +14,7 @@ This has motivated a considerable amount of work on designing distributed \gls{R
 Being able to query a large amount of data in an efficient and faster way is one of the key requirements for every \gls{SPARQL} engine.
 
 To address these challenges, in this thesis, we propose a scalable \gls{RDF} querying engine based on two different partitioning strategies.
-First, Sparklify -- SPARQL-to-SQL rewriter based on the vertical partitioning implemented on top of Apache Spark.
+First, Sparklify -- SPARQL-to-SQL rewriter based on the vertical partitioning~\cite{VPAbadi2007} implemented on top of Apache Spark.
 As a second approach, we investigated and developed the so-called Semantic-based query system. 
 Both approaches are a scalable and efficient evaluation of \gls{SPARQL} queries over distributed \gls{RDF} datasets. 
 The main component of the both systems are the data partitioning and query evaluation over this data representation.
@@ -105,7 +105,7 @@ The main entities defined with SML are \textit{view definitions}.
 See \textit{Step 5} in the Figure~\ref{fig:sparklify-architecture} as an example.
 The actual view definition is declared by the \emph{Create View} \ldots \emph{As} in the first line.
 The remainder of the view contains these parts: (1) the \emph{From} directive defines the logical table based on the partitioned table (see \textit{Step 2}).
-(2) an RDF template is defined in the \emph{Construct} block containing, \gls{URI}, blank node or literals constants (e.g. \emph{ex:worksAt}) and variables (e.g. \emph{?emp}, \emph{?institute}).
+(2) an \gls{RDF} template is defined in the \emph{Construct} block containing, \gls{URI}, blank node or literals constants (e.g. \emph{ex:worksAt}) and variables (e.g. \emph{?emp}, \emph{?institute}).
 The \emph{With} block defines the variables used in the template by means of \gls{RDF} term constructor expressions whose arguments refer to columns of the logical table.
 
 \defn{Query Translation}

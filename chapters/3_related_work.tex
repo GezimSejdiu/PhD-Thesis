@@ -11,13 +11,13 @@ Finally, we cover existing \gls{SPARQL} query evaluators and position our propos
 This chapter is based on the related work sections from following publications~\cite{sejdiu-2018-dist-lod-stats-iswc,sejdiu-2019-sansa-dist-quality-assessment-iswc,sejdiu-2019-sansa-semantic-based-semantics, 2019-sansa-sparklify-iswc}:
 
 \begin{itemize}
-    \item \textbf{Gezim Sejdiu}, Ivan Ermilov, Jens Lehmann, and Mohamed Nadjib-Mami. “\href{http://jens-lehmann.org/files/2018/iswc_distlodstats.pdf}{DistLODStats: Distributed Computation of RDF Dataset Statistics},” in Proceedings of 17th International Semantic Web Conference (ISWC), 2018.
-    
-    \item \textbf{Gezim Sejdiu}, Anisa Rula, Jens Lehmann, and Hajira Jabeen. “\href{http://jens-lehmann.org/files/2019/iswc_dist_quality_assessment.pdf}{A Scalable Framework for Quality Assessment of RDF Datasets},” in Proceedings of 18th International Semantic Web Conference (ISWC), 2019.
-    
-    \item \textbf{Gezim Sejdiu}, Damien Graux, Imran Khan, Ioanna Lytra; Hajira Jabeen; and Jens Lehmann. “\href{https://gezimsejdiu.github.io/publications/semantic_based_query_paper_SEMANTICS2019.pdf}{Towards A Scalable Semantic-based Distributed Approach for SPARQL query evaluation},” 15th International Conference on Semantic Systems (SEMANTiCS), Research \& Innovation , 2019.
-     
-    \item Claus Stadler, \textbf{Gezim Sejdiu}, Damien Graux, and Jens Lehmann. “\href{http://jens-lehmann.org/files/2019/iswc_sparklify.pdf}{Sparklify: A Scalable Software Component for Efficient evaluation of SPARQL queries over distributed RDF datasets},” in Proceedings of 18th International Semantic Web Conference (ISWC), 2019. 
+    \item \textbf{Gezim Sejdiu}; Ivan Ermilov; Jens Lehmann; and Mohamed Nadjib-Mami, “\href{http://jens-lehmann.org/files/2018/iswc_distlodstats.pdf}{DistLODStats: Distributed Computation of RDF Dataset Statistics},” in Proceedings of 17th International Semantic Web Conference (ISWC), 2018.
+
+    \item \textbf{Gezim Sejdiu}; Anisa Rula; Jens Lehmann; and Hajira Jabeen, “\href{http://jens-lehmann.org/files/2019/iswc_dist_quality_assessment.pdf}{A Scalable Framework for Quality Assessment of RDF Datasets},” in Proceedings of 18th International Semantic Web Conference (ISWC), 2019.
+
+    \item \textbf{Gezim Sejdiu}; Damien Graux; Imran Khan; Ioanna Lytra; Hajira Jabeen; and Jens Lehmann, “\href{https://gezimsejdiu.github.io/publications/semantic_based_query_paper_SEMANTICS2019.pdf}{Towards A Scalable Semantic-based Distributed Approach for SPARQL query evaluation},” 15th International Conference on Semantic Systems (SEMANTiCS), Research \& Innovation , 2019.
+
+    \item Claus Stadler; \textbf{Gezim Sejdiu}; Damien Graux; and Jens Lehmann, “\href{http://jens-lehmann.org/files/2019/iswc_sparklify.pdf}{Sparklify: A Scalable Software Component for Efficient evaluation of SPARQL queries over distributed RDF datasets},” in Proceedings of 18th International Semantic Web Conference (ISWC), 2019.
     
 \end{itemize}
 
@@ -29,7 +29,7 @@ To the best of our knowledge, all but one existing approaches use small to mediu
 A dataset is large-scale w.r.t. a particular task in the scope of this article if the main memory on commodity hardware is insufficient to perform the task (without swapping to disk). 
 We mention here, for example 
 RDFStats~\cite{conf/dexaw/LangeggerW09}, which is a framework for generating statistics from \gls{RDF} data that can be used for \gls{SPARQL} query optimization while processing \gls{RDF} data over \gls{SPARQL} endpoints.
-Such statistics includes histograms about subjects (\gls{URI}s, and blank nodes) and histograms about properties and corresponding ranges.
+Such statistics includes histograms about subjects (\gls{URI}s, and blank nodes), properties, and their corresponding ranges.
 The tool can be integrated into user interfaces and other applications that utilize the Jena toolkit in order to provide such statistics for better performance when processing \gls{RDF} data.
 But, the main purpose of the tool is to collect statistics for query optimization rather than generating VoID~\cite{Zhao:11:VoID}.
 
@@ -51,9 +51,19 @@ The tool also provides statistics about the number of corresponding entities con
 The tool can also produce \gls{SPARQL} queries from a summary.
 
 ProLOD~\cite{Bhm2010ProfilingLO} is a web-based profiling tool, with a possibility to analyze \gls{RDF} data and thus provide a deeper understanding of the underlying structure and semantics. 
-It analyzes the object values of RDF triples and generates statistics upon them such as data type and pattern distribution.
-ProLOD++~\cite{Abedjan2014ProfilingAM} which is an extension of ProLOD is also a browser-based tool that implements several algorithms with the aim to compute different profiling, mining or cleansing tasks. In the profiling, the task includes features like finding frequencies and distribution of distinct subjects, predicates, and objects, range of the predicates, string pattern analysis, link analysis and data type analysis.
-\fixme{rephrase}
+It analyzes the object values of \gls{RDF} triples and generates statistics upon them such as data type and pattern distribution.
+ProLOD uses regular expression rules for type detection and such patterns are normalized on the later stage for better visualization of a large number of different patterns.
+It also generates statistical description for the literal values and external links.
+ProLOD++~\cite{Abedjan2014ProfilingAM}
+is an interactive web-based tool that offer a set of methods with the aim of computing different profiling, mining or cleansing tasks.
+The tool is devided into two primary views, a cluster view and a detailed view.
+The cluster view enables users to explore and navigate through the cluster tree with more information for statistics for the selected cluster.
+ProLOD++ is an extension of ProLOD.
+In addition to the mining and the cleansing tasks, ProLOD++ generates profiling features like finding frequencies and distribution of distinct subjects, predicates, and objects, range of the predicates, string pattern analysis, link analysis and data type analysis.
+
+Loupe~\cite{Mihindukulasooriya2017ALD} is a configurable RESTful web service for generating  Linked Data profiles in \gls{RDF} using the Loupe ontology\furl{https://github.com/nandana/loupe-ontology}.
+A tool provides summarized information about explicit vocabulary, class and property usage.
+Besides that, it also facilitates the analysis of implicit data patterns by providing a set of metrics including the ratio of instances of a given class, and property distribution.
 
 Another related approach we are aware of is Aether~\cite{makela2014aether}, which is an application for generating, viewing and comparing extended VoID statistical descriptions of \gls{RDF} datasets.
 The tool is useful, for example, in getting to know a newly encountered dataset, in comparing the different versions of a dataset, and in detecting outliers and errors.
@@ -61,7 +71,7 @@ By giving a \gls{SPARQL} endpoint, the Aether tool can generate an extended VoID
 Later, these statistics can then be viewed in order to get a better overview of the dataset.
 The viewer component of the Aether can be also useful on comparing dataset descriptions to each other, so that the changes between two different versions of the dataset can be captured.
 
-However, only one work we came across that provided a distributed framework for \gls{RDF} statistics computation: \textbf{LODOP}~\cite{Forchhammer:PROFILES:14}. 
+However, only one work we came across that provided a distributed framework for \gls{RDF} statistics computation: LODOP~\cite{Forchhammer:PROFILES:14}.
 LODOP adopts a MapReduce approach for computing, optimizing, and benchmarking data profiling techniques.
 It uses Apache Pig as the underlying computation engine (Hadoop-based). 
 LODOP implements 15 data profiling tasks comparing to 32 in our work. 
@@ -80,27 +90,52 @@ In the following, we divide the section between conceptual and practical approac
 In~\cite{CatarciSCD17} the authors propose a big data processing pipeline and a big data quality pipeline. 
 For each of the phases of the processing pipeline they discuss the corresponding phase of the big data quality pipeline.
 Relevant quality dimensions such as accuracy, consistency and completeness are discussed for the quality assessment of \gls{RDF} datasets as part of an integration scenario.
-Given that the quality dimensions and metrics have somehow evolved from relational to Linked Data,
+Given that the quality dimensions and metrics have somehow evolved from relational to \gls{RDF} data,
 it is relevant to understand the evolution of quality dimensions according to the differences between the structural characteristics of the two data models~\cite{BatiniRSV15}. 
 This allows to manage the huge variability of methods and techniques needed to manage data quality and understand which are the quality dimensions that prevail when assessing large-scale \gls{RDF} datasets.
 
 Most of the existing approaches can be applied to small/medium scale datasets and do not horizontally scale~\cite{debattista2016luzzu,KontokostasWAHLCZ14}. 
-The work in~\cite{KontokostasWAHLCZ14} presents a methodology for assessing the quality of Linked Data based on a test case generation analogy used for software testing. 
+The work in~\cite{KontokostasWAHLCZ14} presents a methodology for assessing the quality of \gls{RDF} data based on a test case generation analogy used for software testing. 
 The idea of this approach is to generate templates of the \gls{SPARQL} queries (i.e., quality test case patterns) and then instantiate them by using the vocabulary or schema information, thus producing quality test case queries. 
+
 Luzzu~\cite{debattista2016luzzu} is similar in spirit with our approach in that its objective is to provide a framework for quality assessment.
-Its Quality Metric Language (LQML), is a \gls{DSL} that enables knowledge engineers to declaratively define quality metrics whose definitions can be understood more easily. 
-LQML offers notations, abstractions and expressive power, focusing on the representation of quality metrics.
+Its \gls{LQML}, is a \gls{DSL} that enables knowledge engineers to declaratively define quality metrics whose definitions can be understood more easily. 
+\gls{LQML} offers notations, abstractions and expressive power, focusing on the representation of quality metrics.
 In contrast to our approach, where data is distributed and also the evaluation of metrics is distributed, Luzzu does not provide any large-scale processing of the data. 
 It only uses Spark streaming for loading the data which is not part of the core framework. 
+
 Another approach proposed for assessing the quality of large-scale medical data implements Hadoop Map/Reduce~\cite{BonnerMKBTMCA15}. 
 It takes advantage of query optimization and join strategies which are tailored to the structure of the data and the \gls{SPARQL} queries for that particular dataset. In addition, this work, differently from our approach, does not assess any data quality metric defined in~\cite{zaveri2015quality}.
 The work in~\cite{BenbernouO17} propose a reasoning approach to derive inconsistency rules and implements a Spark-based implementation of the inference algorithm for capturing and cleaning inconsistencies in \gls{RDF} datasets. 
 The inference generally incurs higher complexity. Our approach is designed for scalability, and we also use Spark-based implementation for capturing inconsistencies in the data.
 While the approach in~\cite{BenbernouO17} needs manual definitions of the inconsistency rules, our approach runs automatically, not only for consistency metrics but also for other quality metrics. 
 In addition, we test the performance of our approach on large-scale \gls{RDF} datasets while their approach is not experimentally evaluated. 
+
 LD-Sniffer~\cite{Mihindukulasooriya2016LDSA}, is a tool for assessing the accessibility of Linked Data resources according to the metrics defined in the Linked Data Quality Model. 
 The limitation of this tool, besides that it is a centralized version, is that it does not provide most of the quality assessment metrics defined in~\cite{zaveri2015quality}. 
 In addition to above, there is a lack of unified structure to propose and develop new quality metrics that are scalable and less computationally expensive.
+
+LiQuate~\cite{LiQuateOTM2013} is another tool which combines Bayesian Networks and rule-based systems for analyzing the quality of the data and links in the \gls{LOD} cloud.
+It uses the probabilistic methods for exploring the assessed datasets for completeness, redundancies, and inconsistencies.
+It has a two-fold approach.
+First, it detects the ambiguities and then, links to solve these ambiguities are inferred and suggested to the user for resolving the identified quality problems.
+The domain expert is required for identifying such rules for the Bayesian Network.
+
+WIQA~\cite{WIQABizer2009} is another quality assessment framework that provides a mechanism for creating and applying a number of policies driven by the provenance and background context related to the data providers.
+WIQA provides a SPARQL- like a language (WIQA-PL) for applying any assessment metric over the defined quality metric. 
+It does not report any quality metadata or quality problem reports but rather an assessment result that includes the set of matching triples with a description of why such triple attain the policy.
+
+LINK-QA~\cite{LINDQA2012Gueret} is a quality assessment framework that allows for the assessment of Linked Data mappings using network metrics i.e. degree, clustering coefficient, centrality, \gls{OWL} $\verb|sameAs|$ chains, and descriptive richness through \gls{OWL} $\verb|sameAs|$.
+These metrics has been proposed using the framework on a set of known good and bad links generated by a common mapping system, and show the behavior of those metrics.
+The system generates HTML reports for the results of the quality assessment. 
+
+RDFUnit~\cite{RDFUnit2014Kontokostas} is another quality assessment system for Linked Data via test-driven quality checks.
+It follows the test-driven software development concept by providing a set of test-cases, which help to ensure a basic level of quality.
+The proposed methodology assesses the quality of the \gls{RDF} data resources, based on a formalization of bad smells and data quality issues.
+Such a formalization employ \gls{SPARQL} queries templates into concrete quality test queries.
+The main focus of RDFUnit is to perform an integrity check via \gls{SPARQL} patterns.
+The quality of the data is assessed by executing custom \gls{SPARQL} queries against different datasets using \gls{SPARQL} endpoints.
+Test case results including quality values and quality problems reported from RDFUnit are represented in a form of \gls{RDF} visualized as HTML.
 
 Based on the identified limitations of these aforementioned approaches, we have introduced DistQualityAssessment which bases its computation and evaluations mainly in-memory.
 As a result the computation of the quality metrics show a high performance for large-scale datasets.
@@ -131,18 +166,26 @@ PigSPARQL~\cite{Schatzle2011PMS} uses Hadoop based implementation of vertical pa
 It translates \gls{SPARQL} queries into Pig\furl{https://pig.apache.org/} LATIN queries and runs them using the Pig engine.
 A most recent approach based on MapReduce is RYA~\cite{Punnoose2012Rya}.
 It is a Hadoop based scalable \gls{RDF} store which uses Accumulo\furl{accumulo.apache.org} as a distributed key-value store for indexing the \gls{RDF} triples.
+RYA indexes triples into three tables and replicate them across the cluster for leveraging the indexes over all the possible records.
+It has the mechanism of performing join reorder, but it lacks of the in-memory computation, which makes it not comparable with other systems.
 One of RYA's advantages is the power of performing join reorder. 
 The main drawback of RYA is that it relies on disk-based processing increasing query execution times.
 Other \gls{RDF} systems like JenaHBase~\cite{KhadilkarKTC2012} and H2RDF+~\cite{PapailiouKTKK13} use the Hadoop database HBase for storing triple and property tables.
-
 SHARD~\cite{Rohloff2010SHARD} is one approach which groups \gls{RDF} data into a dedicated partition so-called semantic-based partition.  
 It groups these \gls{RDF} data by subject and implements a query engine which iterates through each of the clauses used on the query and performs a query processing. 
 A MapReduce job is created while scanning each of the triple patterns and generates a single plan for each of the triple pattern which leads to a larger query plan, therefore, it contains too many Map and Reduces jobs. 
 Our partitioning algorithm implemented on Semantic-based query engine is based on SHARD, but instead of creating MapReduce jobs we employ the Spark framework in order to increase scalability.
 
+While the MapReduce paradigm has been realized for disk-based as well as in-memory processing, the concept is not concerned with controlling aspects of general distributed workflows, such as which intermediate results to cache. 
+As a consequence, high level frameworks were devised which may use MapReduce as a building block.
+Apache Spark is one of them~\cite{zaharia2012resilient}.
+Below, we will list some of the approaches which make use of the Apache Spark (in-memory computation) framework. 
+
 \defn{In-Memory systems}
+S2RDF~\cite{Schatzle:2016:SRQ:2977797.2977806} and SPARQLGX~\cite{sparqlgx-iswc-2016} approaches are considered the most recent distributed SPARQL evaluators over large-scale RDF datasets.
 S2RDF~\cite{Schatzle:2016:SRQ:2977797.2977806} is a distributed query engine which translates \gls{SPARQL} queries into SQL ones while running them on Spark-SQL. 
 It introduces a data partitioning strategy that extends vertical partitioning with additional statistics, containing pre-computed semi-joins for query optimization.
+While doing so, S2RDF avoid tuples which does not have counterparts in the referenced relation (join) which reduces the query input size and thus execution runtime.
 SPARQLGX~\cite{sparqlgx-iswc-2016} is similar to S2RDF, but instead of translating \gls{SPARQL} to SQL, it maps \gls{SPARQL} into direct Spark \gls{RDD} operations. 
 It is a scalable query engine which is capable of evaluating efficiently the \gls{SPARQL} queries over distributed \gls{RDF} datasets~\cite{graux2018multi}.
 It uses a simplified VP approach, where each predicate is assigned to a specific parquet file. 

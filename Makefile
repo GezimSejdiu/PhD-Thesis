@@ -1,6 +1,6 @@
 compile:
-	latex thesis
+	pdflatex thesis
 	biber thesis 
-	latex thesis 
+	pdflatex thesis 
 	makeglossaries thesis
 	pdflatex thesis

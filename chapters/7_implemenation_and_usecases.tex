@@ -93,7 +93,7 @@ It uses Sparqlify\furl{https://github.com/AKSW/Sparqlify} as a SPARQL-to-SQL rew
 Query results can then be further processed by other modules in the SANSA Framework.
 
 \defn{Inference Layer} 
-Both RDFS and \gls{OWL} contain schema information in addition to links between different resources. 
+Both \gls{RDFS} and \gls{OWL} contain schema information in addition to links between different resources. 
 This additional information and rules allows to perform reasoning on the knowledge bases in order to infer new knowledge and expanding the existing one. 
 The core of the inference process is to continuously apply schema related rules on the input data to infer new facts. 
 This process is helpful for deriving new knowledge and for detecting inconsistencies in the knowledge base.
@@ -149,12 +149,12 @@ In the following, we provide a concise description for the examples grouped by t
     \begin{enumerate}
       \item Reading and writing triple files from \gls{HDFS} or file system and some basic triple operations.
       \item A distributed evaluation of numerous \gls{RDF} Dataset Statistics dubbed RDF-Stats (see~Figure~\ref{fig:notebooks}), for example, property distribution, class distribution, distinct subjects/objects/entities as well as statistics summary.
-      \item A distributed evaluation of numerous RDF Dataset quality assessment metrics i.e schema completeness, conciseness, interlinking, etc.
+      \item A distributed evaluation of numerous \gls{RDF} Dataset quality assessment metrics i.e schema completeness, conciseness, interlinking, etc.
       \item Assigning weights to a given entity based on the Spark GraphX PageRank algorithm after triples have been transformed to a graph representation (i.e.~PageRank for resources).
     \end{enumerate}
     \item \emphb{Query}. 
     The example applies Sparqlify\furl{http://aksw.org/Projects/Sparqlify.html}, which is a SPARQL-to-SQL rewriter, for data partitioning and schema extraction. The queries are executed using the SparkSQL engine.
-    \item \emphb{\gls{RDF} inference}. The examples apply a reasoning profile (RDFS Full, RDFS Simple, \gls{OWL} Horst, Transitive) on a given input file with an optimised execution plan.
+    \item \emphb{\gls{RDF} inference}. The examples apply a reasoning profile (\gls{RDFS} Full, \gls{RDFS} Simple, \gls{OWL} Horst, Transitive) on a given input file with an optimised execution plan.
     \item \emphb{OWL}. The examples provided for the OWL layer demonstrate the process of loading an \gls{OWL} file into Spark \gls{RDD}, a Spark Dataset, or a Flink DataSet.
     \item \emphb{Machine Learning}.
     \begin{enumerate}

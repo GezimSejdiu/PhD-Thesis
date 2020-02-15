@@ -4,7 +4,7 @@
 %==============================================================================
 
 In this chapter, we summarize the work done during this thesis and highlight the main results.
-During this thesis we study the research problem of efficient distributed in-memory computation and processing of \gls{RDF} datasets.
+During this thesis we study the research problem of efficient distributed in-memory processing of \gls{RDF} datasets.
 
 In particular, we address the problems of Scalable Computation of \gls{RDF} Dataset Statistics (cf. Chapter~\ref{chapter:dist_lod_stats}), Quality Assessment of \gls{RDF} Datasets at Scale (cf. Chapter~\ref{chapter:dist_quality_assessment}), Scalable and Efficient \gls{SPARQL} query evaluation (cf. Chapter~\ref{chapter:scalable_rdf_querying}), and usage of such scalable approaches into real-world use cases (cf. Chapter~\ref{chapter:implementation_and_use_cases}).
 
@@ -27,7 +27,7 @@ Today, we count more than 10,000 datasets made available online following Semant
 Nevertheless, many applications, such as data integration, search, and interlinking, may not take the full advantage of the data without having a priori statistical information about its internal structure and coverage.
 In fact, there are already a number of tools, which offer such statistics, providing basic information about \gls{RDF} datasets and vocabularies.
 However, those usually show severe deficiencies in terms of performance once the dataset size grows beyond the capabilities of a single machine.
-To address~\ref{rqc:1}, we introduce a software component for statistical calculations of large \gls{RDF} datasets, which scales out to clusters of machines.
+To address~\ref{rqc:1}, in Chapter~\ref{chapter:dist_lod_stats} we introduce a software component for statistical calculations of large \gls{RDF} datasets, which scales out to clusters of machines.
 More specifically, we describe the first distributed in-memory approach for computing 32 different statistical criteria for \gls{RDF} datasets using Apache Spark.
 The preliminary results show that our distributed approach improves upon a previous centralized approach we compare against and provides approximately linear horizontal scale-up. 
 The criteria are extensible beyond the 32 default criteria, is integrated into the larger SANSA framework and employed in at least four major usage scenarios beyond the SANSA community.
@@ -54,7 +54,7 @@ Today, we count more than 10,000 datasets being available online following Linke
 These standards allow data to be machine readable and inter-operable.  
 Nevertheless, many applications, such as data integration, search, and interlinking, cannot take full advantage of Linked Data if it is of low quality.
 There exist a few approaches for the quality assessment of Linked Data, but their performance degrades with the increase in data size and quickly grows beyond the capabilities of a single machine.
-To answer question~\ref{rqc:2}, in this thesis, we present DistQualityAssessment -- an open source implementation of quality assessment of large \gls{RDF} datasets that can scale out to a cluster of machines.
+To answer question~\ref{rqc:2}, in this thesis, we present DistQualityAssessment (cf.\ Chapter~\ref{chapter:dist_quality_assessment} -- an open source implementation of quality assessment of large \gls{RDF} datasets that can scale out to a cluster of machines.
 This is the first distributed, in-memory approach for computing different quality metrics for large \gls{RDF} datasets using Apache Spark. We also provide a quality assessment pattern that can be used to generate new scalable metrics that can be applied to big data.
 The work presented here is integrated with the SANSA framework and has been applied to at least three use cases beyond the SANSA community.   
 The results show that our approach is more generic, efficient, and scalable as compared to previously proposed approaches.
@@ -78,7 +78,7 @@ One of the key features of Big Data is its complexity in terms of representation
 One existing way to deal with it is offered by Semantic Web standards.
 Among them, \gls{RDF} --which proposes to model data with triples representing edges in a graph-- has received a large success and the semantically annotated data has grown steadily towards a massive scale.
 Therefore, there is a need for scalable and efficient query engines capable of retrieving such information.
-To answer~\ref{rqc:3}, we propose scalable approaches for \gls{SPARQL} query evaluation over distributed \gls{RDF} data. 
+To answer~\ref{rqc:3}, in Chapter~\ref{chapter:scalable_rdf_querying} we propose scalable approaches for \gls{SPARQL} query evaluation over distributed \gls{RDF} data. 
 First, Sparklify -- a scalable software component for efficient evaluation of \gls{SPARQL} queries over distributed \gls{RDF} datasets. 
 It uses Sparqlify as a SPARQL-to-SQL rewriter for translating SPARQL queries into Spark executable code.
 Our preliminary results demonstrate that our approach is more extensible, efficient, and scalable as compared to state-of-the-art approaches.
@@ -110,7 +110,8 @@ Last but not least, the question we want to answer in the scope of the thesis is
 With the increase of \gls{RDF} data, new challenges arise.
 With that in mind, new technologies need to be adaptable enough to work on different domain-specific applications.
 To answer~\ref{rqc:4}, we implemented and integrated all the proposed approaches throughout this thesis into a larger SANSA framework.
-Within SANSA, we have applied our approaches into three different use cases.
+Within SANSA, we have applied our approaches into many different use cases.
+On the scope of this thesis, we mention three of them (cf.\ Chapter~\ref{chapter:implementation_and_use_cases}).
 For the Ethereum analysis use case, we show some of the potential use cases of scalable analysis of large Ethereum \gls{RDF} data, i.e. the Hub and Authorities transaction network analysis, and Crypto Kitties analysis.
 During the development and evaluation of this use case, we were able to show and demonstrate the feasibility and scalability of our approach when dealing with a large amount of data.
 For the Big Data logs mining, we show how our approaches can be used to mine different logs generated by the stack of Big Data components for further analysis such as root cause analysis.
