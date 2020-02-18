@@ -125,16 +125,18 @@ In this section, we discuss the limitations we identified during this study and 
 In the following we summarize the limitations and future directions on each of the main contributions of this thesis.
 
 \begin{itemize}
-    \item \textit{Large-scale \gls{RDF} Dataset Statistics} -- 
-    We plan to employ distributed statistics as an insight when performing joint optimization when running \gls{SPARQL} queries. 
-    Sparklify and Semantic-based approaches may benefit when knowing the structure of the data and re-order joins accordingly.
-    Another scenario of benefiting from having a knowledge of the dataset characteristics is when designing a recommended partition system when using different partitioning approaches presented during this thesis.
-    The recommender system will make use of DistLODStats as a feature engineering mechanism for better understanding of the internals of the input dataset. 
-    Later, it propose a best partition strategy to be used.
+    \item \textit{Large-scale \gls{RDF} Dataset Statistics} --
+    In Chapter~\ref{chapter:dist_lod_stats} we have demonstrated that our approach can scale and process large amount of \gls{RDF} data as compared with centralized approach.
+    Nevertheless, we plan to further improve time efficiency by persisting the data to an even higher extend more in memory and perform load balancing, which could further improve the performance.
+    Moreover, as our implementation is purely batch processing, in which the data chunks are normally very large we plan to investigate additional techniques for lowering the network overhead and io footprint.
+    In this regard, efficient compression (e.g. \gls{HDT}~\cite{HDTFernandez2013}) methods for lowering the data communication would be very relevant.
+    Finally, as our main focus in on applying distributed techniques to \gls{RDF} data processing, we plan to port the existing solution for near real-time computation of \gls{RDF} dataset statistics.
+
     \item \textit{Assessment of \gls{RDF} Datasets at Scale} -- 
-    Although we have achieved reasonable results in terms of scalability, we plan to further improve time efficiency by applying intelligent partitioning strategies and persist the data to an even higher extent in memory and perform dependency analysis in order to evaluate multiple metrics simultaneously. 
+    Although we have achieved reasonable results in terms of scalability (cf.\ Chapter~\ref{chapter:dist_quality_assessment}), we plan to further improve time efficiency by applying intelligent partitioning strategies and persist the data to an even higher extent in memory and perform dependency analysis in order to evaluate multiple metrics simultaneously. 
     We also plan to explore near real-time interactive quality assessment of large-scale \gls{RDF} data using Spark Streaming.
     Finally, in the future we intend to develop a declarative plugin for the current work using Quality Metric Language (QML)~\cite{debattista2016luzzu}, which gives users the ability to express, customize and enhance quality metrics.
+    
     \item \textit{Scalable \gls{RDF} querying} -- 
     In this thesis, we showed that the application of OBDA tooling to Big Data frameworks achieves promising results in terms of scalability. 
     We present a working prototype implementation that can serve as a baseline for further research. 
@@ -143,17 +145,23 @@ In the following we summarize the limitations and future directions on each of t
     Our next steps include expanding our parser to support more \gls{SPARQL} fragments and adding statistics to the query engine while evaluating queries. 
     We want to analyze the query performance in the large-scale \gls{RDF} datasets and explore prospects for the improvement.
     For example, we intend to investigate the re-ordering of the \gls{BGP}s and evaluate the effects on query execution time.
+    In this regard, efficient strategies as well as detailed cost function for query plan optimization have to be considered.
+    In addition, we also plan to consider other data management operations i.e. additions, updates, deletions and materialization of the results need to be considered as well.
+    One solution could be provisioning the delta lake solution.
     
-    %A comprehensive, open-source \gls{RDF} processing and analytics stack
-    \item \textit{Adaptability and Use Cases} -- 
-    We presented some of the use cases where our contribution are used. 
-    It shows a significant adoption and easy to use of the approaches ported withing the SANSA framework, however, we further plan to improve the usability and guide of using our framework in the cloud.
+    
+    
+     We plan to employ distributed statistics as an insight when performing joint optimization when running \gls{SPARQL} queries. 
+    Sparklify and Semantic-based approaches may benefit when knowing the structure of the data and re-order joins accordingly.
+    Another scenario of benefiting from having a knowledge of the dataset characteristics is when designing a recommended partition system when using different partitioning approaches presented during this thesis.
+    The recommender system will make use of DistLODStats as a feature engineering mechanism for better understanding of the internals of the input dataset. 
+    Later, it propose a best partition strategy to be used.
 \end{itemize}
 
 \section{Closing Remarks}
 With the increase amount of the \gls{RDF} data, processing large-scale \gls{RDF} datasets is constantly facing challenges and lot of potential for exploration.
 During this thesis, we have shown the benefits of distributed computing frameworks to successfully tackle the problem of scalable and efficient processing of \gls{RDF} datasets.
 Future research work can build upon the contributions presented during this thesis as a starting point for an comprehensive and out-of-the-box scalable processing of large-scale \gls{RDF} datasets.
-Main contributions of this thesis have been integrated within the SANSA framework and are making an impact to the semantic web community and several application domains -- resulting in a SANSA framework and being used in many European research projects.
+Main contributions of this thesis have been integrated within the SANSA framework and are making an impact to the semantic web community and several semantic web applications in the big data era -- resulting in a SANSA framework and being used in many European research projects.
 
 

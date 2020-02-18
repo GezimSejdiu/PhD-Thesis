@@ -138,12 +138,14 @@ The quality of the data is assessed by executing custom \gls{SPARQL} queries aga
 Test case results including quality values and quality problems reported from RDFUnit are represented in a form of \gls{RDF} visualized as HTML.
 
 Based on the identified limitations of these aforementioned approaches, we have introduced DistQualityAssessment which bases its computation and evaluations mainly in-memory.
-As a result the computation of the quality metrics show a high performance for large-scale datasets.
+As a result the computation of the quality metrics show a high performance for large-scale datasets (cf.\ Chapter~\ref{chapter:dist_quality_assessment}).
 
 \section{SPARQL query evaluators}
 
 \defn{Partitioning of RDF Data}
-Centralized \gls{RDF} stores use relational (e.g., Sesame \cite{BroekstraKH02}), property (e.g., Jena~\cite{Wilkinson06}), or binary tables (e.g., SW-Store~\cite{AbadiMMH09}) for storing \gls{RDF} triples or maintain the graph structure of the \gls{RDF} data (e.g., gStore~\cite{ZouMCOZ11}). 
+In recent years, significant effort has been made on the development and designing of efficient solutions for managing and processing \gls{RDF} data.
+Centralized \gls{RDF} stores use relational (e.g., Sesame \cite{BroekstraKH02}), property (e.g., Jena~\cite{Wilkinson06}), or binary tables (e.g., SW-Store~\cite{AbadiMMH09}) for storing \gls{RDF} triples or maintain the graph structure of the \gls{RDF} data (e.g., gStore~\cite{ZouMCOZ11}).
+These tools have achieved high performance on processing \gls{RDF} data over a single computation (centralized) node, neither by designing novel data representation of the underlying data or applying different rational optimization techniques w.r.t to the data storage or processing.
 For dealing with big \gls{RDF} datasets, vertical partitioning and exhaustive indexing are commonly employed techniques. 
 For instance, Abadi et al.~\cite{AbadiMMH07} introduce a vertical partitioning approach in which each predicate is mapped to a two-column table containing the subject and object. 
 This approach has been extended in Hexastore~\cite{WeissKB08} to include all six permutations of subject, predicate, and object (s, p, o). 
@@ -183,7 +185,7 @@ Below, we will list some of the approaches which make use of the Apache Spark (i
 
 \defn{In-Memory systems}
 S2RDF~\cite{Schatzle:2016:SRQ:2977797.2977806} and SPARQLGX~\cite{sparqlgx-iswc-2016} approaches are considered the most recent distributed SPARQL evaluators over large-scale RDF datasets.
-S2RDF~\cite{Schatzle:2016:SRQ:2977797.2977806} is a distributed query engine which translates \gls{SPARQL} queries into SQL ones while running them on Spark-SQL. 
+S2RDF~\cite{Schatzle:2016:SRQ:2977797.2977806} is a distributed query engine which translates \gls{SPARQL} queries into SQL ones while running them on Spark-SQL~\cite{Armbrust2015SSR}. 
 It introduces a data partitioning strategy that extends vertical partitioning with additional statistics, containing pre-computed semi-joins for query optimization.
 While doing so, S2RDF avoid tuples which does not have counterparts in the referenced relation (join) which reduces the query input size and thus execution runtime.
 SPARQLGX~\cite{sparqlgx-iswc-2016} is similar to S2RDF, but instead of translating \gls{SPARQL} to SQL, it maps \gls{SPARQL} into direct Spark \gls{RDD} operations. 
