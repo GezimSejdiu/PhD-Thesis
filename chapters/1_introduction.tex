@@ -12,29 +12,27 @@ To create such data, the information represented in unstructured form or referri
 \gls{RDF} has a very flexible data model comprised of triples (subject, predicate, object), that can be interpreted as a labelled directed graph (s, p, o) with s and o being arbitrary resources (vertices) and p being the property (edge from s to o) among these two resources. 
 Thus, a set of \gls{RDF} triples forms an inter-linkable graph whose flexibility allows to represent a large variety of highly to loosely structured datasets. 
 
-%\subsection{Motivation}
-%\label{sec:motivation}
-RDF, which was standardized by \gls{W3C}, is increasingly being adapted to model data in a variety of scenarios, partly due to the popularity of projects like linked open data and schema.org. 
+\gls{RDF}, which was standardized by \gls{W3C}, is increasingly being adapted to model data in a variety of scenarios, partly due to the popularity of projects like linked open data and schema.org. 
 This linked or semantically annotated data has grown steadily towards a massive scale \furl{http://lodstats.aksw.org/}.
 
 Nevertheless, most existing solutions are limited to centralized environments only.
-In order to deal with the massive data being produced at scale, the existing big data frameworks like Apache Spark\furl{http://spark.apache.org/} and Apache Flink\furl{https://flink.apache.org/} offer fault tolerant, high available and scalable approaches to process this data efficiently. 
-These frameworks have matured over the recent years and offer a proven and reliable method for processing of large scale unstructured data.
+In order to deal with the massive data being produced at scale, the existing big data frameworks like Apache Spark\furl{http://spark.apache.org/} and Apache Flink\furl{https://flink.apache.org/} offer fault-tolerant, high available and scalable approaches to process this data efficiently. 
+These frameworks have matured over recent years and offer a proven and reliable method for processing of large scale unstructured data.
 
 In the past few years, MapReduce based, and related frameworks for Big Data processing have been explored for distributed processing of \gls{RDF} data as well. 
 Some examples include the Spark-based S2RDF~\cite{Schatzle:2016:SRQ:2977797.2977806} which rewrites \gls{SPARQL} queries to SQL by using prior research by the RDB2RDF community and augments this approach by using precomputed semi-join tables. Approaches like SparkRDF~\cite{xu2015sparkrdf}, H2RDF~\cite{papailiou2013h} and H2RDF+~\cite{papailiou2012h2rdf} use triple dataset statistics to find best merge-join orders for efficient querying.
 But, they are rather focused on one key element of the semantic stack, i.e. querying.
-Therefore, there is a need for an comprehensive framework which offer capabilities of exploring, validating and querying large amount of \gls{RDF} data at scale.
-The main motivations behind using distributed computing are being able to handle data that does not fit on a single machine, and achieve a speed-up and scalability.
-Systems like \textit{Apache Spark} employ the \gls{BSP} synchronisation approach, i.e. each parallel iteration/task has to wait for a synchronisation step - all \textit{sub-tasks} must finish. 
+Therefore, there is a need for a comprehensive framework that offers capabilities of exploring, validating and querying a large amount of \gls{RDF} data at scale.
+The main motivations behind using distributed computing are being able to handle data that does not fit on a single machine and achieve a speed-up and scalability.
+Systems like \textit{Apache Spark} employ the \gls{BSP} synchronization approach, i.e. each parallel iteration/task has to wait for a synchronization step - all \textit{sub-tasks} must finish. 
 This ensures correctness and fault tolerance.
-However many applications, i.e. ranking resources (as PageRank is for web pages) are usually iteratively convergent in nature and this synchronisation barrier at the end of each iteration overshadows the speed-up gained by distributed computation. 
-In this thesis, we aims to exploit the existing communication, synchronisation and distribution techniques to optimise the performance of Distributed Processing of \gls{RDF} Datasets when dealing with large amount of data.
+However many applications, i.e. ranking resources (as PageRank is for web pages) are usually iteratively convergent in nature and this synchronization barrier at the end of each iteration overshadows the speed-up gained by distributed computation. 
+In this thesis, we aim to exploit the existing communication, synchronization and distribution techniques to optimize the performance of Distributed Processing of \gls{RDF} Datasets when dealing with large amounts of data.
 
 \section{Problem Definition and Challenges}
 \label{sec:problem-definition-and-challenges}
 Processing large-scale \gls{RDF} datasets is considered as one of the most challenging tasks in the Semantic Web~\cite{Benjamins02sixchallenges}.
-The increase of the \gls{RDF} data in a rapid manner, brings multiple challenges when exploring and getting more insight from the data.
+The increase of the \gls{RDF} data in a rapid manner brings multiple challenges when exploring and getting more insight from the data.
 More specifically, we face (i) a knowledge exploration problem, i.e. knowing the internal characteristics of the dataset. 
 (ii) a data quality problem, i.e. which dataset is considered fit for use.
 (iii) a processing challenge, i.e. can we retrieve and manage \gls{RDF} data when the size of the dataset increases.
@@ -43,11 +41,11 @@ In the following sections, we define the challenges that need to be addressed wh
 
 \subsection{Challenge 1: Scalable Computation of RDF Dataset Statistics}
 \label{sec:c1}
-The first challenge to overcome when dealing with large-scale RDF dataset is to have \textit{a priori} statistical information about its internal structure and coverage.
+The first challenge to overcome when dealing with large-scale RDF datasets is to have \textit{a priori} statistical information about its internal structure and coverage.
 A significant fraction of RDF data available online\footnote{\scriptsize \url{https://lod-cloud.net/} (Retrieved in September 2019)} today are stored as \gls{LOD}.
-Large \gls{RDF} datasets, i.e. DBpeida~\cite{dbpedia-swj} are often collaborative and contains data which has been extracted semi-automatically or has been ingested from different sources.
-Hence, such large-scale \gls{RDF} datasets does not have an apriori view of the data or a strict unified view for structuring the instances.
-As a result, these processes derive noisy and, in a wrong case incomplete data~\cite{zaveri2015quality}.
+Large \gls{RDF} datasets, i.e. DBpeida~\cite{dbpedia-swj} are often collaborative and contain data that has been extracted semi-automatically or has been ingested from different sources.
+Hence, such large-scale \gls{RDF} datasets do not have an apriori view of the data or a strict unified view for structuring the instances.
+As a result, these processes derive noisily and, in a wrong case incomplete data~\cite{zaveri2015quality}.
 In particular, for many applications such as data integration~\cite{michel:tel-01508602}, semantic search~\cite{Tonon2012CII}, interlinking~\cite{Dutta2014PAI}, or \gls{RDF} data partitioning do not take full advantage of the data without knowing the internal structure of the data.
 In fact, there are already a number of tools, which offer such statistics, providing basic information about \gls{RDF} vocabularies~\cite{vandenbussche2015linked} and datasets~\cite{conf/dexaw/LangeggerW09,ermilov-2013-kesw}.
 However, those efforts showed severe deficiencies in terms of performance when the dataset size goes beyond the main memory size of a single machine.
@@ -55,7 +53,7 @@ Therefore, to produce type information about large-scale \gls{RDF} datasets, we 
 
 \subsection{Challenge 2: Quality Assessment of RDF Dataset at Scale}
 \label{sec:c2}
-Apart from knowing the internals of a given dataset, deciding how quality and what information is considered "\textit{fit for use}" is a challenge when size of a dataset goes beyond the capacity of a single machine.
+Apart from knowing the internals of a given dataset, deciding how quality and what information is considered "\textit{fit for use}" is a challenge when the size of a dataset goes beyond the capacity of a single machine.
 Assessing the quality of \gls{RDF} datasets is a crucial step to enhance the quality of the data being processed and published.
 The process of assessing the quality of the data should be efficient and made available in order to facilitate the difference when it comes to finding the right information that is fit for use.
 Some efforts have been made to provide a mechanism to assess the quality of the \gls{RDF} datasets~\cite{Debattista0AC18,farber2018,beek2018,debattista2016luzzu}.
@@ -65,26 +63,25 @@ This limits the applicability of existing solutions to medium-sized datasets onl
 
 \subsection{Challenge 3: Efficient and Scalable SPARQL query evaluation}
 \label{sec:c3}
-More and more structured data is generated by an increasing number of organization that are using \gls{RDF} as a model for data representation.
-Therefore, analytics over such large-scale \gls{RDF} datasets lead us to a complete new level of computational complexity.
+More and more structured data is generated by an increasing number of organizations that are using \gls{RDF} as a model for data representation.
+Therefore, analytics over such large-scale \gls{RDF} datasets lead us to a completely new level of computational complexity.
 As a consequence, it becomes difficult to process such datasets using conventional approaches.
 Many standalone \gls{SPARQL} query evaluators have been introduced in the past, nevertheless, as the volume of \gls{RDF} data increases, these single-machine solutions encounter performance bottlenecks in terms of data processing, loading, and querying.
-For that reason, there is a need for a scalabale and efficient framework which can handle large-scale \gls{RDF} datasets.
+For that reason, there is a need for a scalable and efficient framework that can handle large-scale \gls{RDF} datasets.
 With that in mind, several approaches for distributed \gls{RDF} data processing have been proposed, e.g~\cite{sparqlgx-iswc-2016, Schatzle:2016:SRQ:2977797.2977806}.
-We want to investigate and study implementations of current \gls{SPARQL} query evaluators through system-level characterizations and consequently propose our distributed approaches for RDF data processing.
-
+We want to investigate and study implementations of current \gls{SPARQL} query evaluators through system-level characterizations and consequently propose our distributed approaches for \gls{RDF} data processing.
 
 \subsection{Challenge 4: Adaptability of Exploiting large-scale RDF Datasets}
 \label{sec:c4}
 As the size of distributed systems for handling large-scale \gls{RDF} datasets grows, it becomes interestingly difficult to extract the right features from them.
-Researchers has to deal with a vary dynamic set of environments that these solutions are in contact with and it is becoming difficult to design a comprehensive framework that will be able to cater to all the user's needs in those settings.
-In this thesis we describe our approach with best practices, tools and guidelines and show how it can be used (with some real use cases) to deploy and perform large-scale \gls{RDF} processing easily and efficiently.
+Researchers have to deal with a very dynamic set of environments that these solutions are in contact with and it is becoming difficult to design a comprehensive framework that will be able to cater to all the user's needs in those settings.
+In this thesis, we describe our approach with best practices, tools, and guidelines and show how it can be used (with some real use cases) to deploy and perform large-scale \gls{RDF} processing easily and efficiently.
 
 
 \section{Research Questions}
 \label{sec:research-questions}
 
-As stated in the motivation section above and identified challenges, we define a main research question:
+As stated in the motivation section above and identified challenges, we define the main research question:
 
 \begin{tcolorbox}
 \centering
@@ -93,7 +90,7 @@ As stated in the motivation section above and identified challenges, we define a
 
 This research question then breaks down into four specific research questions.
 
-Each challenge is mapped to a specific research questions and altogether contribute to the overall research problem definition tackled throughout this thesis.
+Each challenge is mapped to specific research questions and altogether contribute to the overall research problem definition tackled throughout this thesis.
 
 \begin{tcolorbox}
 \textbf{\rqNr[RQ1]\label{rq:1}}: How can we efficiently explore the structure of the large-scale \gls{RDF} datasets?
@@ -121,17 +118,18 @@ Results obtained during the research question~\ref{rq:2} allow us to address the
 With the objective of answering this research question, we investigate different data storage representation and \gls{SPARQL} query evaluation and propose two different approaches for scalable and efficient \gls{RDF} data processing.
 First, we introduce Sparklify: a scalable software component for efficient evaluation of \gls{SPARQL} queries over distributed \gls{RDF} datasets.
 It uses SPARQL-to-SQL rewriter techniques for translating \gls{SPARQL} queries into Spark executable code.
-Second approach we investigated and developed with the scope of this thesis, is a scalable approach to evaluate \gls{SPARQL} queries over distributed \gls{RDF} datasets using a semantic-based partitioning.
+The second approach we investigated and developed with the scope of this thesis is a scalable approach to evaluate \gls{SPARQL} queries over distributed \gls{RDF} datasets using a semantic-based partitioning.
 It groups the facts based on the subject and its associated triples.
 Results obtained during the research question~\ref{rq:3} allow us to address the defined challenge (cf. Section~\ref{sec:c3}). 
-Both approaches are implemented and integrated inside the state-of-the-art \gls{RDF} processing framework: SANSA.
+%Both approaches are implemented and integrated inside the state-of-the-art \gls{RDF} processing framework: SANSA.
 
 \begin{tcolorbox}
 \textbf{\rqNr[RQ4]\label{rq:4}}: How can we exploit large-scale \gls{RDF} datasets for a particular use case and ensure scalability?
 \end{tcolorbox}
 
 In response to this question, we present various use-cases and apply the techniques and approaches developed in this thesis.
-Our findings shows that the usage of distributed computing frameworks and semantic technologies for large-scale \gls{RDF} analysis can provide a more adaptive and scalable solution for each domain-specific application.
+Our findings show that the usage of distributed computing frameworks and semantic technologies for large-scale \gls{RDF} analysis can provide a more adaptive and scalable solution for each domain-specific application.
+\fixme{gs: rephrase}
 
 \section{Thesis Overview}
 \label{sec:thesis-overview}
@@ -144,7 +142,7 @@ Our contributions cover a spectrum of research areas in the scope of distributed
 \begin{figure*}
 \centering
 \includegraphics[width=1.0\columnwidth]{images/1_introduction/thesis-contributions.pdf}
-\caption{\textbf{Thesis Contributions}. Four are the main contributions of this thesis: (1) a scalable distributed approach for evaluation of RDF dataset statistics; (2) a scalable framework for quality assessment of RDF datasets; (3) a scalable framework for SPARQL evalaution of large RDF data; (4) a comprehensive, open-source RDF processing and analytics stack for distributed in-memory computing with the real use cases where the thesis results are applicable.}
+\caption{\textbf{Thesis Contributions}. Four are the main contributions of this thesis: (1) a scalable distributed approach for evaluation of RDF dataset statistics; (2) a scalable framework for quality assessment of RDF datasets; (3) a scalable framework for SPARQL evaluation of large RDF data; (4) a comprehensive, open-source RDF processing and analytics stack for distributed in-memory computing with the real use cases where the thesis results are applicable.}
 \label{fig:thesis-contributions}
 \end{figure*}
 %source: https://docs.google.com/presentation/d/1iacx2u1rCsCUb17GdTSpEitC6TwSuBFfD9s8yq7qWt4
@@ -152,7 +150,7 @@ Our contributions cover a spectrum of research areas in the scope of distributed
 \begin{enumerate}
     \item \textit{A Scalable Distributed Approach for Computation of \gls{RDF} Dataset Statistics}.
     
-    For a better view and type information when dealing with large-scale \gls{RDF} dataset we introduce DistLODStats, a software component for statistical calculations of large \gls{RDF} datasets, which scales out to clusters of machines.
+    For a better view and type of information when dealing with large-scale \gls{RDF} dataset we introduce DistLODStats, a software component for statistical calculations of large \gls{RDF} datasets, which scales out to clusters of machines.
     More specifically, we describe the first distributed in-memory approach for computing 32 different statistical criteria for \gls{RDF} datasets using Apache Spark.
     The preliminary results show that our distributed approach improves upon a previous centralized approach we compare against and provides approximately linear horizontal scale-up.
     The criteria are extensible beyond the 32 default criteria, is integrated into the larger SANSA framework and employed in at least four major usage scenarios beyond the SANSA community.
@@ -161,29 +159,29 @@ Our contributions cover a spectrum of research areas in the scope of distributed
     \item \textit{A Scalable Framework for Quality Assessment of \gls{RDF} Datasets}.
     
     Quality of the data is one of the key components when designing and performing \gls{RDF} processing tasks.
-    However, when dealing with large amount of \gls{RDF} data, it becomes a challenge processing and exploring such quantitative and qualitative information.
+    However, when dealing with large amounts of \gls{RDF} data, it becomes a challenge processing and exploring such quantitative and qualitative information.
     There exist a few approaches for the quality assessment of \gls{RDF} datasets, but their performance degrades with the increase in data size and quickly grows beyond the capabilities of a single machine. 
-    To address this, we present DistQualityAssessment -- an open source implementation of quality assessment of large \gls{RDF} datasets that can scale out to a cluster of machines.
+    To address this, we present DistQualityAssessment -- an open-source implementation of quality assessment of large \gls{RDF} datasets that can scale out to a cluster of machines.
     This is the first distributed, in-memory approach for computing different quality metrics for large \gls{RDF} datasets using Apache Spark. We also provide a quality assessment pattern that can be used to generate new scalable metrics that can be applied to big data.
     The work presented here is integrated with the SANSA framework and has been applied to at least three use cases beyond the SANSA community.   
     The results show that our approach is more generic, efficient, and scalable as compared to previously proposed approaches.
     See Chapter~\ref{chapter:dist_quality_assessment} for more information about this contribution, and publication~\cite{sejdiu-2019-sansa-dist-quality-assessment-iswc}.
-    The DistQualityAssessment approach contributes to answering research question~\ref{rq:2}.
+    The DistQualityAssessment approach contributes to answering the research question~\ref{rq:2}.
     
     \item \textit{A Scalable Framework for \gls{SPARQL} evaluation of large \gls{RDF} data}.
     
-    Over the last two decades, the amount of data which has been created, published and managed using Semantic Web standards and especially via \gls{RDF} has been increasing.
-    As a result, efficient processing of such big \gls{RDF} datasets has become challenging.
+    Over the last two decades, the amount of data that has been created, published and managed using Semantic Web standards and especially via \gls{RDF} has been increasing.
+    As a result, the efficient processing of such big \gls{RDF} datasets has become challenging.
     Indeed, these processes require, both efficient storage strategies and query-processing engines, to be able to scale in terms of data size.
-    In order to overcome this, we propose two different techniques which scale up to the cluster of machines.
+    In order to overcome this, we propose two different techniques that scale up to the cluster of machines.
     First, Sparklify: a scalable software component for efficient evaluation of \gls{SPARQL} queries over distributed \gls{RDF} datasets. It uses Sparqlify as a SPARQL-to-SQL rewriter for translating \gls{SPARQL} queries into Spark executable code.
     Our preliminary results demonstrate that Sparklify is more extensible, efficient, and scalable as compared to state-of-the-art approaches.
     Sparklify is integrated into a larger SANSA framework and it serves as a default query engine and has been used by at least three external use scenarios.
-    Second approach we investigated and developed with the scope of this thesis, is a scalable approach to evaluate \gls{SPARQL} queries over distributed \gls{RDF} datasets using a semantic-based partition and is implemented inside the state-of-the-art \gls{RDF} processing framework: SANSA.
-    An evaluation of the performance of semantic-based approach in processing large-scale \gls{RDF} datasets is also presented. 
+    The second approach we investigated and developed with the scope of this thesis is a scalable approach to evaluate \gls{SPARQL} queries over distributed \gls{RDF} datasets using a semantic-based partition and is implemented inside the state-of-the-art \gls{RDF} processing framework: SANSA.
+    An evaluation of the performance of a semantic-based approach in processing large-scale \gls{RDF} datasets is also presented. 
     The preliminary results of the conducted experiments show that it can scale horizontally and perform well as compared with the previous Hadoop-based system.
     It is also comparable with the in-memory \gls{SPARQL} query evaluators when there is less shuffling involved.
-    The Sparklify and semantic-based approaches contributes to answering research question~\ref{rq:3}.
+    The Sparklify and semantic-based approaches contribute to answering the research question~\ref{rq:3}.
     A more detailed information on these contributions is given in Chapter~\ref{chapter:scalable_rdf_querying}, and publications~\cite{2019-sansa-sparklify-iswc, sejdiu-2019-sansa-semantic-based-semantics, sansa-sparklify-ISWC-demo}.
     
     \item \textit{A comprehensive, open-source \gls{RDF} processing and analytics stack for distributed in-memory computing.} 
@@ -193,15 +191,15 @@ Our contributions cover a spectrum of research areas in the scope of distributed
     Alethio\footnote{\scriptsize \url{https://aleth.io/} (last accessed October 31{\textsuperscript{st}} 2019)}, is an advanced analytics platform making Ethereum more accessible and digestible for everyone.
     Their extensive data set contains large-scale blockchain transaction data modelled in \gls{RDF} (currently encompassing more than 20B triples\footnote{\scriptsize \url{https://linkeddata.aleth.io/} (last accessed October 31{\textsuperscript{st}} 2019)}) according to the structure of the Ethereum ontology~\cite{pfeffer2016ethon}.
     As the blockchain is evolving, many users want to know more about the important players of the chain. 
-    With Hub \& Authorities use case, we investigate and analyze the Ethereum blockchain network in order to identify the major entities across the transaction network. 
+    With Hub \& Authorities' use case, we investigate and analyze the Ethereum blockchain network in order to identify the major entities across the transaction network. 
     By leveraging the rich data available through Alethio's platform in the form of \gls{RDF} triples we learn about the Hubs and Authorities of the Ethereum transaction network.
     Alethio uses our approach for efficient reading and processing of such large-scale \gls{RDF} data (transactions on Ethereum blockchain) in order to perform analytics e.g. finding top accounts, or typical behavior patterns of exchanges' deposit wallets and more.
     In another use case where Alethio is involved is the CryptoKitties analysis use case.
-    CryptoKitties\footnote{\url{https://www.cryptokitties.co/} (last accessed October 31{\textsuperscript{st}} 2019)} is one of the first games to be built on blockchain technology.
+    CryptoKitties\footnote{\scriptsize \url{https://www.cryptokitties.co/} (last accessed October 31{\textsuperscript{st}} 2019)} is one of the first games to be built on blockchain technology.
     Our solution empowers Alethio to read and query the data at scale for further analysis: game performance and customer behaviors.
-    Within our solution, Alethio is able to get more insight from the CryptoKitties analyses, i.e the number of active users and amount of spent Ether or correlation between indicators (e.g. to determine whether richer owners have the tendency to collect special/rare kitties which are more expensive).
-    Second use case we were involved was about mining BigDataEurope project logs.
-    Big Data Europe (BDE)\furl{https://github.com/big-data-europe}~\cite{Auer+ICWE-2017} is an open source big data processing platform allowing users to deploy Big Data processing tools and frameworks. 
+    Within our solution, Alethio is able to get more insight from the CryptoKitties analyses, i.e the number of active users and the amount of spent Ether or correlation between indicators (e.g. to determine whether richer owners have the tendency to collect special/rare kitties which are more expensive).
+    The second use case we were involved in was about mining BigDataEurope project logs.
+    Big Data Europe (BDE)\furl{https://github.com/big-data-europe}~\cite{Auer+ICWE-2017} is an open-source big data processing platform allowing users to deploy Big Data processing tools and frameworks. 
     Those tools and frameworks usually generate large amounts of log data. 
     DistLODStats is used for computing statistics over those logs within the BDE platform. 
     BDE uses the Mu Swarm Logger service\furl{https://github.com/big-data-europe/mu-swarm-logger-service} for detecting docker events and convert their representation to \gls{RDF}. 
@@ -213,7 +211,7 @@ Our contributions cover a spectrum of research areas in the scope of distributed
     In this study, we present a flexible architecture to design pipelines able to aggregate \gls{POI}s from contextual to geographical dimensions in a single run. 
     This solution allows any kind of clustering algorithm combinations to compute \gls{AOI}s and is built on top of a Semantic Web stack which allows multiple-source querying and filtering through \gls{SPARQL}.
     The architecture is embedded inside a state-of-the-art Semantic Web stack, SANSA, and then benefits from the advantages of it.
-    The best practices, guidelines, easy to deploy and use in a lightweight allows us to quickly adapt the SANSA framework from the semantic web community and other field of data science, thus allowing us to answer research question~\ref{rq:4}.
+    The best practices, guidelines, easy to deploy and use in a lightweight allows us to quickly adapt the SANSA framework from the semantic web community and other fields of data science, thus allowing us to answer research question~\ref{rq:4}.
     Some of the use cases are described in Chapter~\ref{chapter:implementation_and_use_cases}, and publications~\cite{lehmann-2017-sansa-iswc, iermilov-2017-sansa-iswc-demo, sansa-hubs-and-authorities-transaction-semantics19-poster, piping-clustering-eswc19-poster, graux-2018-sansa-ethereum-semantics-poster, Auer+ICWE-2017}.
 
 \end{enumerate}
@@ -239,11 +237,11 @@ In this thesis, part of the work is based on the following publications~\cite{se
     
     \item Ivan Ermilov; Axel-Cyrille Ngonga Ngomo; Aad Versteden; Hajira Jabeen; \textbf{Gezim Sejdiu}; Giorgos Argyriou; Luigi Selmi; Jürgen Jakobitsch; and Jens Lehmann, “\href{https://svn.aksw.org/papers/2017/KESW_BDE_Workflow/public.pdf}{Managing Lifecycle of Big Data Applications},”; in KESW, 2017. \texttt{URL}:~\url{https://svn.aksw.org/papers/2017/KESW_BDE_Workflow/public.pdf}
     This article is a joint work with Ivan Ermilov, a PhD student at the University of Leipzig. 
-    In this article, I helped on the implementation of the proposed approach and SC4 (Transport) use case, reviewed related work, and prepared of the experiments and analysis of the obtained results.
+    In this article, I helped with the implementation of the proposed approach and SC4 (Transport) use case, reviewed related work, and preparation of the experiments and analysis of the obtained results.
 
     \item Sören Auer; Simon Scerri; Aad Versteden; Erika Pauwels; Angelos Charalambidis; Stasinos Konstantopoulos; Jens Lehmann; Hajira Jabeen; Ivan Ermilov; \textbf{Gezim Sejdiu}; Andreas Ikonomopoulos; Spyros Andronopoulos; Mandy Vlachogiannis; Charalambos Pappas; Athanasios Davettas; Iraklis A. Klampanos; Efstathios Grigoropoulos; Vangelis Karkaletsis; Victor Boer; Ronald Siebes; Mohamed Nadjib Mami; Sergio Albani; Michele Lazzarini; Paulo Nunes; Emanuele Angiuli; Nikiforos Pittaras; George Giannakopoulos; Giorgos Argyriou; George Stamoulis; George Papadakis; Manolis Koubarakis; Pythagoras Karampiperis; Axel-Cyrille Ngonga Ngomo; and Maria-Esther Vidal, “\href{http://jens-lehmann.org/files/2017/icwe_bde.pdf}{The BigDataEurope Platform – Supporting the Variety Dimension of Big Data},” in 17th International Conference on Web Engineering (ICWE2017), 2017. \texttt{URL}:~\url{http://jens-lehmann.org/files/2017/icwe_bde.pdf}
     This article is a joint work with the BDE consortium. 
-    In this article, I contributed within the semantic layer, more specifically; bringing the Big Data Analytics for RDF into BDE platform and co-contributing into dockerizing BDE components.
+    In this article, I contributed within the semantic layer, more specifically; bringing the Big Data Analytics for \gls{RDF} into the BDE platform and co-contributing into dockerizing BDE components.
      
 \end{enumerate}
     \item \emph{Demo \& Poster Papers (peer reviewed)}
@@ -272,20 +270,20 @@ Appendix~\ref{sec:appendix-publications} contains the complete list of publicati
 The thesis consists of eight chapters.
 %and is structured as follows:
 Chapter~\ref{chapter:intro} introduces the thesis starting with the main research problem and challenges, motivation, research questions, scientific contributions addressing research questions, and a list of published scientific papers describing these contributions.
-Chapter~\ref{chapter:preliminaries} presents basic concepts and background about Semantic Web technologies and Hadoop Ecosystem for a comprehensive overview of the research problem. 
+Chapter~\ref{chapter:preliminaries} presents basic concepts and background about Semantic Web technologies and the Hadoop Ecosystem for a comprehensive overview of the research problem. 
 Chapter~\ref{chapter:related} describes state-of-the-art efforts in the field of processing \gls{RDF} datasets w.r.t research problem.
 We provide an overview of existing RDF dataset statistics systems, quality assessment systems, and \gls{SPARQL} query evaluators in order to provide a thorough knowledge of their limitations, and the identified gaps we cover in this thesis.
-In Chapter~\ref{chapter:dist_lod_stats} we introduce a scalable approach for statistical calculation of large \gls{RDF} datasets, which scales out to cluster of machines.
+In Chapter~\ref{chapter:dist_lod_stats} we introduce a scalable approach for the statistical calculation of large \gls{RDF} datasets, which scales out to a cluster of machines.
 More specifically, we describe the first distributed in-memory approach for computing 32 different statistical criteria for \gls{RDF} dataset using the Apache Spark framework.
 Chapter~\ref{chapter:dist_quality_assessment} introduces a scalable approach for quality assessment of \gls{RDF} datasets.
 The presented approach offers generic features to solve common data quality checks.
 As a consequence, this can enable further applications to build trusted data utilities.
-We have demonstrated empirically that our approach improves upon previous centralized approach that we have compared against.
+We have demonstrated empirically that our approach improves upon the previous centralized approach that we have compared against.
 We also provide a quality assessment pattern that can be used to generate new scalable metrics that can be applied to big data.
 Chapter~\ref{chapter:scalable_rdf_querying} proposes two storage strategies and query engine implementations for efficient and scalable querying and processing \gls{RDF} datasets.
-First, Sparklify: a scalable software component for efficient evaluation of SPARQL queries over distributed \gls{RDF} datasets. 
-It uses a SPARQL-to-SQL rewriter techniques for translating \gls{SPARQL} queries into Spark executable code.
-Second approach we investigated and developed with the scope of this thesis, is a scalable approach to evaluate \gls{SPARQL} queries over distributed \gls{RDF} datasets using a semantic-based partition.
+First, Sparklify: a scalable software component for efficient evaluation of \gls{SPARQL} queries over distributed \gls{RDF} datasets. 
+It uses a SPARQL-to-SQL rewriter technique for translating \gls{SPARQL} queries into Spark executable code.
+The second approach we investigated and developed with the scope of this thesis is a scalable approach to evaluate \gls{SPARQL} queries over distributed \gls{RDF} datasets using a semantic-based partition.
 Moreover, in this chapter, we present the evaluations of our implementations as compared with state of the art \gls{SPARQL} query evaluators.
 Chapter~\ref{chapter:implementation_and_use_cases} presents real world use-cases powered by our solutions. 
 More specifically, we show the usage of SANSA in general and the solutions proposed during this work in order to answer the research problem~\ref{rq:4}, and, consequently, validate the solutions proposed for the problems~\ref{rq:1}, \ref{rq:2}, and \ref{rq:3}.

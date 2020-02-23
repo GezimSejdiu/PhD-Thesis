@@ -8,9 +8,7 @@
 % \usepackage{listings}
 
 % generate Texlive offline version: 
-%1. latex thesis.tex, then biber thesis // will generate thesis.bbl -- needed to render references.
-%2. latex thesis makeglossaries thesis // will generate acronym
-%3. latex thesis and then pdflatex thesis // in order to generate PDF
+% run: make compile
 
 % ------
 \usepackage{hyperref}
@@ -190,7 +188,7 @@
 % Add your chapters here - don't forget to also add them to \includeonly above
 
 \include{chapters/1_introduction}
-%\include{chapters/2_preliminaries}
+\include{chapters/2_preliminaries}
 \include{chapters/3_related_work}
 %\include{chapters/4_distlodstats}
 %\include{chapters/5_distqualityassessment}
