@@ -5,7 +5,7 @@
 In recent years, our information society has reached the stage where it produces billions of data records, amounting to multiple quintillions of bytes\furl{https://www.domo.com/learn/data-never-sleeps-5}, on a daily basis.
 Extraction, cleansing, enrichment and refinement of information are key to fuel value-adding processes, such as analytics as a premise for decision making.
 Devising appropriate (ideally uniform) representations and facilitating efficient querying of data, metadata, and provenance arising from such phases constantly poses challenges, especially when data volumes are vast.
-The most prominent and promising effort is the \gls{W3C} consortium with encouraging \gls{RDF} as a common data representation and vocabularies (e.g. RDFS, \gls{OWL}) as a way to include meta-information about the data.
+The most prominent and promising effort is the \gls{W3C} consortium with encouraging \gls{RDF} as a common data representation and vocabularies (e.g. \gls{RDFS}, \gls{OWL}) as a way to include meta-information about the data.
 These data and meta-data can be further processed and analyzed using the de-facto query language for \gls{RDF} data, \gls{SPARQL}.
 \gls{SPARQL} serves as a standard query language for manipulating and retrieving \gls{RDF} data.
 
@@ -48,6 +48,8 @@ This chapter is based on the following publications (\cite{sejdiu-2019-sansa-sem
     In this article, I devised the implementation of the conceptual architecture, helped on the implementation of the proposed approach, reviewed related work, and preparation of the experiments and analysis of the obtained results.
     
     \item Claus Stadler; \textbf{Gezim Sejdiu}; Damien Graux; and Jens Lehmann. "\href{https://gezimsejdiu.github.io/publications/sansa-sparklify-ISWC-demo.pdf}{Querying large-scale RDF datasets using the SANSA framework}".  In Proceedings of 18th International Semantic Web Conference (ISWC), Poster \& Demos, 2019.
+    This demonstration article is a joint work with Claus Stadler, a PhD student at the University of Leipzig.
+    In this article, I helped in describing the architecture and implementation of the running example.
 \end{itemize}
 
 The rest of the chapter is structured as follows:
@@ -172,7 +174,7 @@ The experiments have been executed three times and the average runtime has been 
 
 \subsubsection{Results}
 We evaluate Sparklify using the above datasets and compare it with the chosen state-of-the-art distributed \gls{SPARQL} query evaluator.
-Since our approach does not involve any pre-processing of the RDF data before being able to evaluate \gls{SPARQL} queries on it, Sparklify is thereby closer to the so-called direct evaluators.
+Since our approach does not involve any pre-processing of the \gls{RDF} data before being able to evaluate \gls{SPARQL} queries on it, Sparklify is thereby closer to the so-called direct evaluators.
 Indeed, Sparklify only needs to virtually partition the data prior.
 As a consequence, we omit other distributed evaluators (such as e.g. S2RDF~\cite{Schatzle:2016:SRQ:2977797.2977806}) and compare it with SPARQGX~\cite{sparqlgx-iswc-2016} as it outperforms other approaches as noted by Graux et.al~\cite{sparqlgx-iswc-2016}.
 We compare our approach with \emph{SPARQLGX}'s direct evaluator named SDE and report the loading time for partitioning and query execution time, see Table~\ref{tbl:sparklify-performance-analysis}.

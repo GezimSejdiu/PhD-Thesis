@@ -114,7 +114,7 @@ It consists of three steps: (1) saving RDF data into a scalable storage, (2) par
 \end{figure}
 
 \defn{Fetching the \gls{RDF} data (Step 1):} \gls{RDF} data needs first to be loaded into a large-scale storage that Spark can efficiently read from.
-For this purpose, we use \gls{HDFS}~\footnote{\scriptsize \url{https://hadoop.apache.org/docs/r1.2.1/hdfs\_design.html} (Retrieved in September 2019)}.
+For this purpose, we use \gls{HDFS}~\furl{https://hadoop.apache.org/docs/r1.2.1/hdfs\_design.html}.
 \gls{HDFS} is able to accommodate any type of data in its raw format, horizontally scale to an arbitrary number of nodes, and replicate data among the cluster nodes for fault tolerance.
 In such a distributed environment, Spark adopts different data locality strategies to try to perform computations as close to the needed data as possible in \gls{HDFS} and thus avoid data transfer overhead.
  
@@ -481,7 +481,7 @@ The subsequent step is to split this \gls{RDD} between $s$ nodes, the complexity
 Let be $f$ a function with complexity $O(f)$, then its complexity will be $O(n/s * O(f))$.
 As evident from the formula $O(n/s * O(f))$, the runtime increases linearly when the size of \gls{RDD} increases and \emph{decreases} linearly with the number of nodes in the cluster in case of a function $f$ with with $O(f)=O(1)$.
 
-The complexity of the $sortBy$ operation according to Spark~\footnote{\scriptsize \url{http://tiny.cc/jn91iz} (Retrieved in September 2019)} is a sampled $O(n)$, which means only the unique sample keys $m$ (with $m \le n$) are sorted and lead to a complexity of $O(m*log(m))$ plus the ranges of key sets. 
+The complexity of the $sortBy$ operation according to Spark\furl{http://tiny.cc/jn91iz} is a sampled $O(n)$, which means only the unique sample keys $m$ (with $m \le n$) are sorted and lead to a complexity of $O(m*log(m))$ plus the ranges of key sets. 
 Afterword, the data is shuffled around in $O(n)$ which is costly as sorting needs to be applied internally for the range of keys collected on a given partition $p$, i.e.~$O(p*log(p))$ time is required.
 
 \subsection{Implementation}

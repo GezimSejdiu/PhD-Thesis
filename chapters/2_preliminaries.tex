@@ -42,7 +42,7 @@ It uses a graph pattern mechanism to be matched against an \gls{RDF} graph and i
 
 More details about \gls{RDF} (cf. Section~\ref{sec:rdf-data}) and \gls{SPARQL} (cf. Section~\ref{sec:sparql}) is given in the following sections.
 \addtocounter{footnote}{-1}
-\footnotetext{\url{https://www.w3.org/2007/03/layerCake.png} (Retrieved in September 2019)}
+\footnotetext{\url{https://www.w3.org/2007/03/layerCake.png}}
 
 
 \subsection{RDF Data}
@@ -51,7 +51,7 @@ More details about \gls{RDF} (cf. Section~\ref{sec:rdf-data}) and \gls{SPARQL} (
 The Resource Description Framework (\gls{RDF})~\cite{Wood:14:RCA} is a \gls{W3C} standard for describing resources.
 A resource is a fact or a thing that can be described and identified. 
 A person, a home page, this thesis is a resource. 
-An RDF resource is identified by a \emph{\gls{URI}} reference, while literals are used to represent a respective data values.
+An \gls{RDF} resource is identified by a \emph{\gls{URI}} reference, while literals are used to represent a respective data values.
 Literals consist of either a string and its language tag or value and its data type.
 
 An \gls{RDF} graph is a set of \gls{RDF} triples $(s,p,o)$ where $s$ is called the \emph{subject}, $p$ is the \emph{predicate} and $o$ is the \emph{object}, each of which can be an \gls{URI}, subjects and objects can alternatively be blank nodes and objects can also represent literal data values.
@@ -199,7 +199,7 @@ The property elements (predicates) can either be encoded using the \gls{XML} att
 An \gls{RDF} graph is considered being a directed, labeled graph data format that represents information on the Web.
 \gls{SPARQL}~\cite{Seaborne:08:SQL} is a \gls{W3C} standard query language for retrieving and manipulating \gls{RDF} data.
 Its core component is the graph pattern mechanism which allows users to write queries in the form of triple patterns, conjunctions, disjunctions and/or a set of optional patterns (e.g. $\verb|FILTER|$) which are matched against an \gls{RDF} graph.
-This is done by replacing the variables in the triple pattern with elements fo the \gls{RDF} graph such that the resulting graph is contained in the original \gls{RDF} graph, known as pattern matching.
+This is done by replacing the variables in the triple pattern with elements of the \gls{RDF} graph such that the resulting graph is contained in the original \gls{RDF} graph, known as pattern matching.
 The results of \gls{SPARQL} queries are a set of binding or an \gls{RDF} graph.
 
 In the following, we cover the foundation of \gls{SPARQL} and its syntax as an analog to the definitions in~\cite{Perez:2009:SCS:1567274.1567278}.
@@ -393,7 +393,7 @@ In the following sections, we will cover those libraries we make use of.
 \subsubsection{GraphX}
 GraphX~\cite{Gonzalez2014GraphX} is a Spark library for graphs and parallel graph computation.
 It extends the \gls{RDD} abstraction and thus introduces \gls{RDG}, which relates records with vertices (VertexRDD) and edges (EdgeRDD) in a graph and provides an expressive set of computational primitives.
-In addition, GraphX simplifies the conventional ETL processes and analysis significantly by providing new operations for viewing, filtering, and transforming graphs.
+In addition, GraphX simplifies the conventional \gls{ETL} processes and analysis significantly by providing new operations for viewing, filtering, and transforming graphs.
 
 The GraphX \gls{RDG} leverages advances in distributed graph representation by combining the best of both worlds; benefits of graph-parallel and data-parallel systems.
 It exploits the graph structure in order to minimize network communication and storage overhead.
@@ -407,7 +407,7 @@ Usually, these operators take graphs and collections as input and produce new gr
 
 \subsubsection{SparkSQL}
 Spark SQL~\cite{Armbrust2015SSR} is a Spark library for SQL and structured data processing which allows querying structured data inside Spark programs.
-Essentially, the main abstraction in Spark SQL’s API is a \textit{DataFrame} which are distributed collections of rows with a homogeneous schema.
+Essentially, the main abstraction in Spark SQL’s \gls{API} is a \textit{DataFrame} which are distributed collections of rows with a homogeneous schema.
 A \textit{DataFrame} is an \gls{RDD} with a schema.
 They can be seen as tables in a relational database and can also be manipulated in a similar way to \gls{RDD}s.
 They are represented using a columnar storage format (while kept in-memory caching) which allows access to only those columns required, therefore it reduces the memory footprint by applying columnar compression schemas, i.e dictionary encoding, and run-length encoding.

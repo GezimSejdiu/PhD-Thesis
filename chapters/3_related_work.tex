@@ -18,6 +18,8 @@ This chapter is based on the related work sections from following publications~\
     \item \textbf{Gezim Sejdiu}; Damien Graux; Imran Khan; Ioanna Lytra; Hajira Jabeen; and Jens Lehmann, “\href{https://gezimsejdiu.github.io/publications/semantic_based_query_paper_SEMANTICS2019.pdf}{Towards A Scalable Semantic-based Distributed Approach for SPARQL query evaluation},” 15th International Conference on Semantic Systems (SEMANTiCS), Research \& Innovation , 2019.
 
     \item Claus Stadler; \textbf{Gezim Sejdiu}; Damien Graux; and Jens Lehmann, “\href{http://jens-lehmann.org/files/2019/iswc_sparklify.pdf}{Sparklify: A Scalable Software Component for Efficient evaluation of SPARQL queries over distributed RDF datasets},” in Proceedings of 18th International Semantic Web Conference (ISWC), 2019.
+    This article is a joint work with Claus Stadler, a PhD student at the University of Leipzig. 
+    In this article, I devised the implementation of the conceptual architecture, helped on the implementation of the proposed approach, reviewed related work, and preparation of the experiments and analysis of the obtained results.
     
 \end{itemize}
 
@@ -26,7 +28,7 @@ In this section, we provide an overview of related work regarding \gls{RDF} data
 
 To the best of our knowledge, all but one existing approaches use small to medium scale datasets and do not horizontally scale.
 
-A dataset is large-scale w.r.t. a particular task in the scope of this article if the main memory on commodity hardware is insufficient to perform the task (without swapping to disk). 
+A dataset is large-scale w.r.t. a particular task in the scope of this thesis if the main memory on commodity hardware is insufficient to perform the task (without swapping to disk). 
 We mention here, for example 
 RDFStats~\cite{conf/dexaw/LangeggerW09}, which is a framework for generating statistics from \gls{RDF} data that can be used for \gls{SPARQL} query optimization while processing \gls{RDF} data over \gls{SPARQL} endpoints.
 Such statistics include histograms about subjects (\gls{URI}s, and blank nodes), properties, and their corresponding ranges.
@@ -190,15 +192,15 @@ It introduces a data partitioning strategy that extends vertical partitioning wi
 While doing so, S2RDF avoids tuples that do not have counterparts in the referenced relation (join) which reduces the query input size and thus execution runtime.
 SPARQLGX~\cite{sparqlgx-iswc-2016} is similar to S2RDF, but instead of translating \gls{SPARQL} to SQL, it maps \gls{SPARQL} into direct Spark \gls{RDD} operations. 
 It is a scalable query engine that is capable of evaluating efficiently the \gls{SPARQL} queries over distributed \gls{RDF} datasets~\cite{graux2018multi}.
-It uses a simplified VP approach, where each predicate is assigned to a specific parquet file. 
-As an addition, it is able to assign \gls{RDF} statistics for further query optimization while also providing the possibility of directly query files on the \gls{HDFS} using SDE.
+It uses a simplified \gls{VP} approach, where each predicate is assigned to a specific parquet file. 
+As an addition, it is able to assign \gls{RDF} statistics for further query optimization while also providing the possibility of directly query files on the \gls{HDFS} using SDE (its direct \gls{SPARQL} evaluator).
 
-Nevertheless, these engines lack one important information derived from the knowledge, \emph{RDF terms}.
-RDF terms includes information about a statement such as \emph{language}, \emph{typed literals} and \emph{blank nodes} which are omitted from most of the engines.
-Beside \emph{RDF terms}, we also wanted to investigate different partitioning mechanisms while querying a large amount of \gls{RDF}.
+Nevertheless, these engines lack one important information derived from the knowledge, \emph{\gls{RDF} terms}.
+\gls{RDF} terms includes information about a statement such as \emph{language}, \emph{typed literals} and \emph{blank nodes} which are omitted from most of the engines.
+Beside \emph{\gls{RDF} terms}, we also wanted to investigate different partitioning mechanisms while querying a large amount of \gls{RDF}.
 During this thesis, we propose two different \gls{SPARQL} query evaluator.
-Sparklify -- a scalable software component for efficient evaluation of SPARQL queries over distributed RDF datasets. 
-The conceptual foundation is the application of \emph{ontology-based data access} (OBDA) tooling, specifically SPARQL-to-SQL rewriting, for translating SPARQL queries into Spark executable code. 
+Sparklify -- a scalable software component for efficient evaluation of \gls{SPARQL} queries over distributed \gls{RDF} datasets. 
+The conceptual foundation is the application of \emph{ontology-based data access} (OBDA) tooling, specifically SPARQL-to-SQL rewriting, for translating \gls{SPARQL} queries into Spark executable code. 
 We demonstrate our approach using Sparqlify, which has been used in the LinkedGeoData\furl{http://linkedgeodata.org} community project to serve more than 30 billion triples on-the-fly from a relational OpenStreetMap database.
 As we mentioned previously, we wanted to see if different partitioning strategies improve the execution time while evaluating \gls{SPARQL} queries over large-scale \gls{RDF} datasets and propose a Semantic-based approach which partitions the data into subject-based grouping (e.g. all entities which are associated with a unique subject).
 For more details on the proposed approaches, see Chapter~\ref{chapter:scalable_rdf_querying}.

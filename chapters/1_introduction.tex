@@ -13,7 +13,7 @@ To create such data, the information represented in unstructured form or referri
 Thus, a set of \gls{RDF} triples forms an inter-linkable graph whose flexibility allows to represent a large variety of highly to loosely structured datasets. 
 
 \gls{RDF}, which was standardized by \gls{W3C}, is increasingly being adapted to model data in a variety of scenarios, partly due to the popularity of projects like linked open data and schema.org. 
-This linked or semantically annotated data has grown steadily towards a massive scale \furl{http://lodstats.aksw.org/}.
+This linked or semantically annotated data has grown steadily towards a massive scale\furl{http://lodstats.aksw.org/}.
 
 Nevertheless, most existing solutions are limited to centralized environments only.
 In order to deal with the massive data being produced at scale, the existing big data frameworks like Apache Spark\furl{http://spark.apache.org/} and Apache Flink\furl{https://flink.apache.org/} offer fault-tolerant, high available and scalable approaches to process this data efficiently. 
@@ -41,8 +41,8 @@ In the following sections, we define the challenges that need to be addressed wh
 
 \subsection{Challenge 1: Scalable Computation of RDF Dataset Statistics}
 \label{sec:c1}
-The first challenge to overcome when dealing with large-scale RDF datasets is to have \textit{a priori} statistical information about its internal structure and coverage.
-A significant fraction of RDF data available online\footnote{\scriptsize \url{https://lod-cloud.net/} (Retrieved in September 2019)} today are stored as \gls{LOD}.
+The first challenge to overcome when dealing with large-scale \gls{RDF} datasets is to have \textit{a priori} statistical information about its internal structure and coverage.
+A significant fraction of RDF data available online\furl{https://lod-cloud.net/} today are stored as \gls{LOD}.
 Large \gls{RDF} datasets, i.e. DBpeida~\cite{dbpedia-swj} are often collaborative and contain data that has been extracted semi-automatically or has been ingested from different sources.
 Hence, such large-scale \gls{RDF} datasets do not have an apriori view of the data or a strict unified view for structuring the instances.
 As a result, these processes derive noisily and, in a wrong case incomplete data~\cite{zaveri2015quality}.
@@ -128,8 +128,7 @@ Results obtained during the research question~\ref{rq:3} allow us to address the
 \end{tcolorbox}
 
 In response to this question, we present various use-cases and apply the techniques and approaches developed in this thesis.
-Our findings show that the usage of distributed computing frameworks and semantic technologies for large-scale \gls{RDF} analysis can provide a more adaptive and scalable solution for each domain-specific application.
-\fixme{gs: rephrase}
+Our findings show that the usage of distributed computing frameworks for large-scale \gls{RDF} analysis can provide a more adaptive and scalable solution for different use cases.
 
 \section{Thesis Overview}
 \label{sec:thesis-overview}
@@ -188,14 +187,14 @@ Our contributions cover a spectrum of research areas in the scope of distributed
     
     We collaborated with many different stockholders and research projects during the development of this thesis in order to solve the real-world scalable knowledge analysis and \gls{RDF} processing use cases.
     First, we mention here, Hub \& Authorities and CryptoKitties analysis use cases. 
-    Alethio\footnote{\scriptsize \url{https://aleth.io/} (last accessed October 31{\textsuperscript{st}} 2019)}, is an advanced analytics platform making Ethereum more accessible and digestible for everyone.
-    Their extensive data set contains large-scale blockchain transaction data modelled in \gls{RDF} (currently encompassing more than 20B triples\footnote{\scriptsize \url{https://linkeddata.aleth.io/} (last accessed October 31{\textsuperscript{st}} 2019)}) according to the structure of the Ethereum ontology~\cite{pfeffer2016ethon}.
+    Alethio\furl{https://aleth.io/}, is an advanced analytics platform making Ethereum more accessible and digestible for everyone.
+    Their extensive data set contains large-scale blockchain transaction data modelled in \gls{RDF} (currently encompassing more than 20B triples\furl{https://linkeddata.aleth.io/}) according to the structure of the Ethereum ontology~\cite{pfeffer2016ethon}.
     As the blockchain is evolving, many users want to know more about the important players of the chain. 
     With Hub \& Authorities' use case, we investigate and analyze the Ethereum blockchain network in order to identify the major entities across the transaction network. 
     By leveraging the rich data available through Alethio's platform in the form of \gls{RDF} triples we learn about the Hubs and Authorities of the Ethereum transaction network.
     Alethio uses our approach for efficient reading and processing of such large-scale \gls{RDF} data (transactions on Ethereum blockchain) in order to perform analytics e.g. finding top accounts, or typical behavior patterns of exchanges' deposit wallets and more.
     In another use case where Alethio is involved is the CryptoKitties analysis use case.
-    CryptoKitties\footnote{\scriptsize \url{https://www.cryptokitties.co/} (last accessed October 31{\textsuperscript{st}} 2019)} is one of the first games to be built on blockchain technology.
+    CryptoKitties\furl{https://www.cryptokitties.co/} is one of the first games to be built on blockchain technology.
     Our solution empowers Alethio to read and query the data at scale for further analysis: game performance and customer behaviors.
     Within our solution, Alethio is able to get more insight from the CryptoKitties analyses, i.e the number of active users and the amount of spent Ether or correlation between indicators (e.g. to determine whether richer owners have the tendency to collect special/rare kitties which are more expensive).
     The second use case we were involved in was about mining BigDataEurope project logs.
@@ -249,6 +248,8 @@ In this thesis, part of the work is based on the following publications~\cite{se
     \setcounter{enumi}{7}
 
     \item Claus Stadler; \textbf{Gezim Sejdiu}; Damien Graux; and Jens Lehmann. "\href{https://gezimsejdiu.github.io/publications/sansa-sparklify-ISWC-demo.pdf}{Querying large-scale RDF datasets using the SANSA framework}".  In Proceedings of 18th International Semantic Web Conference (ISWC), Poster \& Demos, 2019. \texttt{URL}:~\url{https://gezimsejdiu.github.io/publications/sansa-sparklify-ISWC-demo.pdf}
+    This demonstration article is a joint work with Claus Stadler, a PhD student at the University of Leipzig.
+    In this article, I helped in describing the architecture and implementation of the running example.
 
     \item Danning Sui; \textbf{Gezim Sejdiu}; Damien Graux; and Jens Lehmann. "\href{https://gezimsejdiu.github.io/publications/sansa-hubs-and-authorities-transaction-semantics19-poster.pdf}{The Hubs and Authorities Transaction NetworkAnalysis using the SANSA framework}".  In 15th International Conference on Semantic Systems (SEMANTiCS), Poster \& Demos, 2019. \texttt{URL}:~\url{http://tiny.cc/4ukxcz}
     
@@ -259,6 +260,8 @@ In this thesis, part of the work is based on the following publications~\cite{se
     \item Damien Graux; \textbf{Gezim Sejdiu}; Hajira Jabeen; Jens Lehmann; Danning Sui; Dominik Muhs; and Johannes Pfeffer, “\href{http://jens-lehmann.org/files/2018/semantics_ethereum_pd.pdf}{Profiting from Kitties on Ethereum: Leveraging Blockchain RDF with SANSA},” in 14th International Conference on Semantic Systems, Poster \& Demos, 2018. \texttt{URL}:~\url{http://jens-lehmann.org/files/2018/semantics_ethereum_pd.pdf}
     
     \item Ivan Ermilov; Jens Lehmann; \textbf{Gezim Sejdiu}; Lorenz Bühmann; Patrick Westphal; Claus Stadler; Simon Bin; Nilesh Chakraborty; Henning Petzka; Muhammad Saleem; Axel-Cyrille Ngomo Ngonga; and Hajira Jabeen, “\href{http://jens-lehmann.org/files/2017/iswc_pd_sansa.pdf}{The Tale of Sansa Spark},” in Proceedings of 16th International Semantic Web Conference, Poster \& Demos, 2017 ({\color{darkred}\textbf{Best Demo Award}}). \texttt{URL}:~\url{http://jens-lehmann.org/files/2017/iswc_pd_sansa.pdf}
+    This demonstration article is joint work with Ivan Ermilov, a PhD student at the University of Leipzig. 
+    In this article, I helped in describing the architecture, implementation of the examples and demonstration of the prototype.
         
     \end{enumerate}
 \end{itemize}
@@ -272,7 +275,7 @@ The thesis consists of eight chapters.
 Chapter~\ref{chapter:intro} introduces the thesis starting with the main research problem and challenges, motivation, research questions, scientific contributions addressing research questions, and a list of published scientific papers describing these contributions.
 Chapter~\ref{chapter:preliminaries} presents basic concepts and background about Semantic Web technologies and the Hadoop Ecosystem for a comprehensive overview of the research problem. 
 Chapter~\ref{chapter:related} describes state-of-the-art efforts in the field of processing \gls{RDF} datasets w.r.t research problem.
-We provide an overview of existing RDF dataset statistics systems, quality assessment systems, and \gls{SPARQL} query evaluators in order to provide a thorough knowledge of their limitations, and the identified gaps we cover in this thesis.
+We provide an overview of existing \gls{RDF} dataset statistics systems, quality assessment systems, and \gls{SPARQL} query evaluators in order to provide a thorough knowledge of their limitations, and the identified gaps we cover in this thesis.
 In Chapter~\ref{chapter:dist_lod_stats} we introduce a scalable approach for the statistical calculation of large \gls{RDF} datasets, which scales out to a cluster of machines.
 More specifically, we describe the first distributed in-memory approach for computing 32 different statistical criteria for \gls{RDF} dataset using the Apache Spark framework.
 Chapter~\ref{chapter:dist_quality_assessment} introduces a scalable approach for quality assessment of \gls{RDF} datasets.
