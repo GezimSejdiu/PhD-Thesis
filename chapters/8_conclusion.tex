@@ -4,9 +4,9 @@
 %==============================================================================
 
 In this chapter, we summarize the work done during this thesis and highlight the main results.
-During this thesis, we study the research problem of efficient distributed in-memory processing of \gls{RDF} datasets.
+During this thesis, we studied the research problem of efficient distributed in-memory processing of \gls{RDF} datasets.
 
-In particular, we address the problems of Scalable Computation of \gls{RDF} Dataset Statistics (cf. Chapter~\ref{chapter:dist_lod_stats}), Quality Assessment of \gls{RDF} Datasets at Scale (cf. Chapter~\ref{chapter:dist_quality_assessment}), Scalable and Efficient \gls{SPARQL} query evaluation (cf. Chapter~\ref{chapter:scalable_rdf_querying}), and usage of such scalable approaches into real-world use cases (cf. Chapter~\ref{chapter:implementation_and_use_cases}).
+In particular, we addressed the problems of Scalable Computation of \gls{RDF} Dataset Statistics (cf. Chapter~\ref{chapter:dist_lod_stats}), Quality Assessment of \gls{RDF} Datasets at Scale (cf. Chapter~\ref{chapter:dist_quality_assessment}), Scalable and Efficient \gls{SPARQL} query evaluation (cf. Chapter~\ref{chapter:scalable_rdf_querying}), and usage of such scalable approaches into real-world use cases (cf. Chapter~\ref{chapter:implementation_and_use_cases}).
 
 In the following sections, we provide a summary of our contributions and elaborate on the main findings that validate our research questions.
 
@@ -27,16 +27,16 @@ Today, we count more than 10,000 datasets made available online following Semant
 Nevertheless, many applications, such as data integration, search, and interlinking, may not take the full advantage of the data without having a priori statistical information about its internal structure and coverage.
 In fact, there are already a number of tools, which offer such statistics, providing basic information about \gls{RDF} datasets and vocabularies.
 However, those usually show severe deficiencies in terms of performance once the dataset size grows beyond the capabilities of a single machine.
-To address~\ref{rqc:1}, in Chapter~\ref{chapter:dist_lod_stats} we introduce a software component for statistical calculations of large \gls{RDF} datasets, which scales out to clusters of machines.
-More specifically, we describe the first distributed in-memory approach for computing 32 different statistical criteria for \gls{RDF} datasets using Apache Spark.
+To address~\ref{rqc:1}, in Chapter~\ref{chapter:dist_lod_stats} we introduced a software component for statistical calculations of large \gls{RDF} datasets, which scales out to clusters of machines.
+More specifically, we described the first distributed in-memory approach for computing 32 different statistical criteria for \gls{RDF} datasets using Apache Spark.
 The preliminary results show that our distributed approach improves upon a previous centralized approach we compare against and provides approximately linear horizontal scale-up. 
 The criteria are extensible beyond the 32 default criteria, is integrated into the larger SANSA framework and employed in at least four major usage scenarios beyond the SANSA community.
 Overall, we provide the following contributions to the state-of-the-art:
 
 \begin{itemize}
-    \item We propose an algorithm for computing \gls{RDF} dataset statistics and implement it using an efficient framework for large-scale, distributed and in-memory computations: Apache Spark.
-    \item We perform an analysis of the complexity of the computational steps and the data exchange between nodes in the cluster. 
-    \item We evaluate our approach and demonstrate empirically its superiority over a previous centralized approach.
+    \item We proposed an algorithm for computing \gls{RDF} dataset statistics and implement it using an efficient framework for large-scale, distributed and in-memory computations: Apache Spark.
+    \item We performed an analysis of the complexity of the computational steps and the data exchange between nodes in the cluster. 
+    \item We evaluated our approach and demonstrate empirically its superiority over a previous centralized approach.
     \item We integrated the approach into the SANSA framework, where it is actively maintained and re-uses the community infrastructure (mailing list, issues trackers, website, etc.).
     \item An approach for triggering \gls{RDF} statistics calculation remotely simply using HTTP requests. 
     DistLODStats is built as a plugin into the larger SANSA framework and makes use of Apache Livy, a novel lightweight solution for interacting with the Spark cluster via a REST Interface.
@@ -62,7 +62,7 @@ Overall, we provide the following contributions to the state-of-the-art:
 \begin{itemize}
     \item We present a Quality Assessment Pattern $\mathcal{QAP}$ to characterize scalable quality metrics.
     \item We provide DistQualityAssessment -- a distributed (open source) implementation of quality metrics using Apache Spark.
-    \item We perform an analysis of the complexity of the metric evaluation in the cluster.
+    \item We performed an analysis of the complexity of the metric evaluation in the cluster.
     \item We evaluate our approach and demonstrate empirically its superiority over a previous centralized approach.
     \item We integrated the approach into the SANSA framework.
     SANSA is actively maintained and uses the community ecosystem (mailing list, issues trackers, continuous integration, website, etc.).
@@ -78,7 +78,7 @@ One of the key features of Big Data is its complexity in terms of representation
 One existing way to deal with it is offered by Semantic Web standards.
 Among them, \gls{RDF} --which proposes to model data with triples representing edges in a graph-- has received a large success and the semantically annotated data has grown steadily towards a massive scale.
 Therefore, there is a need for scalable and efficient query engines capable of retrieving such information.
-To answer~\ref{rqc:3}, in Chapter~\ref{chapter:scalable_rdf_querying} we propose scalable approaches for \gls{SPARQL} query evaluation over distributed \gls{RDF} data. 
+To answer~\ref{rqc:3}, in Chapter~\ref{chapter:scalable_rdf_querying} we proposed scalable approaches for \gls{SPARQL} query evaluation over distributed \gls{RDF} data. 
 First, Sparklify -- a scalable software component for efficient evaluation of \gls{SPARQL} queries over distributed \gls{RDF} datasets. 
 It uses Sparqlify as a SPARQL-to-SQL rewriter for translating SPARQL queries into Spark executable code.
 Our preliminary results demonstrate that our approach is more extensible, efficient, and scalable as compared to state-of-the-art approaches.
@@ -92,7 +92,7 @@ Overall, we provide the following contributions to the state-of-the-art:
 \begin{itemize}
  \item We present a novel approach for vertical partitioning including \gls{RDF} terms using the distributed computing framework, Apache Spark.
  \item We developed a scalable query system using Sparqlify -- a SPARQL-to-SQL rewriter on top of Apache Spark.
- \item We evaluate Sparklify with state-of-the-art engines and demonstrate it empirically.
+ \item We evaluated Sparklify with state-of-the-art engines and demonstrate it empirically.
  \item A scalable approach for semantic-based partitioning using the distributed computing framework, Apache Spark.
  \item A scalable semantic-based query engine (\textit{SANSA.Semantic}) on top of Apache Spark.
  \item Comparison of the semantic-based system with state-of-the-art engines and demonstrate the performance empirically.
@@ -142,7 +142,7 @@ In the following, we summarize the limitations and future directions on each of 
     We present a working prototype implementation that can serve as a baseline for further research. 
     Our next steps include evaluating other tools, such as Ontop~\cite{Calvanese2017OntopAS}, and analyze how their performance in the Big Data setting can be improved further. 
     For example, we intend to investigate how OBDA tools can be combined with dictionary encoding of \gls{RDF} terms as integers and evaluate the effects.
-    Our next steps include expanding our parser to support more \gls{SPARQL} fragments and adding statistics to the query engine while evaluating queries. 
+    In addition to that, we plan to further extend our parser to support more \gls{SPARQL} fragments and adding statistics to the query engine while evaluating queries. 
     We want to analyze the query performance in the large-scale \gls{RDF} datasets and explore prospects for improvement.
     For example, we intend to investigate the re-ordering of the \gls{BGP}s and evaluate the effects on query execution time.
     In this regard, efficient strategies, as well as a detailed cost function for query plan optimization, have to be considered.
