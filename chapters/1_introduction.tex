@@ -15,7 +15,7 @@ Thus, a set of \gls{RDF} triples forms an inter-linkable graph whose flexibility
 \gls{RDF}, which was standardized by \gls{W3C}, is increasingly being adapted to model data in a variety of scenarios, partly due to the popularity of projects like linked open data and schema.org. 
 This linked or semantically annotated data has grown steadily towards a massive scale\furl{http://lodstats.aksw.org/}.
 
-Nevertheless, most existing solutions are limited to centralized environments only.
+Nevertheless, most existing solutions are limited to standalone environments only.
 In order to deal with the massive data being produced at scale, the existing big data frameworks like Apache Spark\furl{http://spark.apache.org/} and Apache Flink\furl{https://flink.apache.org/} offer fault-tolerant, high available and scalable approaches to process this data efficiently. 
 These frameworks have matured over recent years and offer a proven and reliable method for processing of large scale unstructured data.
 
@@ -71,11 +71,11 @@ For that reason, there is a need for a scalable and efficient framework that can
 With that in mind, several approaches for distributed \gls{RDF} data processing have been proposed, e.g~\cite{sparqlgx-iswc-2016, Schatzle:2016:SRQ:2977797.2977806}.
 We want to investigate and study implementations of current \gls{SPARQL} query evaluators through system-level characterizations and consequently propose our distributed approaches for \gls{RDF} data processing.
 
-\subsection{Challenge 4: Adaptability of Exploiting large-scale RDF Datasets}
-\label{sec:c4}
-As the size of distributed systems for handling large-scale \gls{RDF} datasets grows, it becomes interestingly difficult to extract the right features from them.
-Researchers have to deal with a very dynamic set of environments that these solutions are in contact with and it is becoming difficult to design a comprehensive framework that will be able to cater to all the user's needs in those settings.
-In this thesis, we describe our approach with best practices, tools, and guidelines and show how it can be used (with some real use cases) to deploy and perform large-scale \gls{RDF} processing easily and efficiently.
+%\subsection{Challenge 4: Adaptability of Exploiting large-scale RDF Datasets}
+%\label{sec:c4}
+%As the size of distributed systems for handling large-scale \gls{RDF} datasets grows, it becomes interestingly difficult to extract the right features from them.
+%Researchers have to deal with a very dynamic set of environments that these solutions are in contact with and it is becoming difficult to design a comprehensive framework that will be able to cater to all the user's needs in those settings.
+%In this thesis, we describe our approach with best practices, tools, and guidelines and show how it can be used (with some real use cases) to deploy and perform large-scale \gls{RDF} processing easily and efficiently.
 
 
 \section{Research Questions}
@@ -88,7 +88,7 @@ As stated in the motivation section above and identified challenges, we define t
 \textit{Is it possible to process large-scale \gls{RDF} datasets efficiently and effectively?}
 \end{tcolorbox}
 
-This research question then breaks down into four specific research questions.
+This research question then breaks down into three specific research questions.
 
 Each challenge is mapped to specific research questions and altogether contribute to the overall research problem definition tackled throughout this thesis.
 
@@ -123,12 +123,12 @@ It groups the facts based on the subject and its associated triples.
 Results obtained during the research question~\ref{rq:3} allow us to address the defined challenge (cf. Section~\ref{sec:c3}). 
 %Both approaches are implemented and integrated inside the state-of-the-art \gls{RDF} processing framework: SANSA.
 
-\begin{tcolorbox}
-\textbf{\rqNr[RQ4]\label{rq:4}}: How can we exploit large-scale \gls{RDF} datasets for a particular use case and ensure scalability?
-\end{tcolorbox}
+%\begin{tcolorbox}
+%\textbf{\rqNr[RQ4]\label{rq:4}}: How can we exploit large-scale \gls{RDF} datasets for a particular use case and ensure scalability?
+%\end{tcolorbox}
 
-In response to this question, we present various use-cases and apply the techniques and approaches developed in this thesis.
-Our findings show that the usage of distributed computing frameworks for large-scale \gls{RDF} analysis can provide a more adaptive and scalable solution for different use cases.
+%In response to this question, we present various use-cases and apply the techniques and approaches developed in this thesis.
+%Our findings show that the usage of distributed computing frameworks for large-scale \gls{RDF} analysis can provide a more adaptive and scalable solution for different use cases.
 
 \section{Thesis Overview}
 \label{sec:thesis-overview}
@@ -210,7 +210,8 @@ Our contributions cover a spectrum of research areas in the scope of distributed
     In this study, we present a flexible architecture to design pipelines able to aggregate \gls{POI}s from contextual to geographical dimensions in a single run. 
     This solution allows any kind of clustering algorithm combinations to compute \gls{AOI}s and is built on top of a Semantic Web stack which allows multiple-source querying and filtering through \gls{SPARQL}.
     The architecture is embedded inside a state-of-the-art Semantic Web stack, SANSA, and then benefits from the advantages of it.
-    The best practices, guidelines, easy to deploy and use in a lightweight allows us to quickly adapt the SANSA framework from the semantic web community and other fields of data science, thus allowing us to answer research question~\ref{rq:4}.
+    The best practices, guidelines, easy to deploy and use in a lightweight allows us to quickly adapt the SANSA framework from the semantic web community and other fields of data science.
+    %, thus allowing us to answer research question~\ref{rq:4}.
     Some of the use cases are described in Chapter~\ref{chapter:implementation_and_use_cases}, and publications~\cite{lehmann-2017-sansa-iswc, iermilov-2017-sansa-iswc-demo, sansa-hubs-and-authorities-transaction-semantics19-poster, piping-clustering-eswc19-poster, graux-2018-sansa-ethereum-semantics-poster, Auer+ICWE-2017}.
 
 \end{enumerate}
@@ -289,5 +290,7 @@ It uses a SPARQL-to-SQL rewriter technique for translating \gls{SPARQL} queries 
 The second approach we investigated and developed with the scope of this thesis is a scalable approach to evaluate \gls{SPARQL} queries over distributed \gls{RDF} datasets using a semantic-based partition.
 Moreover, in this chapter, we present the evaluations of our implementations as compared with state of the art \gls{SPARQL} query evaluators.
 Chapter~\ref{chapter:implementation_and_use_cases} presents real world use-cases powered by our solutions. 
-More specifically, we show the usage of SANSA in general and the solutions proposed during this work in order to answer the research problem~\ref{rq:4}, and, consequently, validate the solutions proposed for the problems~\ref{rq:1}, \ref{rq:2}, and \ref{rq:3}.
+More specifically, we show the usage of SANSA in general and the solutions proposed during this work
+%in order to answer the research problem~\ref{rq:4}
+, and, consequently, validate the solutions proposed for the problems~\ref{rq:1}, \ref{rq:2}, and \ref{rq:3}.
 Chapter~\ref{chapter:conclusion} conclude the thesis with an overall overview of the contributions made during this research work and a discussion on the future work based on the limitations of the actual solutions. 
