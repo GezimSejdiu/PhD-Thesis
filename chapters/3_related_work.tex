@@ -160,7 +160,7 @@ Such approaches use either standard partitioning algorithms like METIS~\cite{Gur
 For instance, Lee et al.~\cite{LeeL2013} define a partition unit as a vertex with its closest neighbors based on heuristic rules while DiploCloud~\cite{WylotC16} and AdPart~\cite{harbi2016accelerating} use physiological \gls{RDF} partitioning based on \gls{RDF} molecules. 
 In our proposal, we use both, vertical partitioning and semantic-based partitioning approaches.
 
-\defn{Hadoop-based systems}
+\defn{Hadoop-Based Systems}
 Cloud-based approaches for managing large-scale \gls{RDF} mainly use NoSQL distributed data stores or employ various partitioning approaches on top of Hadoop infrastructure, i.e., the \gls{HDFS} and its MapReduce implementation, in order to leverage computational resources of multiple nodes. 
 For instance, Sempala~\cite{Schatzle2014Sempala} is a Hadoop-based approach that serves as the SPARQL-to-SQL approach on top of Hadoop.
 It uses Impala\furl{https://impala.apache.org/} as a distributed SQL processing engine.
@@ -185,7 +185,7 @@ As a consequence, high-level frameworks were devised which may use MapReduce as 
 Apache Spark is one of them~\cite{zaharia2012resilient}.
 Below, we will list some of the approaches which make use of the Apache Spark (in-memory computation) framework.
 
-\defn{In-Memory systems}
+\defn{In-Memory Systems}
 S2RDF~\cite{Schatzle:2016:SRQ:2977797.2977806} and SPARQLGX~\cite{sparqlgx-iswc-2016} approaches are considered the most recent distributed \gls{SPARQL} evaluators over large-scale \gls{RDF} datasets.
 S2RDF~\cite{Schatzle:2016:SRQ:2977797.2977806} is a distributed query engine that translates \gls{SPARQL} queries into SQL ones while running them on Spark-SQL~\cite{Armbrust2015SSR}. 
 It introduces a data partitioning strategy that extends vertical partitioning with additional statistics, containing pre-computed semi-joins for query optimization.
