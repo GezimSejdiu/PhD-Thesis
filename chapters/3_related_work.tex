@@ -175,6 +175,14 @@ It has the mechanism of performing join reorder, but it lacks the in-memory comp
 One of RYA's advantages is the power of performing join reorder. 
 The main drawback of RYA is that it relies on disk-based processing increasing query execution times.
 Other \gls{RDF} systems like JenaHBase~\cite{KhadilkarKTC2012} and H2RDF+~\cite{PapailiouKTKK13} use the Hadoop database HBase for storing triple and property tables.
+JenaHBase represents triples in the form of three index tables: SPO, POS, and OSP. 
+It maps \gls{RDF} \gls{URI}s and most literals to numerical ids and uses the same table structure for all indices: the row key is built from the concatenation of the ids, and leaving the rest i.e. column qualifiers and cell values empty. 
+This is done in order to leverage the lexicographical sorting of the row keys, covering multiple triple patterns with the same table.
+The main idea behind indexing is reducing network and disk I/O overhead, for fast joins.
+H2RDF+ is conceptually similar to Rya and JenaHBase as it stores RDF data in HBase. 
+It does that by storing triples in the row key which uses six tables for all possible triple permutations thus creates six different indexes. 
+In addition, it also maintains index statistics for triple pattern selectivity estimation as well as join output size and cost.
+H2RDF+ is able to answer selective queries efficiently as it is able to determine the scale for non-selective queries to be executed centrally but is slower when done through distributed execution.
 SHARD~\cite{Rohloff2010SHARD} is one approach that groups \gls{RDF} data into a dedicated partition so-called semantic-based partition.  
 It groups these \gls{RDF} data by subject and implements a query engine which iterates through each of the clauses used on the query and performs a query processing. 
 A MapReduce job is created while scanning each of the triple patterns and generates a single plan for each of the triple patterns which leads to a larger query plan, therefore, it contains too many Map and Reduces jobs. 
@@ -190,6 +198,12 @@ S2RDF~\cite{Schatzle:2016:SRQ:2977797.2977806} and SPARQLGX~\cite{sparqlgx-iswc-
 S2RDF~\cite{Schatzle:2016:SRQ:2977797.2977806} is a distributed query engine that translates \gls{SPARQL} queries into SQL ones while running them on Spark-SQL~\cite{Armbrust2015SSR}. 
 It introduces a data partitioning strategy that extends vertical partitioning with additional statistics, containing pre-computed semi-joins for query optimization.
 While doing so, S2RDF avoids tuples that do not have counterparts in the referenced relation (join) which reduces the query input size and thus execution runtime.
+By pre-computing the possible join relations between partitions i.e. tables of \gls{VP}, the S2RDF query processor can directly access the subset of a specific table where the object also exists as a subject in at least one tuple in the other table and join it with the equivalent subset of that table.
+This avoids dangling tuples, tuples that do not find a corresponding join partner, to be used as input and thus also reduces I/O overhead and the number of join comparisons that lead to overall speeds up.
+S2RDF query processor is based on the algebra representation of \gls{SPARQL} expressions. 
+It uses Jena ARQ for parsing the \gls{SPARQL} query into a corresponding algebra tree.
+It traverses through the algebra tree and generates the corresponding Spark SQL expressions mapped to the extended vertical partitioning schema as described above.
+As a consequence, such an equivalent Spark SQL query is then executed by the Spark engine.
 SPARQLGX~\cite{sparqlgx-iswc-2016} is similar to S2RDF, but instead of translating \gls{SPARQL} to SQL, it maps \gls{SPARQL} into direct Spark \gls{RDD} operations. 
 It is a scalable query engine that is capable of evaluating efficiently the \gls{SPARQL} queries over distributed \gls{RDF} datasets~\cite{graux2018multi}.
 It uses a simplified \gls{VP} approach, where each predicate is assigned to a specific parquet file. 

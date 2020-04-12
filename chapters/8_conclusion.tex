@@ -6,7 +6,7 @@
 In this chapter, we summarize the work done during this thesis and highlight the main results.
 During this thesis, we studied the research problem of efficient distributed in-memory processing of \gls{RDF} datasets.
 
-In particular, we addressed the problems of Scalable Computation of \gls{RDF} Dataset Statistics (cf. Chapter~\ref{chapter:dist_lod_stats}), Quality Assessment of \gls{RDF} Datasets at Scale (cf. Chapter~\ref{chapter:dist_quality_assessment}), Scalable and Efficient \gls{SPARQL} query evaluation (cf. Chapter~\ref{chapter:scalable_rdf_querying}), and usage of such scalable approaches into real-world use cases (cf. Chapter~\ref{chapter:implementation_and_use_cases}).
+In particular, we addressed the problems of Scalable Computation of \gls{RDF} Dataset Statistics (cf. Chapter~\ref{chapter:dist_lod_stats}), Quality Assessment of \gls{RDF} Datasets at Scale (cf. Chapter~\ref{chapter:dist_quality_assessment}), Scalable and Efficient \gls{SPARQL} Query Evaluation (cf. Chapter~\ref{chapter:scalable_rdf_querying}), and usage of such scalable approaches into real-world use cases (cf. Chapter~\ref{chapter:implementation_and_use_cases}).
 
 In the following sections, we provide a summary of our contributions and elaborate on the main findings that validate our research questions.
 
@@ -45,7 +45,8 @@ Overall, we provide the following contributions to the state-of-the-art:
 The second problem we tried to address was the possibility of assessing the quality of large-scale \gls{RDF} datasets efficiently in a distributed manner and answers the following research question.
 
 \begin{tcolorbox}
-\textbf{\rqNr[RQ2]\label{rqc:2}}: Can quality of large-scale \gls{RDF} datasets be assessed efficiently in a distributed manner?
+%\textbf{\rqNr[RQ2]\label{rqc:2}}: Can quality of large-scale \gls{RDF} datasets be assessed efficiently in a distributed manner?
+\textbf{\rqNr[RQ2]\label{rqc:2}}: Can we scale \gls{RDF} dataset quality assessment horizontally?
 \end{tcolorbox}
 
 Over the last years, Linked Data has grown continuously. 
@@ -129,11 +130,19 @@ In the following, we summarize the limitations and future directions on each of 
     Moreover, as our implementation is purely batch processing, in which the data chunks are normally very large we plan to investigate additional techniques for lowering the network overhead and I/O footprint.
     In this regard, efficient compression (e.g. \gls{HDT}~\cite{HDTFernandez2013}) methods for lowering data communication would be very relevant.
     Finally, as our main focus is on applying distributed techniques to \gls{RDF} data processing, we plan to port the existing solution for near real-time computation of \gls{RDF} dataset statistics.
-
+    
     \item \textit{Assessment of \gls{RDF} Datasets at Scale} -- 
     Although we have achieved reasonable results in terms of scalability (cf.\ Chapter~\ref{chapter:dist_quality_assessment}), we plan to further improve time efficiency by applying intelligent partitioning strategies and persist the data to an even higher extent in memory and perform dependency analysis in order to evaluate multiple metrics simultaneously. 
     We also plan to explore near real-time interactive quality assessment of large-scale \gls{RDF} data using Spark Streaming.
     Finally, in the future, we intend to develop a declarative plugin for the current work using Quality Metric Language (QML)~\cite{debattista2016luzzu}, which gives users the ability to express, customize and enhance quality metrics.
+    Besides the above mentioned future direction, as a long-term vision, we plan to offer DistQualityAssessment as a Service.
+    It is obvious that the quality assessment of \gls{RDF} is not considered a one-off event but, on the contrary, intends to be constantly evolving.
+    Therefore, these changes have to be reflected as well.
+    However, given the large-scale of such \gls{RDF} datasets, one should consider various strategies for crawling and assessing the quality of the data.
+    Currently, there is a number of crawlers available, such as the LODStats\furl{http://lodstats.aksw.org/} project, which has crawled \gls{RDF} data from metadata portals for the past eight years. 
+    It interacts with the CKAN dataset metadata registry to obtain a comprehensive picture of the current state of the Data Web.
+    While crawling the data, and specifically over large-scale \gls{RDF} datasets, data quality check is a must.
+    The current solution does not provide such option, therefore, integration of our approach with the LODStats project could bring another view w.r.t to the quality of the data
     
     \item \textit{Scalable \gls{RDF} Querying} -- 
     In this thesis, we showed that the application of OBDA tooling to Big Data frameworks achieves promising results in terms of scalability. 
@@ -146,6 +155,27 @@ In the following, we summarize the limitations and future directions on each of 
     In this regard, efficient strategies, as well as a detailed cost function for query plan optimization, have to be considered.
     In addition, we also plan to consider other data management operations i.e. additions, updates, deletions and materialization of the results.
     One solution could be considering the Delta\furl{https://delta.io/} lake solution as an alternative for storage layer that brings ACID transactions to \gls{RDF} data management solutions.
+\end{itemize}
+
+In addition to the future work mentioned above, we see a potential future direction as a long term vision of this work, in an
+attempt to foster the interest in scalable processing of \gls{RDF} datasets.
+
+\begin{itemize} 
+  \item \textit{Adaptive Distributed \gls{RDF} Querying} -- 
+  Often the power of freedom while designing \gls{SPARQL} queries leads to very complex and performance deficits in \gls{SPARQL} query evaluation.
+  Within our \gls{SPARQL} query evaluators, we will go beyond that by developing adaptive data distribution strategies, that generate and optimize index structures and distribute data based on anticipated query workloads of particular inference or machine learning algorithms.
+  
+  \item \textit{Efficient Recommendation System for \gls{RDF} Partitioners} -- 
+  In order to store and query big \gls{RDF} datasets efficiently in distributed environments, different partitioning techniques need to be implemented. 
+  Several techniques have been proposed for splitting Big \gls{RDF} Data, ranging from vertical (cf. Section~\ref{sec:sparklify-approach}), hash, graph to semantic-based (cf. Section~\ref{sec:semantic-based-approach}) partitioners. 
+  However, the selection of the “best partitioner” depends highly on the structure of the dataset and the query efficiency and effectiveness are coupled to the query engine used. 
+  We aim to develop a recommender system that will suggest the “best partitioner” for both of our \gls{SPARQL} query evaluators based on the structure of the data gathered from DistLODStats (cf. Chapter~\ref{chapter:dist_lod_stats}) and specific requirements.
+  
+  \item \textit{A Powerful Benchmarking Suite} -- 
+  In order to decide which distributed \gls{SPARQL} query evaluator performs best for specific query loads over a large-scale \gls{RDF} dataset, it is required to perform benchmarks. 
+  Benchmarking is an extremely tedious task demanding repetitive manual effort, therefore it is required to automate the whole process.
+  However, there are currently no benchmarking frameworks that support benchmarking and comparing diverse distributed \gls{SPARQL} query evaluators.
+  To this end, we will make use of the existing benchmarking platform i.e. LITMUS~\cite{ThakkarEtAl:LITMUS16}, HOBBIT~\cite{Roeder2019Hobbit} and extend them toward supporting distributed settings.
 \end{itemize}
 
 \section{Closing Remarks}
