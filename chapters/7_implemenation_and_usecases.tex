@@ -75,19 +75,20 @@ In addition, it also provides a dedicated serialization mechanism for faster I/O
 SANSA aim to support Jena and \gls{OWL} \gls{API} interfaces for processing \gls{RDF} and \gls{OWL} data, respectively.
 This particularly targets usability, as many users are already familiar with the corresponding libraries and thus would require less time to get productive with the SANSA stack.
 
-Moreover, it allows users to compute \gls{RDF} statistics~\cite{sejdiu-2018-dist-lod-stats-iswc} and quality assessment~\cite{sejdiu-2019-sansa-dist-quality-assessment-iswc} in a distributed manner.
+Moreover, it allows users to compute \gls{RDF} statistics (cf. Chapter~\ref{chapter:dist_lod_stats}) and quality assessment (cf. Chapter~\ref{chapter:dist_quality_assessment}) in a distributed manner.
 
 \defn{Query Layer}
 Querying an \gls{RDF} graph is the primary method for searching, exploring, and extracting information from the underlying \gls{RDF} data.
 \gls{SPARQL} is the \gls{W3C} standard for querying \gls{RDF} graphs.
 Our aim is to have cross-representational transformations and partitioning strategies for efficient query answering. We are investigating the performance of different data structures (e.g., graphs, tables, tensors) in the context of different types of queries and workflows.
-SANSA provides \gls{API}s for performing \gls{SPARQL} queries directly in Spark and Flink programs.
-It also features a \gls{W3C} standard-compliant HTTP \gls{SPARQL} endpoint server component for enabling externally querying the data that has been loaded using its \gls{API}s. These queries are eventually transformed into lower-level Spark/Flink programs executed on the Distribution \& Representation Layer.
+SANSA provides \gls{API}s for performing \gls{SPARQL} queries directly in Spark and Flink programs (cf. Chapter~\ref{chapter:scalable_rdf_querying}).
+It also features a \gls{W3C} standard-compliant HTTP \gls{SPARQL} endpoint server component for enabling externally querying the data that has been loaded using its \gls{API}s.
+These queries are eventually transformed into lower-level Spark/Flink programs executed on the Distribution \& Representation Layer.
 At present, SANSA implements flexible triple-based partitioning strategies on top of \gls{RDF} (such as predicate tables with sub-partitioning by datatypes), which will be complemented with sub-graph based partitioning strategies.
-In addition, it also support a so-called semantic-based query engine~\cite{sejdiu-2019-sansa-semantic-based-semantics} -- a scalable approach to evaluate \gls{SPARQL} queries over distributed \gls{RDF} datasets
+In addition, it also support a so-called semantic-based query engine -- a scalable approach to evaluate \gls{SPARQL} queries over distributed \gls{RDF} datasets
 Based on the partitioning and the SQL dialects supported by Spark and Flink, SANSA provides an infrastructure for the integration of existing SPARQL-to-SQL rewriting tools. 
 This bears the potential advantage of leveraging the optimizers of both the rewriters as well as those of the underlying frameworks for SQL.
-Currently, the Sparklify~\cite{2019-sansa-sparklify-iswc} implementation serves as the baseline.
+Currently, the Sparklify implementation serves as the baseline.
 It uses Sparqlify\furl{https://github.com/AKSW/Sparqlify} as a SPARQL-to-SQL rewriter for translating \gls{SPARQL} queries into Spark executable code.
 Query results can then be further processed by other modules in the SANSA Framework.
 
@@ -325,9 +326,10 @@ Indeed, once the complete \gls{RDF} data set is loaded, SANSA filters it to reta
 
 Practically, the challenges tackled with SANSA can be divided into two groups: game performance and customer behaviors. 
 The first one focuses on time series metrics: throughput time, the event volume, number of active users and amount of spent Ether, which can jointly estimate the trend of popularity for the game. 
-In Figure \ref{fig:auction}, the history of CryptoKitties auctions events shows clearly that there was a peak of traffic in December after the game was launched for around one month. 
+In Figure~\ref{fig:auction}, the history of CryptoKitties auctions events shows clearly that there was a peak of traffic in December after the game was launched for around one month. 
 By this time series, we can estimate the popularity of the game throughout history.
-The second one requires machine learning algorithms to detect correlations between indicators (e.g. to determine whether richer owners have the tendency to collect special/rare kitties which are more expensive). and topology from a network view. In Figure \ref{fig:incest}, we present a small subset of the kitty family tree, where incest happened during the reproduction: kitty 1057 is the secondary-degree relative (grandparent) of kitty 3200, while later it bred with kitty 3200 and gave birth to kitty 3225.
+The second one requires machine learning algorithms to detect correlations between indicators (e.g. to determine whether richer owners have the tendency to collect special/rare kitties which are more expensive) and topology from a network view. 
+In Figure~\ref{fig:incest}, we present a small subset of the kitty family tree, where incest happened during the reproduction: kitty 1057 is the secondary-degree relative (grandparent) of kitty 3200, while later it bred with kitty 3200 and gave birth to kitty 3225.
 
 
 \section{Mining Big Data Applications Logs Using the SANSA Framework}

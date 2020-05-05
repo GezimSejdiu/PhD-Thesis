@@ -55,7 +55,7 @@ This chapter is based on the following publications (\cite{sejdiu-2019-sansa-sem
 The rest of the chapter is structured as follows:
 Sparklify, a scalable software component for \gls{SPARQL} evaluation of large \gls{RDF} data is presented in Section~\ref{sec:sparklify-approach}.
 Its data modeling, data partitioning, and query translation using a distributed framework (Apache Spark) are detailed in Subsection~\ref{sec:sparklify-architecture} and evaluated in Subsection~\ref{sec:sparklify-evaluation}.
-Second part of the chapter, Suction~\ref{sec:semantic-based-approach} elaborate the Semantic-based approach, including its system architecture overview as presented in Section~\ref{fig:semantic-based-architecture}.
+Second part of the chapter, Section~\ref{sec:semantic-based-approach} elaborate the Semantic-based approach, including its system architecture overview as presented in Section~\ref{fig:semantic-based-architecture}.
 The Semantic-based approach is evaluated in Subsection~\ref{sec:semantic-based-evaluation}.
 Finally, we summarize our work in  Section~\ref{sec:scalable-rdf-querying-summary}.
 
@@ -73,7 +73,7 @@ In the following, each component is discussed in details.
 \centering
 \includegraphics[width=1.0\textwidth]{images/6_scalable_rdf_querying/sparklify-architecture.pdf}
 \caption{\textbf{Sparklify Architecture Overview}.
-It consists of four main components: Data modeling -- data ingestion and data partitioning (using the extensible vertical partitioning), Mappings/Views -- the relational-to-RDF mapping, Query Translator -- SQL query generator from the SPARQL query, and Query Evaluator - SQL query evaluated directly into the Spark SQL engine.
+It consists of four main components: Data modeling -- data ingestion and data partitioning (using the extensible \gls{VP}), Mappings/Views -- the relational-to-RDF mapping, Query Translator -- SQL query generator from the SPARQL query, and Query Evaluator - SQL query evaluated directly into the Spark SQL engine.
 }
 % source : https://docs.google.com/presentation/d/16XlT4u3bFn8XdP_eoLJOAu5WPl_q_9zIjAZbllfEEic 
 \label{fig:sparklify-architecture}
@@ -84,20 +84,20 @@ It consists of four main components: Data modeling -- data ingestion and data pa
 SANSA~\cite{lehmann-2017-sansa-iswc} comes with different data structures and different partitioning strategies.
 We model and store \gls{RDF} graph following the concept of \gls{RDD}s -- a basic building blocks of the Spark Framework.
 \gls{RDD}s are in-memory collections of records that are capable of operating in a parallel overall larger cluster.
-Sparklify makes use of the SANSA bottom layer which corresponds with the extended vertical partitioning (VP) including \gls{RDF} terms.
+Sparklify makes use of the SANSA bottom layer which corresponds with the extended \gls{VP} including \gls{RDF} terms.
 This partition model is the most convenient storage model for the fast processing of \gls{RDF} datasets on top of \gls{HDFS}.
 \paragraph{Data Ingestion (Step 1)} \gls{RDF} data first needs to be loaded into a large-scale storage that Spark can efficiently read from.
 We use \gls{HDFS}.
 Spark employ different data locality scheme in order to accomplish computations nearest to the desired data in \gls{HDFS}, as a result avoiding i/o overhead. 
 \paragraph{Data Partition (Step 2)}
-VP approach in SANSA is designed to support the extensible partitioning of \gls{RDF} data.
+\gls{VP} approach in SANSA is designed to support the extensible partitioning of \gls{RDF} data.
 Instead of dealing with a single three-column table $(s, p, o)$, data is partitioned into multiple tables based on the used \gls{RDF} predicates, \gls{RDF} term types and literal datatypes.
 The first column of these tables is always a string representing the subject.
 The second column always represents the literal value as a Scala/Java datatype.
 Tables for storing literals with language tags have an additional third-string column for the language tag.
 
 \defn{Mappings/Views}
-After the \gls{RDF} data has been partitioned using the extensible VP (as it has been described on \textit{Step 2}) the relational-to-RDF mapping is performed. 
+After the \gls{RDF} data has been partitioned using the extensible \gls{VP} (as it has been described on \textit{Step 2}) the relational-to-RDF mapping is performed. 
 Sparqlify supports both the \gls{W3C} standard R2RML
 sparqlification~\cite{sml}.
 
@@ -237,7 +237,7 @@ The loading time for partitioning and query execution time is reported.
 
 Table~\ref{tbl:sparklify-performance-analysis} shows the performance analysis of two approaches run on three different datasets.
 Column SPARQLGX-SDE$^{a}$ reports on the performance of SPARQLGX-SDE considering the total runtime to evaluate the given queries.
-Column Sparklify$^{b}$ lists the times required for Sparklify to perform the VP and then the query execution time is reported on the Sparklify$^{c}$.
+Column Sparklify$^{b}$ lists the times required for Sparklify to perform the \gls{VP} and then the query execution time is reported on the Sparklify$^{c}$.
 Total runtime for Sparklify is shown in the last column, Sparklify$^{d}$.
 
 We observe that the execution of both approaches fails for the \textit{Q2} in the \textit{LUBM-10K} dataset while evaluating the query. 
@@ -307,7 +307,7 @@ According to Figure~\ref{fig:sparklify-overall-analysis}, SPARQLGX-SDE performan
 This might be due to the fact that SPARQLGX-SDE has to read the whole triple file each time.
 In contrast to SPARQLGX-SDE, Sparklify seems to perform well when there are more triple patterns involved (see queries \textit{QC}, \textit{QF} and \textit{QS} in the Figure~\ref{fig:sparklify-overall-analysis}) but slightly worst when there are linear queries (see \textit{QL}) evaluated. 
 This may be due to the reason that Sparqlify typically rewrites a \gls{SPARQL} query into a single SQL query, thus maximizing the opportunities given to the Spark SQL optimizer. Conversely, SPARQLGX-SDE constructs the workflow by chaining Scala API calls, which may restrict the possibilities e.g. in regard to join ordering.
-Based on our findings and the evaluation study carried out in this paper, we show that Sparklify is scalable and the execution time ends in a reasonable time given the size of the dataset.
+Based on our findings and the evaluation study carried out, we show that Sparklify is scalable and the execution time ends in a reasonable time given the size of the dataset.
 
 %----Semantic-based approach--------
 
@@ -380,7 +380,7 @@ The result set can be used for further processing and visualization using the SA
 \label{subsection:semantic-based-algorithm}
 We implement our approach using the Apache Spark framework (see Algorithm~\ref{alg:semantic-based-algorithm}). 
 It constructs the graph (\textit{Line \ref{line:semantic-based-rdf2rdd}}) while reading \gls{RDF} data and converts it into an \gls{RDD} of triples.
-Later, it partitions the data (\textit{Line \ref{line:semantic-based-partitionGraph}}, for more details see Algorithm~\ref{alg:semantic-based-partitionGraph}) using the semantic-based partitioning (SP) strategy.
+Later, it partitions the data (\textit{Line \ref{line:semantic-based-partitionGraph}}, for more details see Algorithm~\ref{alg:semantic-based-partitionGraph}) using the semantic-based partitioning strategy.
 Finally, the query evaluator is constructed (\textit{Line \ref{line:semantic-based-sparql}}) which is detailed in Algorithm~\ref{alg:semantic-based-sparql}.
 
 \begin{algorithm*}
@@ -398,7 +398,7 @@ Finally, the query evaluator is constructed (\textit{Line \ref{line:semantic-bas
 \Return{$result$}
 \end{algorithm*}
 
-The partition algorithm (see Algorithm~\ref{alg:semantic-based-partitionGraph}) transforms the \gls{RDF} graph into a convenient SP (\textit{Line \ref{line:semantic-based-partitionGraph}}).
+The partition algorithm (see Algorithm~\ref{alg:semantic-based-partitionGraph}) transforms the \gls{RDF} graph into a convenient semantic-based partitioning (\textit{Line \ref{line:semantic-based-partitionGraph}}).
 For each unique triple in the graph in a distributed fashion, it does the following: It gets the values about subjects and objects (\textit{Line \ref{line:semantic-based-subject_object_values}}) and local name of the predicate (\textit{Line \ref{line:semantic-based-predicate}}).
 It generates the key-value pairs of the subject and its associated triples with predicate and objects separated with space in between (\textit{Line \ref{line:semantic-based-partition_data}}).
 After the mapping is done, the data is grouped by key (in our case \emph{subject}) (\textit{Line \ref{line:semantic-based-groupBy}}).

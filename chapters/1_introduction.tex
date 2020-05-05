@@ -174,7 +174,7 @@ Our contributions cover a spectrum of research areas in the scope of distributed
     As a result, the efficient processing of such big \gls{RDF} datasets has become challenging.
     Indeed, these processes require, both efficient storage strategies and query-processing engines, to be able to scale in terms of data size.
     In order to overcome this, we propose two different techniques that scale up to the cluster of machines.
-    First, Sparklify: a scalable software component for efficient evaluation of \gls{SPARQL} queries over distributed \gls{RDF} datasets. It uses Sparqlify as a SPARQL-to-SQL rewriter for translating \gls{SPARQL} queries into Spark executable code.
+    First, Sparklify: a scalable software component for efficient evaluation of \gls{SPARQL} queries over distributed \gls{RDF} datasets. It uses Sparqlify\furl{https://github.com/SmartDataAnalytics/Sparqlify} as a SPARQL-to-SQL rewriter for translating \gls{SPARQL} queries into Spark executable code.
     Our preliminary results demonstrate that Sparklify is more extensible, efficient, and scalable as compared to state-of-the-art approaches.
     Sparklify is integrated into a larger SANSA framework and it serves as a default query engine and has been used by at least three external use scenarios.
     The second approach we investigated and developed with the scope of this thesis is a scalable approach to evaluate \gls{SPARQL} queries over distributed \gls{RDF} datasets using a semantic-based partition and is implemented inside the state-of-the-art \gls{RDF} processing framework: SANSA.

@@ -752,8 +752,8 @@ Usually, this process is done manually either entering the cluster gateway machi
 \centering
 \includegraphics[width=1.0\columnwidth]{images/4_distlodstats/distlodstats-statisfy.pdf}
 \caption{\textbf{STATisfy overview architecture}.
-Main services of STATisfy: \textit{Client} -- will create a remote Spark cluster for initialization, and submit jobs through REST \gls{API}s.
-\textit{Livy REST Server} -- it will then discover this job and sent through \gls{RCP} to SparkSession, where the code will be initialized and executed using DistLODStats.
+Main services of STATisfy: \textit{Client} -- will create a remote Spark cluster for initialization, and submit jobs through REST APIs.
+\textit{Livy REST Server} -- it will then discover this job and sent through Remote Procedure Call (RCP) to SparkSession, where the code will be initialized and executed using DistLODStats.
 }
 \label{fig:STATisfy}
 %source:https://docs.google.com/presentation/d/1bV83Rik_xwzmYPigCwHWV9OMQC5Wtl3gSF4UoaNilIQ

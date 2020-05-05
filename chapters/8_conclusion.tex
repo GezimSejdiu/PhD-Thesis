@@ -13,7 +13,7 @@ In the following sections, we provide a summary of our contributions and elabora
 \section{Review of the Contributions}
 In this section, we give an overview of the thesis' contributions in terms of the problems solved and how they offer concrete and valid solutions to the research questions.
 The main goal of the thesis is to advance the area of distributed processing of \gls{RDF} datasets by providing a novel set of approaches in order to solve the main challenges in a distributed and scalable setting.
-In this respect, our contributions answer four research questions.
+In this respect, our contributions answer three research questions.
 Let us revisit the research questions defined during this thesis.
 
 First, we tackled the problem of exploring the structure of the large-scale \gls{RDF} datasets and answering the following research question.
@@ -54,7 +54,7 @@ Today, we count more than 10,000 datasets being available online following Linke
 These standards allow data to be machine-readable and interoperable.  
 Nevertheless, many applications, such as data integration, search, and interlinking, cannot take full advantage of Linked Data if it is of low quality.
 There exist a few approaches for the quality assessment of Linked Data, but their performance degrades with the increase in data size and quickly grows beyond the capabilities of a single machine.
-To answer question~\ref{rqc:2}, in this thesis, we present DistQualityAssessment (cf.\ Chapter~\ref{chapter:dist_quality_assessment} -- an open source implementation of quality assessment of large \gls{RDF} datasets that can scale out to a cluster of machines.
+To answer question~\ref{rqc:2}, in this thesis, we present DistQualityAssessment (cf.\ Chapter~\ref{chapter:dist_quality_assessment}) -- an open source implementation of quality assessment of large \gls{RDF} datasets that can scale out to a cluster of machines.
 This is the first distributed, in-memory approach for computing different quality metrics for large \gls{RDF} datasets using Apache Spark. We also provide a quality assessment pattern that can be used to generate new scalable metrics that can be applied to big data.
 The work presented here is integrated with the SANSA framework and has been applied to at least three use cases beyond the SANSA community.   
 The results show that our approach is more generic, efficient, and scalable as compared to previously proposed approaches.

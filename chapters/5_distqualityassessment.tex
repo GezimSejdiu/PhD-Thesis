@@ -200,7 +200,7 @@ As shown in Table~\ref{tab:MetricRules}, each quality metric can contain multipl
 It is worth mentioning that action $\verb|count(triples)|$ returns the total number of triples in the given data. 
 This can also be seen that the action can be an arithmetic combination of multiple actions i.e. ratio, sum, etc. 
 We illustrate our proposed approach on some metrics selected from~\cite{debattista2016luzzu,zaveri2015quality}. 
-Given that the aim of this paper is to show the applicability of the proposed approach and comparison with existing methods, we have only selected those which are already provided out-of-box in Luzzu.
+Given that the aim of this chapter is to show the applicability of the proposed approach and comparison with existing methods, we have only selected those which are already provided out-of-box in Luzzu.
 
 
 \subsection{System Overview}
@@ -509,7 +509,7 @@ For metrics like \ref{qm:I2} and \ref{qm:CN2}, Luzzu uses approximate values for
 
 \subsubsection{Overall analysis by metrics}
 We analyze the overall run-time of the metric evaluation.
-Figure~\ref{fig:distqualityassessment-overall-analysis} reports on the run-time of each metric considered in this paper (see Table~\ref{tab:MetricRules}) on both $BSBM_{20GB}$ and $BSBM_{200GB}$ datasets.
+Figure~\ref{fig:distqualityassessment-overall-analysis} reports on the run-time of each metric considered (see Table~\ref{tab:MetricRules}) on both $BSBM_{20GB}$ and $BSBM_{200GB}$ datasets.
 
 \begin{figure*}
 \includegraphics[width=1.0\columnwidth]{images/5_distqualityassessment/distqualityassessment-overall-analysis.pdf}
@@ -527,7 +527,7 @@ The results obtained show that the execution is sometimes a little longer when t
 Metric~\ref{qm:SV3} and \ref{qm:CN2} are the most expensive ones in terms of runtime.
 This is due to the extra overhead caused by extracting the literals for objects, and checking the lexical form of its datatype. 
 
-Overall, the evaluation study carried out in this paper demonstrates that distributed computation of  different quality measures is scalable and the execution ends in reasonable time given the large volume of data.
+Overall, the evaluation study carried out demonstrates that distributed computation of  different quality measures is scalable and the execution ends in reasonable time given the large volume of data.
 
 
 \section{Summary}
