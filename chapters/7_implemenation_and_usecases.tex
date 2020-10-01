@@ -46,8 +46,8 @@ It provides data distribution, scalability, and fault tolerance for manipulating
 It comes with: (i) specialized serialization mechanisms and partitioning schemata for \gls{RDF}, using vertical partitioning strategies,
 (ii) a scalable query engine for large \gls{RDF} datasets and different distributed representation formats for \gls{RDF}, namely graphs, tables, and tensors,
 (iii) an adaptive reasoning engine which derives an efficient execution and evaluation plan from a given set of inference rules,
-(iv) several distributed structured machine learning algorithms that can be applied on large-scale \GLS{RDF} data,
-and (v) a framework with a unified \GLS{API} that aims to combine distributed in-memory computation technology with semantic technologies.
+(iv) several distributed structured machine learning algorithms that can be applied on large-scale \gls{RDF} data,
+and (v) a framework with a unified \gls{API} that aims to combine distributed in-memory computation technology with semantic technologies.
 
 To achieve the goal of storing and manipulating large \gls{RDF} datasets, we leverage existing big data frameworks like Apache Spark\furl{http://spark.apache.org/} and Apache Flink\furl{http://flink.apache.org/}, which have matured over the years and offer a proven and reliable method for general-purpose processing of large-scale data.
 
@@ -85,7 +85,7 @@ SANSA provides \gls{API}s for performing \gls{SPARQL} queries directly in Spark 
 It also features a \gls{W3C} standard-compliant HTTP \gls{SPARQL} endpoint server component for enabling externally querying the data that has been loaded using its \gls{API}s.
 These queries are eventually transformed into lower-level Spark/Flink programs executed on the Distribution \& Representation Layer.
 At present, SANSA implements flexible triple-based partitioning strategies on top of \gls{RDF} (such as predicate tables with sub-partitioning by datatypes), which will be complemented with sub-graph based partitioning strategies.
-In addition, it also support a so-called semantic-based query engine -- a scalable approach to evaluate \gls{SPARQL} queries over distributed \gls{RDF} datasets
+In addition, it also support a so-called semantic-based query engine -- a scalable approach to evaluate \gls{SPARQL} queries over distributed \gls{RDF} datasets.
 Based on the partitioning and the SQL dialects supported by Spark and Flink, SANSA provides an infrastructure for the integration of existing SPARQL-to-SQL rewriting tools. 
 This bears the potential advantage of leveraging the optimizers of both the rewriters as well as those of the underlying frameworks for SQL.
 Currently, the Sparklify implementation serves as the baseline.
